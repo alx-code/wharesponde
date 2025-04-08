@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  wharesponde:
+    build: .
+    container_name: wharesponde
+    ports:
+      - "80:8001"
+    environment:
+      - NODE_ENV=production

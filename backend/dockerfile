@@ -1,0 +1,11 @@
+FROM node:18-bullseye-slim 
+WORKDIR /app
+COPY package*.json ./
+
+RUN apt-get update && apt-get install -y python3 make g++ && npm install && npm rebuild bcrypt --build-from-source && rm -rf /var/lib/apt/lists/*
+
+COPY . .
+
+EXPOSE 3000 
+
+CMD ["npm", "start"]
