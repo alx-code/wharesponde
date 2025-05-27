@@ -1,0 +1,74 @@
+.logosSection {
+  background-color: #f8f0fc; /* Un lila claro más suave */
+  padding: 4rem 0; /* Aumentar padding */
+  text-align: center;
+}
+
+.container {
+  max-width: 1000px; /* Ancho ligeramente menor que otras secciones para centrar los logos */
+  margin: 0 auto;
+  padding: 0 1.5rem; /* Ajustar padding horizontal */
+}
+
+.heading {
+  font-size: 1.6rem; /* Ajustar tamaño del encabezado */
+  color: #673ab7; /* Un morado más vibrante */
+  margin-bottom: 3rem; /* Aumentar margen inferior */
+  font-weight: 600;
+}
+
+.logosGrid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem; /* Aumentar el espacio entre logos */
+  flex-wrap: wrap; /* Permite que los logos se envuelvan */
+}
+
+.logoItem {
+  /* Si usas imágenes, ajusta width/height según necesites */
+  /* width: 120px; */
+  /* height: auto; */
+  /* filter: grayscale(100%); */
+  /* opacity: 0.6; */
+  /* transition: filter 0.3s ease, opacity 0.3s ease; */
+
+  /* Si usas texto */
+  font-size: 2.2rem; /* Ajustar tamaño del texto del logo */
+  font-weight: 700;
+  color: #512da8; /* Un morado oscuro */
+  opacity: 0.8; /* Ligera transparencia para un look más suave */
+  transition: opacity 0.3s ease;
+}
+
+.logoItem:hover {
+  /* Si usas imágenes */
+  /* filter: grayscale(0%); */
+  /* opacity: 1; */
+
+  /* Si usas texto */
+  opacity: 1; /* Opacidad completa en hover */
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .heading {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+  }
+
+  .logosGrid {
+    gap: 2rem; /* Reducir espacio entre logos en pantallas pequeñas */
+  }
+
+  .logoItem {
+    font-size: 1.8rem; /* Ajustar tamaño del texto del logo en pantallas pequeñas */
+  }
+}
+
+/* Estilos para imágenes si los usas */
+/* .logoImage { */
+/*   max-width: 100%; */
+/*   height: auto; */
+/*   display: block; */
+/* } */

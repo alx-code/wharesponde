@@ -1,0 +1,74 @@
+.chatLinkGeneratorSection {
+  background-color: #fff; /* Fondo blanco */
+  padding: 4rem 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 3rem; /* Espacio entre contenido y formulario */
+  padding: 0 1rem;
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan */
+}
+
+.content {
+  flex: 1;
+  min-width: 300px; /* Asegura que el contenido no se encoja demasiado */
+}
+
+.content h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.content p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.form {
+  flex: 1;
+  min-width: 300px; /* Asegura que el formulario no se encoja demasiado */
+  background-color: #f9f9f9; /* Fondo ligero para el formulario */
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.imageContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imagePlaceholder {
+  width: 100%;
+  max-width: 400px; /* Ajusta según la imagen decorativa */
+  height: 250px; /* Ajusta según la proporción */
+  background-color: #ddd; /* Placeholder visual */
+  border-radius: 8px;
+}
+
+/* Responsividad */
+@media (max-width: 992px) {
+  .container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .content,
+  .form {
+    min-width: unset; /* Elimina el min-width en pantallas más pequeñas */
+    width: 100%;
+  }
+
+  .imageContainer {
+    order: -1; /* Mueve la imagen arriba en pantallas pequeñas */
+  }
+}

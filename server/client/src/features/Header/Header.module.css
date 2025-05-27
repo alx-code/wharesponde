@@ -1,0 +1,62 @@
+.header {
+  background-color: #ffffff; /* Blanco puro para un look limpio */
+  padding: 1.2rem 0; /* Aumentar un poco el padding vertical */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* Sombra más sutil */
+  position: sticky; /* Opcional: hacer el header sticky */
+  top: 0;
+  z-index: 1000; /* Asegurar que esté por encima de otros elementos */
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.5rem; /* Aumentar un poco el padding horizontal */
+}
+
+.logo span {
+  font-size: 1.8rem; /* Aumentar ligeramente el tamaño del logo */
+  font-weight: 700; /* Hacer el texto más audaz */
+  color: #4CAF50; /* Mantener el color verde */
+  letter-spacing: -0.05em; /* Ajustar espaciado de letras */
+}
+
+.nav .navLink {
+  margin-left: 2rem; /* Aumentar el espacio entre enlaces */
+  text-decoration: none;
+  color: #555; /* Color de texto ligeramente más suave */
+  font-weight: 500;
+  transition: color 0.3s ease, border-bottom 0.3s ease;
+  padding-bottom: 0.2rem; /* Espacio para el subrayado */
+}
+
+.nav .navLink:hover,
+.nav .navLink:focus {
+  color: #4CAF50; /* Color verde en hover/focus */
+  border-bottom: 2px solid #4CAF50; /* Subrayado sutil */
+}
+
+.ctaButton {
+  background-color: #4CAF50; /* Color verde */
+  color: white;
+  padding: 0.8rem 1.8rem; /* Ajustar padding del botón */
+  border: none;
+  border-radius: 28px; /* Bordes más redondeados */
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600; /* Fuente un poco más audaz */
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Sombra para el botón */
+}
+
+.ctaButton:hover {
+  background-color: #388E3C; /* Verde más oscuro en hover */
+  transform: translateY(-1px); /* Efecto ligero al pasar el mouse */
+}
+
+.ctaButton:active {
+  transform: translateY(0); /* Quitar efecto al hacer click */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Sombra más pequeña al hacer click */
+}
