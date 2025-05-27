@@ -1,0 +1,147 @@
+[
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTQ5MTEzMTExMjQyNBUCABIYFDNBMEZBMjZBQTIyRkJDREVBMjRFAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1746208165,
+    "senderName": "Ani Marquez",
+    "senderMobile": "5491131112424",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTQ5MTEzMTExMjQyNBUCABEYEkUwMDhFM0VGQzAzQkUxQTYzMgA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1746208778,
+    "senderName": "Ani Marquez",
+    "senderMobile": "5491131112424",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING",
+    "context": "",
+    "origin": "meta",
+    "err": ""
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTQ5MTEzMTExMjQyNBUCABEYEkM1REFENzA2QzRFNTE0QTlEQgA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola, pudiste entrar a tu cuenta?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1746288742,
+    "senderName": "Ani Marquez",
+    "senderMobile": "5491131112424",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING",
+    "context": "",
+    "origin": "meta",
+    "err": ""
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTQ5MTEzMTExMjQyNBUCABIYFDNBMzI3NDVBNDUwN0Y0MDlGOEFFAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Hola no"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1746291233,
+    "senderName": "Ani Marquez",
+    "senderMobile": "5491131112424",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTQ5MTEzMTExMjQyNBUCABEYEkFEMTM5QUQ1QTcxQUQwNEU0NAA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1746468207,
+    "senderName": "Ani Marquez",
+    "senderMobile": "5491131112424",
+    "status": "",
+    "star": false,
+    "route": "OUTGOING",
+    "context": "",
+    "origin": "meta",
+    "err": ""
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTQ5MTEzMTExMjQyNBUCABEYEjE2NzVFMkM4ODg4NUNBRTM4MwA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "he vuelto a enviar el correo para recuperar la contraseña a este correo analiamarquez29@gmail.com"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1746468227,
+    "senderName": "Ani Marquez",
+    "senderMobile": "5491131112424",
+    "status": "",
+    "star": false,
+    "route": "OUTGOING",
+    "context": "",
+    "origin": "meta",
+    "err": ""
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTQ5MTEzMTExMjQyNBUCABEYEkFCMzE4NzdDRERFMjk2MUU5OAA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "podrias validar si llego este correo a tu bandeja ? "
+      }
+    },
+    "reaction": "",
+    "timestamp": 1746468236,
+    "senderName": "Ani Marquez",
+    "senderMobile": "5491131112424",
+    "status": "",
+    "star": false,
+    "route": "OUTGOING",
+    "context": "",
+    "origin": "meta",
+    "err": ""
+  }
+]

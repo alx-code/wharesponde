@@ -89,8 +89,8 @@
   {
     "id": "1744927426474",
     "position": {
-      "x": 879.8345672720097,
-      "y": -373.0802972190569
+      "x": 932.9537187492826,
+      "y": -457.0591462212221
     },
     "nodeType": "BUTTON",
     "data": {
@@ -106,15 +106,15 @@
               {
                 "type": "reply",
                 "reply": {
-                  "id": "1744927436266",
-                  "title": "Si"
+                  "id": "1745942779561",
+                  "title": "Si me gustaria"
                 }
               },
               {
                 "type": "reply",
                 "reply": {
-                  "id": "1744927439815",
-                  "title": "No"
+                  "id": "1745944812221",
+                  "title": "Regresar"
                 }
               }
             ]
@@ -122,8 +122,8 @@
         }
       },
       "keyword": [
-        "Si",
-        "No"
+        "Si me gustaria",
+        "Regresar"
       ]
     },
     "type": "BUTTON",
@@ -131,8 +131,8 @@
     "height": 407,
     "selected": false,
     "positionAbsolute": {
-      "x": 879.8345672720097,
-      "y": -373.0802972190569
+      "x": 932.9537187492826,
+      "y": -457.0591462212221
     },
     "dragging": false
   },
@@ -163,8 +163,8 @@
               {
                 "type": "reply",
                 "reply": {
-                  "id": "1744927521779",
-                  "title": "No"
+                  "id": "1745944819947",
+                  "title": "Regresar"
                 }
               }
             ]
@@ -173,7 +173,7 @@
       },
       "keyword": [
         "Si",
-        "No"
+        "Regresar"
       ]
     },
     "type": "BUTTON",
@@ -189,8 +189,8 @@
   {
     "id": "1745699870620",
     "position": {
-      "x": 1330.410453823113,
-      "y": 653.3814133533141
+      "x": 1208.154948522232,
+      "y": 459.2872748490837
     },
     "nodeType": "BUTTON",
     "data": {
@@ -206,15 +206,15 @@
               {
                 "type": "reply",
                 "reply": {
-                  "id": "1745699931673",
-                  "title": "Si"
+                  "id": "1745943661994",
+                  "title": "Si, por favor"
                 }
               },
               {
                 "type": "reply",
                 "reply": {
-                  "id": "1745699935350",
-                  "title": "No"
+                  "id": "1745944835064",
+                  "title": "Regresar"
                 }
               }
             ]
@@ -222,25 +222,25 @@
         }
       },
       "keyword": [
-        "Si",
-        "No"
+        "Si, por favor",
+        "Regresar"
       ]
     },
     "type": "BUTTON",
     "width": 268,
     "height": 338,
-    "selected": true,
+    "selected": false,
     "positionAbsolute": {
-      "x": 1330.410453823113,
-      "y": 653.3814133533141
+      "x": 1208.154948522232,
+      "y": 459.2872748490837
     },
     "dragging": false
   },
   {
     "id": "1745700070955",
     "position": {
-      "x": 908.9513936252661,
-      "y": 679.0984750348484
+      "x": 816.9892878679664,
+      "y": 641.231725605372
     },
     "nodeType": "BUTTON",
     "data": {
@@ -290,8 +290,8 @@
     "selected": false,
     "dragging": false,
     "positionAbsolute": {
-      "x": 908.9513936252661,
-      "y": 679.0984750348484
+      "x": 816.9892878679664,
+      "y": 641.231725605372
     }
   },
   {
@@ -358,14 +358,14 @@
     "id": "1745702271371",
     "position": {
       "x": 1373.4408528472513,
-      "y": -837.6839221342802
+      "y": -838.9486638361201
     },
     "nodeType": "IMAGE",
     "data": {
       "msgContent": {
         "type": "image",
         "image": {
-          "link": "https://kibot.kuvo360.com/media/kcsWGaud80IxC5SN3Q78Qw4EA0npRvYJ.png",
+          "link": "https://kibot.kuvo360.com/media/QyNr5pJRT84jZyk5suU0l0cfctcMjlN3.png",
           "caption": "Mediante un QR tus clientes pueden llegar y conocer toda la informacion que tienes en redes sociales, web, tiendas en linea. etc.. todo en un solo lugar 😁"
         }
       },
@@ -380,7 +380,7 @@
     "selected": false,
     "positionAbsolute": {
       "x": 1373.4408528472513,
-      "y": -837.6839221342802
+      "y": -838.9486638361201
     },
     "dragging": false
   },

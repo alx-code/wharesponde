@@ -1,0 +1,63 @@
+[
+  {
+    "id": "1746807209693",
+    "position": {
+      "x": 300,
+      "y": 300
+    },
+    "nodeType": "TEXT",
+    "data": {
+      "msgContent": {
+        "type": "text",
+        "text": {
+          "preview_url": true,
+          "body": "{{OTHER_MSG}}"
+        }
+      },
+      "keyword": [
+        "{{OTHER_MSG}}"
+      ]
+    },
+    "type": "TEXT",
+    "width": 268,
+    "height": 262,
+    "selected": false,
+    "dragging": false
+  },
+  {
+    "id": "1746807213718",
+    "position": {
+      "x": 648,
+      "y": 400
+    },
+    "nodeType": "ASSIGN_AGENT",
+    "data": {
+      "msgContent": {
+        "agentEmail": "ceseco_norte@uaq.mx",
+        "agentObj": {
+          "id": 5,
+          "owner_uid": "0Dl3cfrIdtWwsoqVMUcG51ocKZn25FyR",
+          "uid": "TowxCIWCetFiUGdryvvHBz8tySQZxZ6z",
+          "role": "agent",
+          "email": "ceseco_norte@uaq.mx",
+          "password": "$2b$10$9dHPtBQj0QwIO52biukibemzPRA7qbKdZQKF8LLM1aknh/rqjO16G",
+          "name": "Ceseco Norte",
+          "mobile": "123456789",
+          "comments": null,
+          "is_active": 1,
+          "createdAt": "2025-05-09T15:33:05.000Z"
+        }
+      },
+      "keyword": []
+    },
+    "type": "ASSIGN_AGENT",
+    "width": 268,
+    "height": 143,
+    "selected": true,
+    "positionAbsolute": {
+      "x": 648,
+      "y": 400
+    },
+    "dragging": false
+  }
+]

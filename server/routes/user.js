@@ -29,6 +29,7 @@ const {
   checkNote,
   checkTags,
   checkContactLimit,
+  checkWaWArmer,
 } = require("../middlewares/plan.js");
 const { recoverEmail } = require("../emails/returnEmails.js");
 const moment = require("moment");
@@ -1753,6 +1754,179 @@ router.post("/auto_agent_login", validateUser, async (req, res) => {
   } catch (err) {
     console.log(err);
     res.json({ msg: "something went wrong", err });
+  }
+});
+
+// add warmer message
+router.post("/add_warmer_message", validateUser, async (req, res) => {
+  try {
+    const { message } = req.body;
+    if (!message) {
+      return res.json({ msg: "Please enter a message to add" });
+    }
+
+    await query(`INSERT INTO warmer_script (uid, message) VALUES (?,?)`, [
+      req.decode.uid,
+      message,
+    ]);
+
+    res.json({ msg: "Warmer message was added", success: true });
+  } catch (err) {
+    console.log(err);
+    res.json({ msg: "something went wrong", err });
+  }
+});
+
+// get my warmer script
+router.get("/get_warmer_script", validateUser, async (req, res) => {
+  try {
+    const data = await query(`SELECT * FROM warmer_script WHERE uid = ?`, [
+      req.decode.uid,
+    ]);
+    res.json({ data, success: true });
+  } catch (err) {
+    console.log(err);
+    res.json({ msg: "something went wrong", err });
+  }
+});
+
+// del a message
+router.post("/del_warmer_msg", validateUser, async (req, res) => {
+  try {
+    const { id } = req.body;
+    await query(`DELETE FROM warmer_script WHERE id = ? AND uid = ?`, [
+      id,
+      req.decode.uid,
+    ]);
+    res.json({ msg: "Message was deleted", success: true });
+  } catch (err) {
+    console.log(err);
+    res.json({ msg: "something went wrong", err });
+  }
+});
+
+// add to warmer
+router.post(
+  "/add_ins_to_warm",
+  validateUser,
+  checkPlan,
+  checkWaWArmer,
+  async (req, res) => {
+    try {
+      const { instance } = req.body;
+
+      const getWarm = await query(`SELECT * FROM warmers WHERE uid = ?`, [
+        req.decode.uid,
+      ]);
+
+      const addedIns = JSON.parse(getWarm[0]?.instances);
+
+      if (addedIns.includes(instance)) {
+        const finalIns = addedIns.filter((i) => i !== instance);
+
+        await query(`UPDATE warmers SET instances = ? WHERE uid = ?`, [
+          JSON.stringify(finalIns),
+          req.decode.uid,
+        ]);
+      } else {
+        const fiIns = [...addedIns, instance];
+        await query(`UPDATE warmers SET instances = ? WHERE uid = ?`, [
+          JSON.stringify(fiIns),
+          req.decode.uid,
+        ]);
+      }
+
+      res.json({
+        msg: "Warmer updated",
+        success: true,
+      });
+    } catch (err) {
+      console.log(err);
+      res.json({ msg: "something went wrong", err });
+    }
+  }
+);
+
+// get my warmer
+router.get("/get_my_warmer", validateUser, async (req, res) => {
+  try {
+    const { uid } = req.decode;
+
+    const getWarmer = await query(`SELECT * FROM warmers WHERE uid = ?`, [uid]);
+
+    if (getWarmer?.length < 1) {
+      await query(
+        `INSERT INTO warmers (uid, instances, is_active) VALUES (?,?,?)`,
+        [uid, JSON.stringify([]), 1]
+      );
+
+      // getting warmer again
+      const warmer = await query(`SELECT * FROM warmers WHERE uid = ?`, [uid]);
+
+      warmer[0].instances = JSON.parse(warmer[0].instances);
+      res.json({ data: warmer[0], success: true });
+    } else {
+      getWarmer[0].instances = JSON.parse(getWarmer[0].instances);
+
+      res.json({ data: getWarmer[0], success: true });
+    }
+  } catch (err) {
+    res.json({ success: false, msg: "something went wrong", err });
+    console.log(err);
+  }
+});
+
+// change warmer status
+router.post("/change_warmer_status", validateUser, async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    await query(`UPDATE warmers SET is_active = ? WHERE uid = ?`, [
+      status ? 1 : 0,
+      req.decode.uid,
+    ]);
+
+    res.json({ msg: "Status updated", success: true });
+  } catch (err) {
+    res.json({ success: false, msg: "something went wrong", err });
+    console.log(err);
+  }
+});
+
+// add google auth
+router.post("/add_g_auth", validateUser, checkPlan, async (req, res) => {
+  try {
+    const { label, url } = req.body;
+    console.log(req.body);
+    if (!url || !label) {
+      return res.json({
+        msg: "Please upload and file and give a label to the auth",
+      });
+    }
+
+    await query(`INSERT INTO g_auth (uid, label, url) VALUES (?,?,?)`, [
+      req.decode.uid,
+      label,
+      url,
+    ]);
+
+    res.json({ success: true, msg: "Credentials uploaded" });
+  } catch (err) {
+    res.json({ success: false, msg: "something went wrong", err });
+    console.log(err);
+  }
+});
+
+// get my creds
+router.get("/get_my_g_creds", validateUser, async (req, res) => {
+  try {
+    const data = await query(`SELECT * FROM g_auth WHERE uid = ?`, [
+      req.decode.uid,
+    ]);
+    res.json({ data, success: true });
+  } catch (err) {
+    res.json({ success: false, msg: "something went wrong", err });
+    console.log(err);
   }
 });
 

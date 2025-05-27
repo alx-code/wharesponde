@@ -102,6 +102,64 @@
     "sourceHandle": "Si",
     "target": "1745701536672",
     "targetHandle": "1745701536672_target",
-    "id": "reactflow__edge-1744927507668Si-17457015366721745701536672_target"
+    "id": "reactflow__edge-1744927507668Si-17457015366721745701536672_target",
+    "selected": false
+  },
+  {
+    "source": "1745702271371",
+    "sourceHandle": "No por ahora",
+    "target": "1744926532337",
+    "targetHandle": "1744926532337_target",
+    "id": "reactflow__edge-1745702271371No por ahora-17449265323371744926532337_target"
+  },
+  {
+    "source": "1744927426474",
+    "sourceHandle": "No",
+    "target": "1744926532337",
+    "targetHandle": "1744926532337_target",
+    "id": "reactflow__edge-1744927426474No-17449265323371744926532337_target"
+  },
+  {
+    "source": "1744927426474",
+    "sourceHandle": "Si me gustaria",
+    "target": "1745702271371",
+    "targetHandle": "1745702271371_target",
+    "id": "reactflow__edge-1744927426474Si me gustaria-17457022713711745702271371_target"
+  },
+  {
+    "source": "1745699870620",
+    "sourceHandle": "Regresar atras",
+    "target": "1744926532337",
+    "targetHandle": "1744926532337_target",
+    "id": "reactflow__edge-1745699870620Regresar atras-17449265323371744926532337_target",
+    "selected": false
+  },
+  {
+    "source": "1744927507668",
+    "sourceHandle": "No",
+    "target": "1744926532337",
+    "targetHandle": "1744926532337_target",
+    "id": "reactflow__edge-1744927507668No-17449265323371744926532337_target"
+  },
+  {
+    "source": "1744927426474",
+    "sourceHandle": "Regresar",
+    "target": "1744926532337",
+    "targetHandle": "1744926532337_target",
+    "id": "reactflow__edge-1744927426474Regresar-17449265323371744926532337_target"
+  },
+  {
+    "source": "1744927507668",
+    "sourceHandle": "Regresar",
+    "target": "1744926532337",
+    "targetHandle": "1744926532337_target",
+    "id": "reactflow__edge-1744927507668Regresar-17449265323371744926532337_target"
+  },
+  {
+    "source": "1745699870620",
+    "sourceHandle": "Si, por favor",
+    "target": "1745701536672",
+    "targetHandle": "1745701536672_target",
+    "id": "reactflow__edge-1745699870620Si, por favor-17457015366721745701536672_target"
   }
 ]

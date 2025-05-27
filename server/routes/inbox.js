@@ -32,6 +32,7 @@ router.post("/webhook/:uid", async (req, res) => {
 
     const getDays = await getUserPlayDays(userUID);
     if (getDays < 1) {
+      console.log("User plan expired");
       return;
     }
 

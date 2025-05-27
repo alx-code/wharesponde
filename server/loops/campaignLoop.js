@@ -6,12 +6,7 @@ const { sendMessage } = require("./loopFunctions");
 
 function delayRandom(fromSeconds, toSeconds) {
   const randomSeconds = Math.random() * (toSeconds - fromSeconds) + fromSeconds;
-
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, randomSeconds * 1000);
-  });
+  return new Promise((resolve) => setTimeout(resolve, randomSeconds * 1000));
 }
 
 // Function to check if a date has passed in a given timezone
@@ -32,7 +27,6 @@ async function updateBroadcastDatabase(status, broadcastId) {
 // Function to process a broadcast campaign
 async function processBroadcast(campaign) {
   const planDays = await getUserPlayDays(campaign?.uid);
-
   if (planDays < 1) {
     await updateBroadcastDatabase(
       "ACTIVE PLAN NOT FOUND",
@@ -44,40 +38,43 @@ async function processBroadcast(campaign) {
   const metaKeys = await query("SELECT * FROM meta_api WHERE uid = ?", [
     campaign?.uid,
   ]);
-
   if (metaKeys.length < 1) {
     await updateBroadcastDatabase("META API NOT FOUND", campaign?.broadcast_id);
     return;
   }
 
-  const log = await query(
-    "SELECT * FROM broadcast_log WHERE broadcast_id = ? AND delivery_status = ? LIMIT ?",
-    [campaign?.broadcast_id, "PENDING", 1]
+  // Fetch multiple pending messages instead of just one
+  const logs = await query(
+    "SELECT * FROM broadcast_log WHERE broadcast_id = ? AND delivery_status = ? LIMIT 10",
+    [campaign?.broadcast_id, "PENDING"]
   );
 
-  if (log.length < 1) {
+  if (logs.length < 1) {
     await updateBroadcastDatabase("FINISHED", campaign?.broadcast_id);
     return;
   }
 
-  const message = log[0];
-
-  const getObj = await sendMessage(message, metaKeys[0]);
-
   const curTime = Date.now();
 
-  if (getObj.success) {
-    await query(
-      `UPDATE broadcast_log SET meta_msg_id = ?, delivery_status = ?, delivery_time = ? WHERE id = ?`,
-      [getObj?.msgId, getObj.msg, curTime, message?.id]
-    );
-  } else {
-    console.log({ getObj: JSON.stringify(getObj) });
-    await query(`UPDATE broadcast_log SET delivery_status = ? WHERE id = ?`, [
-      getObj.msg,
-      message?.id,
-    ]);
-  }
+  // Process all messages in parallel
+  await Promise.all(
+    logs.map(async (message) => {
+      const getObj = await sendMessage(message, metaKeys[0]);
+
+      if (getObj.success) {
+        await query(
+          `UPDATE broadcast_log SET meta_msg_id = ?, delivery_status = ?, delivery_time = ? WHERE id = ?`,
+          [getObj?.msgId, getObj.msg, curTime, message?.id]
+        );
+      } else {
+        console.log({ getObj: JSON.stringify(getObj) });
+        await query(
+          `UPDATE broadcast_log SET delivery_status = ? WHERE id = ?`,
+          [getObj.msg, message?.id]
+        );
+      }
+    })
+  );
 }
 
 // Function to retrieve and process broadcast campaigns
@@ -86,24 +83,23 @@ async function processBroadcasts() {
     "QUEUE",
   ]);
 
-  // console.log({ length: broadcasts.length });
-
-  for (const campaign of broadcasts) {
-    if (
-      campaign.schedule &&
-      hasDatePassedInTimezone(campaign?.timezone, campaign?.schedule)
-    ) {
-      await processBroadcast(campaign);
-    }
-  }
+  await Promise.all(
+    broadcasts.map(async (campaign) => {
+      if (
+        campaign.schedule &&
+        hasDatePassedInTimezone(campaign?.timezone, campaign?.schedule)
+      ) {
+        await processBroadcast(campaign);
+      }
+    })
+  );
 }
 
 // Function to introduce a random delay before processing broadcasts
 async function runCampaign() {
-  // console.log('Campaign started');
   await processBroadcasts();
-  await delayRandom(3, 5);
-  runCampaign(); // This line causes the function to run recursively
+  await delayRandom(1, 2); // Reduce delay for faster execution
+  runCampaign();
 }
 
 module.exports = { runCampaign };

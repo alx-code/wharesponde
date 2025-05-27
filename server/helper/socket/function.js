@@ -224,7 +224,7 @@ function setQrMsgObj(obj) {
         image: {
           url: obj?.image?.link,
         },
-        caption: obj?.caption || null,
+        caption: obj?.image?.caption || null,
         jpegThumbnail: fetchImageAsBase64(obj?.image?.link),
       };
 
@@ -233,7 +233,7 @@ function setQrMsgObj(obj) {
         video: {
           url: obj?.video?.link,
         },
-        caption: obj?.caption || null,
+        caption: obj?.video?.caption || null,
       };
 
     case "audio":
@@ -253,7 +253,7 @@ function setQrMsgObj(obj) {
         document: {
           url: obj?.document?.link,
         },
-        caption: obj?.caption || null,
+        caption: obj?.document?.caption || null,
         fileName: extractFileName(obj?.document?.link),
       };
 

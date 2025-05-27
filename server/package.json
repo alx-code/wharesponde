@@ -1,11 +1,11 @@
 {
   "name": "server",
-  "version": "1.0.0",
-  "description": "",
+  "version": "3.6",
+  "description": "this code is made for https://codecanyon.net/user/codeyon_itservices/portfolio created by hamidsaifi.com",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +22,7 @@
     "express": "^4.17.2",
     "express-fileupload": "^1.4.0",
     "express-validator": "^6.14.0",
+    "googleapis": "^148.0.0",
     "jsonwebtoken": "^9.0.0",
     "link-preview-js": "^3.0.14",
     "mime-types": "^2.1.35",

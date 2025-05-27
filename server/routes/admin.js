@@ -72,6 +72,9 @@ router.post("/add_plan", adminValidator, async (req, res) => {
       price,
       price_strike,
       plan_duration_in_days,
+      qr_account,
+      wa_warmer,
+      rest_api_qr,
     } = req.body;
 
     if (!title || !short_description || !plan_duration_in_days) {
@@ -80,7 +83,7 @@ router.post("/add_plan", adminValidator, async (req, res) => {
 
     await query(
       `INSERT INTO plan (title, short_description, allow_tag, allow_note, allow_chatbot, 
-            contact_limit, allow_api, is_trial, price, price_strike, plan_duration_in_days) VALUES (?,?,?,?,?,?,?,?,?,?,?)`,
+            contact_limit, allow_api, is_trial, price, price_strike, plan_duration_in_days, qr_account, wa_warmer, rest_api_qr) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         title,
         short_description,
@@ -93,6 +96,9 @@ router.post("/add_plan", adminValidator, async (req, res) => {
         is_trial ? 0 : price,
         price_strike,
         parseInt(plan_duration_in_days || 1),
+        parseInt(qr_account) > 0 ? parseInt(qr_account) : 0,
+        wa_warmer ? 1 : 0,
+        rest_api_qr ? 1 : 0,
       ]
     );
 

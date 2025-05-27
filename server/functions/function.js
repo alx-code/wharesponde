@@ -11,22 +11,17 @@ const nodemailer = require("nodemailer");
 const unzipper = require("unzipper");
 const { destributeTaskFlow } = require("./chatbot");
 
-function executeQueries(queries, connection) {
-  return new Promise(async (resolve) => {
-    try {
-      for (const query of queries) {
-        await connection.query(query);
-      }
-      resolve({
-        success: true,
-      });
-    } catch (err) {
-      resolve({
-        success: false,
-        err,
-      });
+async function executeQueries(queries, pool) {
+  try {
+    const connection = await pool.getConnection(); // Get a connection from the pool
+    for (const query of queries) {
+      await connection.query(query);
     }
-  });
+    connection.release(); // Release the connection back to the pool
+    return { success: true };
+  } catch (err) {
+    return { success: false, err };
+  }
 }
 
 function findTargetNodes(nodes, edges, incomingWord) {
@@ -1966,6 +1961,26 @@ async function validateFacebookToken(userAccessToken, appId, appSecret) {
   }
 }
 
+function extractFileName(url) {
+  try {
+    const decodedUrl = decodeURIComponent(url.split("?")[0]); // Remove query params
+    return decodedUrl.substring(decodedUrl.lastIndexOf("/") + 1);
+  } catch (error) {
+    console.error("Error extracting file name:", error.message);
+    return null;
+  }
+}
+
+async function checkWarmerPlan({ uid }) {
+  try {
+    const [user] = await query(`SELECT * FROM user WHERE uid = ?`, [uid]);
+    const warmer = user?.plan ? JSON.parse(user?.plan)?.wa_warmer : 0;
+    return parseInt(warmer) > 0 ? true : false;
+  } catch (err) {
+    return false;
+  }
+}
+
 module.exports = {
   isValidEmail,
   downloadAndExtractFile,
@@ -2010,4 +2025,6 @@ module.exports = {
   rzCapturePayment,
   validateFacebookToken,
   addObjectToFile,
+  extractFileName,
+  checkWarmerPlan,
 };

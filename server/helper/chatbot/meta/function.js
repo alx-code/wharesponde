@@ -74,7 +74,18 @@ function convertNumberToRandomString(number) {
   return result;
 }
 
+function extractFileName(url) {
+  try {
+    const decodedUrl = decodeURIComponent(url.split("?")[0]); // Remove query params
+    return decodedUrl.substring(decodedUrl.lastIndexOf("/") + 1);
+  } catch (error) {
+    console.error("Error extracting file name:", error.message);
+    return null;
+  }
+}
+
 function setQrMsgObj(obj) {
+  console.dir({ obj }, { depth: null });
   if (!obj || typeof obj !== "object") return null;
 
   switch (obj.type) {
@@ -85,7 +96,7 @@ function setQrMsgObj(obj) {
         image: {
           url: obj?.image?.link,
         },
-        caption: obj?.caption || null,
+        caption: obj?.image?.caption || null,
         // jpegThumbnail: fetchImageAsBase64(obj?.image?.link),
       };
 
@@ -94,7 +105,7 @@ function setQrMsgObj(obj) {
         video: {
           url: obj?.video?.link,
         },
-        caption: obj?.caption || null,
+        caption: obj?.video?.caption || null,
       };
 
     case "audio":
@@ -114,7 +125,7 @@ function setQrMsgObj(obj) {
         document: {
           url: obj?.document?.link,
         },
-        caption: obj?.caption || null,
+        caption: obj?.document?.caption || null,
         fileName: extractFileName(obj?.document?.link),
       };
 
@@ -312,8 +323,10 @@ async function sendMetaMsg({
   try {
     const originData = getOriginData(chatbotFromMysq);
 
+    // console.log({ originData: originData.data });
+
     if (originData?.success) {
-      console.log("SEND QR MSG");
+      // console.log("SEND QR MSG");
       const sendBaileysApi = await sendQrMsg({
         uid,
         msgObj,
@@ -323,7 +336,7 @@ async function sendMetaMsg({
         chatbotFromMysq,
         originData,
       });
-      sendBaileysApi && console.log({ sendBaileysApi });
+      // sendBaileysApi && console.log({ sendBaileysApi });
       return sendBaileysApi;
     } else {
       const sendCloudApi = await sendMetaMsgCloud({
@@ -335,7 +348,7 @@ async function sendMetaMsg({
         chatbotFromMysq,
         originData,
       });
-      sendCloudApi && console.log({ sendCloudApi });
+      // sendCloudApi && console.log({ sendCloudApi });
       return sendCloudApi;
     }
   } catch (err) {
@@ -347,84 +360,6 @@ async function sendMetaMsg({
     };
   }
 }
-
-// function sendMetaMsgOld(uid, msgObj, toNumber, savObj, chatId) {
-//   return new Promise(async (resolve) => {
-//     try {
-//       const getMeta = await query(`SELECT * FROM meta_api WHERE uid = ?`, [
-//         uid,
-//       ]);
-//       const getUser = await query(`SELECT * FROM user WHERE uid = ?`, [uid]);
-
-//       if (getMeta.length < 1) {
-//         return resolve({ success: false, msg: "Unable to to find API " });
-//       }
-
-//       const waToken = getMeta[0]?.access_token;
-//       const waNumId = getMeta[0]?.business_phone_number_id;
-
-//       if (!waToken || !waNumId) {
-//         return resolve({
-//           success: false,
-//           msg: "Please add your meta token and phone number ID",
-//         });
-//       }
-
-//       const url = `https://graph.facebook.com/v17.0/${waNumId}/messages`;
-
-//       const payload = {
-//         messaging_product: "whatsapp",
-//         recipient_type: "individual",
-//         to: toNumber,
-//         ...msgObj,
-//       };
-
-//       const response = await fetch(url, {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${waToken}`,
-//         },
-//         body: JSON.stringify(payload),
-//       });
-
-//       const data = await response.json();
-
-//       if (data?.error) {
-//         return resolve({ success: false, msg: data?.error?.message });
-//       }
-
-//       if (data?.messages[0]?.id) {
-//         const userTimezone = getCurrentTimestampInTimeZone(
-//           getUser[0]?.timezone || Date.now() / 1000
-//         );
-//         const finalSaveMsg = {
-//           ...savObj,
-//           metaChatId: data?.messages[0]?.id,
-//           timestamp: userTimezone,
-//         };
-
-//         const chatPath = `${__dirname}/../../../conversations/inbox/${uid}/${chatId}.json`;
-//         addObjectToFile(finalSaveMsg, chatPath);
-
-//         await query(
-//           `UPDATE chats SET last_message_came = ?, last_message = ?, is_opened = ? WHERE chat_id = ?`,
-//           [userTimezone, JSON.stringify(finalSaveMsg), 1, chatId]
-//         );
-
-//         await query(`UPDATE chats SET is_opened = ? WHERE chat_id = ?`, [
-//           1,
-//           chatId,
-//         ]);
-//       }
-
-//       resolve({ success: true });
-//     } catch (err) {
-//       resolve({ success: false, msg: err.toString(), err });
-//       console.log(err);
-//     }
-//   });
-// }
 
 module.exports = {
   checkAssignAi,

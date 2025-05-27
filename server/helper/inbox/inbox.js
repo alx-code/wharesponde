@@ -142,9 +142,16 @@ async function processMessage({
     // console.dir({ latestConversation }, { depth: null });
     const { conversationPath } = latestConversation;
 
+    console.log({ body }, { depth: null });
+
     // chatbot init
     // console.log({ latestConversation });
     if (latestConversation?.newMessage && uid) {
+      if (origin === "qr") {
+        if (body?.key?.fromMe) {
+          return;
+        }
+      }
       metaChatbotInit({
         latestConversation,
         uid,

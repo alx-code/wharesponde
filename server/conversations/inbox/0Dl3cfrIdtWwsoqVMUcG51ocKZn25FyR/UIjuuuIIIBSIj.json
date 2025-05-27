@@ -1,0 +1,84 @@
+[
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYIDA2MEY1MDdFRUE0NjE2MjQ5MzQzNUQ3MjUwNTdFQTdGAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1746728438,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjY0MDVEQjc3QkI4NEJGNDQ4RAA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Todo listo :D "
+      }
+    },
+    "reaction": "",
+    "timestamp": 1746728450,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING",
+    "context": "",
+    "origin": "meta",
+    "err": ""
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkJCNTIzNzJENTA1QzI4NUQ2QwA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "*Ceseco Norte*:\nHola soy la secretaria de ceseco norte, en que te puedo ayudar"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1746805315,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING",
+    "context": "",
+    "origin": "meta",
+    "err": ""
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBQTY5MzI0QzdBOTY5QjY0OUJGAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1746807295,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  }
+]

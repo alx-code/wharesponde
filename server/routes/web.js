@@ -369,7 +369,7 @@ router.post("/update_app", async (req, res) => {
       return res.json({ msg: "Admin password missing", success: false });
     }
 
-    const getAdmin = await query(`SELECT * FROM admin`, []);
+    const getAdmin = await query("SELECT * FROM admin", []);
 
     const compare = await bcrypt.compare(password, getAdmin[0].password);
     if (!compare) {
@@ -378,17 +378,19 @@ router.post("/update_app", async (req, res) => {
       });
     }
 
-    const connection = await mysql.createConnection({
+    // Create a MySQL connection pool
+    const pool = mysql.createPool({
       host: process.env.DBHOST || "localhost",
       user: process.env.DBUSER,
       password: process.env.DBPASS,
       database: process.env.DBNAME,
+      connectionLimit: 10, // Limit the number of concurrent connections
     });
 
     if (queries && JSON.parse(queries)?.length > 0) {
       const parsedQueries = JSON.parse(queries);
       if (Array.isArray(parsedQueries) && parsedQueries.length > 0) {
-        await executeQueries(parsedQueries, connection);
+        await executeQueries(parsedQueries, pool);
       }
     }
 
@@ -397,9 +399,14 @@ router.post("/update_app", async (req, res) => {
       await Promise.all(
         newQuery?.map(async (i) => {
           const { run, check } = i;
-          const checkExist = await query(check, []);
-          if (checkExist.length < 1) {
-            await query(run, []);
+          const connection = await pool.getConnection(); // Get a connection from the pool
+          try {
+            const checkExist = await connection.query(check);
+            if (checkExist[0].length < 1) {
+              await connection.query(run);
+            }
+          } finally {
+            connection.release(); // Always release the connection back to the pool
           }
         })
       );
@@ -530,6 +537,8 @@ router.post("/test", (req, res) => {
   const body = req.body;
   const headers = req.headers;
   const contentType = req.get("Content-Type");
+
+  console.log({ body: req.body });
 
   res.json({
     success: true,
