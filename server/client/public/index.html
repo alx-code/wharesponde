@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsCRM</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        .landing {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background: #25D366;
+            padding: 1rem;
+            text-align: center;
+        }
+        .header h1 {
+            color: white;
+            margin: 0;
+        }
+        .content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .login-btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: white;
+            color: #25D366;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .feature-card {
+            padding: 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="landing">
+        <header class="header">
+            <h1>WhatsCRM</h1>
+            <a href="/app" class="login-btn">Acceder a la aplicación</a>
+        </header>
+        
+        <main class="content">
+            <h2>Bienvenido a WhatsCRM</h2>
+            <p>La solución completa para gestionar WhatsApp Business</p>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <h3>Automatización</h3>
+                    <p>Respuestas automáticas y flujos de trabajo personalizados</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Multi-Agente</h3>
+                    <p>Gestiona múltiples conversaciones simultáneas</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Reportes</h3>
+                    <p>Análisis detallado de conversaciones y métricas</p>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

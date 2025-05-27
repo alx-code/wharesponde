@@ -1,0 +1,674 @@
+[
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABIYFDNBRDkwODUwNjZCNTRENTZBRTJBAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Hola, me interesa conocer más sobre sus servicios"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927832,
+    "senderName": "Lore",
+    "senderMobile": "5213334842923",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABEYEjcxRDQzNEU0ODFBRTA4ODRDRAA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Hola que tal, soy Alex 👋\n\n¿En que te puedo ayudar?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926661889",
+                "title": "Kuvo Tarjeta Digital"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926673675",
+                "title": "Tienda en linea"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926687819",
+                "title": "Otro"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927832,
+    "senderName": "Lore",
+    "senderMobile": "5213334842923",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABIYFDNBMDIzQjRBREFFNjgwQkNGMDA2AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Tienda en linea"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927841,
+    "senderName": "Lore",
+    "senderMobile": "5213334842923",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABEYEjcxRDQzNEU0ODFBRTA4ODRDRAA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, soy Alex 👋\n\n¿En que te puedo ayudar?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926661889",
+                  "title": "Kuvo Tarjeta Digital"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926673675",
+                  "title": "Tienda en linea"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926687819",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1744927832,
+      "senderName": "Lore",
+      "senderMobile": "5213334842923",
+      "status": "read",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABEYEjYzMkUxQTU5NTBENEQxNUI2NQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Claro mira te explico, las tiendas en linea son personalizadas y se realizan acorde a tu gusto, cada tienda es unica y por eso nos difernciamos mucho, ya que nosotros NO utilizamos plantillas de wordpress, shopify o demas..\n\n¿Te gustaria ver uno de nuestros demos?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927519042",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927521779",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927842,
+    "senderName": "Lore",
+    "senderMobile": "5213334842923",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABIYFDNBNjQzRDM1QjlFQzIzQkI5RDUyAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Si"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927865,
+    "senderName": "Lore",
+    "senderMobile": "5213334842923",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABEYEjYzMkUxQTU5NTBENEQxNUI2NQA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Claro mira te explico, las tiendas en linea son personalizadas y se realizan acorde a tu gusto, cada tienda es unica y por eso nos difernciamos mucho, ya que nosotros NO utilizamos plantillas de wordpress, shopify o demas..\n\n¿Te gustaria ver uno de nuestros demos?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927519042",
+                  "title": "Si"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927521779",
+                  "title": "No"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1744927842,
+      "senderName": "Lore",
+      "senderMobile": "5213334842923",
+      "status": "read",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABEYEjBERjJDRjRERUZCOEZFNEREMAA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Perfecto 😁, mira esta es mi tarjeta digital, con que des clic en el siguiente enlace podras ver todos los medios de contactos en 1 sola pantalla\n\nDa clic aqui 👇\nhttps://app.kuvo360.com/alexramos\n\n¿Que te parece es lo que buscas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927477399",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927482914",
+                "title": "No estoy seguro"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927488206",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927865,
+    "senderName": "Lore",
+    "senderMobile": "5213334842923",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABEYEkQ3NjE3MTBFRTUzNzBGNkY1QwA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "perfecto, mira tenemos varios tipos de tienda en linea, desde las sencillas con carrito de compra y pedidos de whatsapp hasta tiendas en linea super grandes que te incluyen una app movil, \n\n¿Cuantos productos manejas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927566600",
+                "title": "de 50 a 100"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927573748",
+                "title": "de 100 a 500"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927579504",
+                "title": "más de 1000"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927866,
+    "senderName": "Lore",
+    "senderMobile": "5213334842923",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABIYFDNBOTk0MDJBNTFFMDAwQTlFMTU5AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "de 50 a 100"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927896,
+    "senderName": "Lore",
+    "senderMobile": "5213334842923",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABEYEkQ3NjE3MTBFRTUzNzBGNkY1QwA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "perfecto, mira tenemos varios tipos de tienda en linea, desde las sencillas con carrito de compra y pedidos de whatsapp hasta tiendas en linea super grandes que te incluyen una app movil, \n\n¿Cuantos productos manejas?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927566600",
+                  "title": "de 50 a 100"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927573748",
+                  "title": "de 100 a 500"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927579504",
+                  "title": "más de 1000"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1744927866,
+      "senderName": "Lore",
+      "senderMobile": "5213334842923",
+      "status": "read",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABEYEjQxRkM1MUREQTE0MEM4MEYxQwA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Hola que tal, soy Alex 👋\n\n¿En que te puedo ayudar?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926661889",
+                "title": "Kuvo Tarjeta Digital"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926673675",
+                "title": "Tienda en linea"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926687819",
+                "title": "Otro"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927897,
+    "senderName": "Lore",
+    "senderMobile": "5213334842923",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABIYFDNBRjg3NkQ5M0NDRDk5MzIwOTAxAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Kuvo Tarjeta Digital"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927904,
+    "senderName": "Lore",
+    "senderMobile": "5213334842923",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABEYEjQxRkM1MUREQTE0MEM4MEYxQwA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, soy Alex 👋\n\n¿En que te puedo ayudar?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926661889",
+                  "title": "Kuvo Tarjeta Digital"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926673675",
+                  "title": "Tienda en linea"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926687819",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1744927897,
+      "senderName": "Lore",
+      "senderMobile": "5213334842923",
+      "status": "read",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABEYEjRFREY2QkY4MjVCRjY5MjQ4NQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927436266",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927439815",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927905,
+    "senderName": "Lore",
+    "senderMobile": "5213334842923",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABIYFDNBNDJBMzAxMjI1OURERkMzMDRBAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Si"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927910,
+    "senderName": "Lore",
+    "senderMobile": "5213334842923",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABEYEjRFREY2QkY4MjVCRjY5MjQ4NQA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927436266",
+                  "title": "Si"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927439815",
+                  "title": "No"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1744927905,
+      "senderName": "Lore",
+      "senderMobile": "5213334842923",
+      "status": "read",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABEYEkNGMUVEMzczRjI1QTVCNTFCMAA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Perfecto 😁, mira esta es mi tarjeta digital, con que des clic en el siguiente enlace podras ver todos los medios de contactos en 1 sola pantalla\n\nDa clic aqui 👇\nhttps://app.kuvo360.com/alexramos\n\n¿Que te parece es lo que buscas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927477399",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927482914",
+                "title": "No estoy seguro"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927488206",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927911,
+    "senderName": "Lore",
+    "senderMobile": "5213334842923",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzNDg0MjkyMxUCABEYEjUzQzkwNTY1MTk5REMzOENDRQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "perfecto, mira tenemos varios tipos de tienda en linea, desde las sencillas con carrito de compra y pedidos de whatsapp hasta tiendas en linea super grandes que te incluyen una app movil, \n\n¿Cuantos productos manejas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927566600",
+                "title": "de 50 a 100"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927573748",
+                "title": "de 100 a 500"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927579504",
+                "title": "más de 1000"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927911,
+    "senderName": "Lore",
+    "senderMobile": "5213334842923",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING"
+  }
+]

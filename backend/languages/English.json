@@ -733,5 +733,15 @@
   "mergeChats": "Merge Chats",
   "instance": "Instance",
   "waNumber": "WA Number",
-  "instanceId": "InstanceID"
+  "instanceId": "InstanceID",
+  "entireMsg": "Previoue Entire message",
+  "or": "or",
+  "sendConABody": "Send conversation as body?",
+  "youWillGet": "You will get",
+  "messagess": "Messages(s)",
+  "saveAsVar": "Save as varaible",
+  "saveAsVarDes": "You can use {{{msgVariableName}}} (or any variable name you define) anywhere within this flow.",
+  "savHelper": "You can also use previousMsg.key.key",
+  "giveVarName": "Give varaible name",
+  "username": "Username"
 }

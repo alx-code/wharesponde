@@ -1,0 +1,107 @@
+[
+  {
+    "source": "1744926532337",
+    "sourceHandle": "Kuvo Tarjeta Digital",
+    "target": "1744927426474",
+    "targetHandle": "1744927426474_target",
+    "id": "reactflow__edge-1744926532337Kuvo Tarjeta Digital-17449274264741744927426474_target"
+  },
+  {
+    "source": "1744926532337",
+    "sourceHandle": "Tienda en linea",
+    "target": "1744927507668",
+    "targetHandle": "1744927507668_target",
+    "id": "reactflow__edge-1744926532337Tienda en linea-17449275076681744927507668_target"
+  },
+  {
+    "source": "1744926532337",
+    "sourceHandle": "Otro",
+    "target": "1745700070955",
+    "targetHandle": "1745700070955_target",
+    "id": "reactflow__edge-1744926532337Otro-17457000709551745700070955_target"
+  },
+  {
+    "source": "1745700070955",
+    "sourceHandle": "Bots Whatsapp",
+    "target": "1745699870620",
+    "targetHandle": "1745699870620_target",
+    "id": "reactflow__edge-1745700070955Bots Whatsapp-17456998706201745699870620_target"
+  },
+  {
+    "source": "1745699870620",
+    "sourceHandle": "Si",
+    "target": "1745701536672",
+    "targetHandle": "1745701536672_target",
+    "id": "reactflow__edge-1745699870620Si-17457015366721745701536672_target"
+  },
+  {
+    "source": "1745701536672",
+    "sourceHandle": null,
+    "target": "1745701674610",
+    "targetHandle": "1745701674610_target",
+    "id": "reactflow__edge-1745701536672-17457016746101745701674610_target"
+  },
+  {
+    "source": "1745700070955",
+    "sourceHandle": "Soporte",
+    "target": "1745701536672",
+    "targetHandle": "1745701536672_target",
+    "id": "reactflow__edge-1745700070955Soporte-17457015366721745701536672_target"
+  },
+  {
+    "source": "1745700070955",
+    "sourceHandle": "Ventas",
+    "target": "1745701536672",
+    "targetHandle": "1745701536672_target",
+    "id": "reactflow__edge-1745700070955Ventas-17457015366721745701536672_target"
+  },
+  {
+    "source": "1745702271371",
+    "sourceHandle": "Te gustaria obtener la tuya?",
+    "target": "1745701536672",
+    "targetHandle": "1745701536672_target",
+    "id": "reactflow__edge-1745702271371Te gustaria obtener la tuya?-17457015366721745701536672_target"
+  },
+  {
+    "source": "1744927426474",
+    "sourceHandle": "Si",
+    "target": "1745702271371",
+    "targetHandle": "1745702271371_target",
+    "id": "reactflow__edge-1744927426474Si-17457022713711745702271371_target"
+  },
+  {
+    "source": "1745701674610",
+    "sourceHandle": "De acuerdo",
+    "target": "1745702845795",
+    "targetHandle": "1745702845795_target",
+    "id": "reactflow__edge-1745701674610De acuerdo-17457028457951745702845795_target"
+  },
+  {
+    "source": "1744926016349",
+    "sourceHandle": "{{OTHER_MSG}}",
+    "target": "1744926532337",
+    "targetHandle": "1744926532337_target",
+    "id": "reactflow__edge-1744926016349{{OTHER_MSG}}-17449265323371744926532337_target"
+  },
+  {
+    "source": "1745701674610",
+    "sourceHandle": "Si",
+    "target": "1745702845795",
+    "targetHandle": "1745702845795_target",
+    "id": "reactflow__edge-1745701674610Si-17457028457951745702845795_target"
+  },
+  {
+    "source": "1745701674610",
+    "sourceHandle": "si",
+    "target": "1745702845795",
+    "targetHandle": "1745702845795_target",
+    "id": "reactflow__edge-1745701674610si-17457028457951745702845795_target"
+  },
+  {
+    "source": "1744927507668",
+    "sourceHandle": "Si",
+    "target": "1745701536672",
+    "targetHandle": "1745701536672_target",
+    "id": "reactflow__edge-1744927507668Si-17457015366721745701536672_target"
+  }
+]

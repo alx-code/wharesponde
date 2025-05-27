@@ -1,0 +1,371 @@
+[
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxOTUxMzEyMzc5ORUCABIYIEM4NjVFREIzMEEyQUFCMzVEMjc3NzJBQzExMDY2N0E2AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "¡Hola! 🌟"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703957,
+    "senderName": "Paguishop",
+    "senderMobile": "5219513123799",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxOTUxMzEyMzc5ORUCABEYEkEzOTczRDQ2RjAzMUQyQzNDMAA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926661889",
+                "title": "Kuvo Tarjeta Digital"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926673675",
+                "title": "Tienda en linea"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926687819",
+                "title": "Otro"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703958,
+    "senderName": "Paguishop",
+    "senderMobile": "5219513123799",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxOTUxMzEyMzc5ORUCABIYIEFDNEQ3QjQ5MEQ0M0IyNThBRDE0NEQ0ODU1NzE3NzAxAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Otro"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703971,
+    "senderName": "Paguishop",
+    "senderMobile": "5219513123799",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxOTUxMzEyMzc5ORUCABEYEkEzOTczRDQ2RjAzMUQyQzNDMAA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926661889",
+                  "title": "Kuvo Tarjeta Digital"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926673675",
+                  "title": "Tienda en linea"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926687819",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745703958,
+      "senderName": "Paguishop",
+      "senderMobile": "5219513123799",
+      "status": "read",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxOTUxMzEyMzc5ORUCABEYEjRDNTNCMjE5N0IxODM4MkRDNgA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "vale, entonces si gustas dime que necesitas y yo vere como te puedo apoyar  😇"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700115785",
+                "title": "Bots Whatsapp"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700133327",
+                "title": "Soporte"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700136090",
+                "title": "Ventas"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703971,
+    "senderName": "Paguishop",
+    "senderMobile": "5219513123799",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxOTUxMzEyMzc5ORUCABIYIEE3MDlCODlGODExODg2QjkwODk1MjQ0MjQ0RjNDQjYxAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Bots Whatsapp"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703978,
+    "senderName": "Paguishop",
+    "senderMobile": "5219513123799",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxOTUxMzEyMzc5ORUCABEYEjRDNTNCMjE5N0IxODM4MkRDNgA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "vale, entonces si gustas dime que necesitas y yo vere como te puedo apoyar  😇"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745700115785",
+                  "title": "Bots Whatsapp"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745700133327",
+                  "title": "Soporte"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745700136090",
+                  "title": "Ventas"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745703971,
+      "senderName": "Paguishop",
+      "senderMobile": "5219513123799",
+      "status": "read",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxOTUxMzEyMzc5ORUCABEYEjg3M0FDMDEyRkU0QTY1MTUwOAA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Whatsapp bot es para todos aquellos negocios que tienen procesos repetitivos y constantes, y siempre tienen que dar la misma información a todos sus clientes, \n\n¿Deseas saber mas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745699931673",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745699935350",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703979,
+    "senderName": "Paguishop",
+    "senderMobile": "5219513123799",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxOTUxMzEyMzc5ORUCABIYIDUyMDE0QkQyQjIzOUEyOUFCNUQwNDkxMUYzODgxMkY5AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Si"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703983,
+    "senderName": "Paguishop",
+    "senderMobile": "5219513123799",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxOTUxMzEyMzc5ORUCABEYEjg3M0FDMDEyRkU0QTY1MTUwOAA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Whatsapp bot es para todos aquellos negocios que tienen procesos repetitivos y constantes, y siempre tienen que dar la misma información a todos sus clientes, \n\n¿Deseas saber mas?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745699931673",
+                  "title": "Si"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745699935350",
+                  "title": "No"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745703979,
+      "senderName": "Paguishop",
+      "senderMobile": "5219513123799",
+      "status": "read",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxOTUxMzEyMzc5ORUCABEYEjI4OEE1Njk2RjYwRUNDNzhDMAA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto 😁, por favor puedes indicarme con quién tengo el gusto?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703984,
+    "senderName": "Paguishop",
+    "senderMobile": "5219513123799",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxOTUxMzEyMzc5ORUCABEYEjRDODkwMzZERkNENTIxQ0Q0MwA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto, Si voy a transferirte con un agente para que pueda aclarar tus dudas 😉\n\nEstás de acuerdo?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703984,
+    "senderName": "Paguishop",
+    "senderMobile": "5219513123799",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING"
+  }
+]

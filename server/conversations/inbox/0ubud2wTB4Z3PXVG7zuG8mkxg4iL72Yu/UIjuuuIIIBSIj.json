@@ -1,0 +1,4621 @@
+[
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBMjQ2QzY2ODg5QzVFMUI1NkYwAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "¡Hola! 🌟"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744831164,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBRjQ4MjZEOTRDNjBBMTU4RDRDAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744925843,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBM0IzNTFGRTY5MzkyMjQ5NzdDAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744926182,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBMjkxOUE3OTQ5NjI0MDUxODc4AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744926365,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBNkE1QURFRTlBNDgyREM3MjNGAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744926933,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkExNjVERTk2MUIzMjk4MUU5OQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Hola que tal, soy Alex\n\n¿En que producto estas interesado?\n"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926661889",
+                "title": "Kuvo Tarjeta Digital"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926673675",
+                "title": "Tienda en linea"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926687819",
+                "title": "Otro"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744926934,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBRUU4NEY0NzA4Nzc2NEREQkREAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Kuvo Tarjeta Digital"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744926944,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkExNjVERTk2MUIzMjk4MUU5OQA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, soy Alex\n\n¿En que producto estas interesado?\n"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926661889",
+                  "title": "Kuvo Tarjeta Digital"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926673675",
+                  "title": "Tienda en linea"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926687819",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1744926934,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjkzMEU2Q0M4RDgwMEQ1N0EyNQA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744926945,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBNjBFNkI0OTRERTRGQjJCRkY1AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927338,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjNFODY4MUU5RUEyNUI3NUZGMwA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Hola que tal, soy Alex 👋\n\n¿En que te puedo ayudar?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926661889",
+                "title": "Kuvo Tarjeta Digital"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926673675",
+                "title": "Tienda en linea"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926687819",
+                "title": "Otro"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927339,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBQTNFQkI1MTgyNkZDNjlGOENBAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Kuvo Tarjeta Digital"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927366,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjNFODY4MUU5RUEyNUI3NUZGMwA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, soy Alex 👋\n\n¿En que te puedo ayudar?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926661889",
+                  "title": "Kuvo Tarjeta Digital"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926673675",
+                  "title": "Tienda en linea"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926687819",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1744927339,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkU2RjVDN0ZCNzZGRjE2MzA0NwA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927367,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBMTYxN0UyQzI1MDE5MTJDNkNFAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Si"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927390,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjlGQzQxQTFEM0JEQUUwQUNDNQA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto 😁, mira esta es mi tarjeta digital, con que des clic en el siguiente enlace podras ver todos los medios de contactos en 1 sola pantalla\n\nDa clic aqui 👇\nhttps://app.kuvo360.com/alexramos\n\n¿Que te parece es lo que buscas?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927391,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkI5NUU1RkZGNDgzRjU3RUI0MQA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "perfecto, mira tenemos varios tipos de tienda en linea, desde las sencillas con carrito de compra y pedidos de whatsapp hasta tiendas en linea super grandes que te incluyen una app movil, \n\n¿En cual estas intereasdo?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927391,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBQTgyMjAxQkY4OTEwM0E2OTRBAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927597,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjA2MDM3MUE0MjlBMDY5NDA0RQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Hola que tal, soy Alex 👋\n\n¿En que te puedo ayudar?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926661889",
+                "title": "Kuvo Tarjeta Digital"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926673675",
+                "title": "Tienda en linea"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926687819",
+                "title": "Otro"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927598,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBOTA0OTA0QUUyN0I5MzYxRDNBAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Kuvo Tarjeta Digital"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927602,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjA2MDM3MUE0MjlBMDY5NDA0RQA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, soy Alex 👋\n\n¿En que te puedo ayudar?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926661889",
+                  "title": "Kuvo Tarjeta Digital"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926673675",
+                  "title": "Tienda en linea"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926687819",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1744927598,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkI1QTJEOEQ2REZCMTdCMzQzMwA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927436266",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927439815",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927602,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBNzA5N0JGMTlCNkVFQUNCRDQ0AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Si"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927606,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkI1QTJEOEQ2REZCMTdCMzQzMwA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927436266",
+                  "title": "Si"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927439815",
+                  "title": "No"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1744927602,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkUzRDBFQzcyOTVDODlEREM2MwA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Perfecto 😁, mira esta es mi tarjeta digital, con que des clic en el siguiente enlace podras ver todos los medios de contactos en 1 sola pantalla\n\nDa clic aqui 👇\nhttps://app.kuvo360.com/alexramos\n\n¿Que te parece es lo que buscas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927477399",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927482914",
+                "title": "No estoy seguro"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927488206",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927606,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkI2N0YzQ0UyQTdEOUM0RjM4NQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "perfecto, mira tenemos varios tipos de tienda en linea, desde las sencillas con carrito de compra y pedidos de whatsapp hasta tiendas en linea super grandes que te incluyen una app movil, \n\n¿Cuantos productos manejas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927566600",
+                "title": "de 50 a 100"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927573748",
+                "title": "de 100 a 500"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927579504",
+                "title": "más de 1000"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1744927607,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBRDQxNjBDMTg4RDkxODY1QTMxAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745701413,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjA0N0FFRDBGNjQ3MEU5Q0ExOAA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Hola que tal, soy Alex 👋\n\n¿En que te puedo ayudar?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926661889",
+                "title": "Kuvo Tarjeta Digital"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926673675",
+                "title": "Tienda en linea"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926687819",
+                "title": "Otro"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745701414,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBMDJCNTQyQjNEMDhEMDA4MEE4AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Otro"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745701434,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjA0N0FFRDBGNjQ3MEU5Q0ExOAA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, soy Alex 👋\n\n¿En que te puedo ayudar?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926661889",
+                  "title": "Kuvo Tarjeta Digital"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926673675",
+                  "title": "Tienda en linea"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926687819",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745701414,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjFGNzhCRDZCOUExRjZENkQ2NQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "vale, entonces si gustas dime que necesitas y yo vere como te puedo apoyar  😇"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700115785",
+                "title": "Bots Whatsapp"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700133327",
+                "title": "Soporte"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700136090",
+                "title": "Ventas"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745701434,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBQzlEREM3RkM0MDU5ODBFRUVBAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Bots Whatsapp"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745701439,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjFGNzhCRDZCOUExRjZENkQ2NQA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "vale, entonces si gustas dime que necesitas y yo vere como te puedo apoyar  😇"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745700115785",
+                  "title": "Bots Whatsapp"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745700133327",
+                  "title": "Soporte"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745700136090",
+                  "title": "Ventas"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745701434,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkZDQkNFQkM5RkMwRDdEOTYwQgA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Whatsapp bot es para todos aquellos negocios que tienen procesos repetitivos y constantes, y siempre tienen que dar la misma información a todos sus clientes, \n\n¿Deseas saber mas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745699931673",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745699935350",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745701439,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBMDBGODNEM0QwNjY5MzJBQURGAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Si"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745701444,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkZDQkNFQkM5RkMwRDdEOTYwQgA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Whatsapp bot es para todos aquellos negocios que tienen procesos repetitivos y constantes, y siempre tienen que dar la misma información a todos sus clientes, \n\n¿Deseas saber mas?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745699931673",
+                  "title": "Si"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745699935350",
+                  "title": "No"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745701439,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjZCRDlEOTREODFEMTNFQzdGNwA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Perfecto 😁, mira esta es mi tarjeta digital, con que des clic en el siguiente enlace podras ver todos los medios de contactos en 1 sola pantalla\n\nDa clic aqui 👇\nhttps://app.kuvo360.com/alexramos\n\n¿Que te parece es lo que buscas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927477399",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927482914",
+                "title": "No estoy seguro"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927488206",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745701445,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjM4NjRDNjAwQUUwRUVBNTQ5OQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "perfecto, mira tenemos varios tipos de tienda en linea, desde las sencillas con carrito de compra y pedidos de whatsapp hasta tiendas en linea super grandes que te incluyen una app movil, \n\n¿Cuantos productos manejas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927566600",
+                "title": "de 50 a 100"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927573748",
+                "title": "de 100 a 500"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927579504",
+                "title": "más de 1000"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745701445,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBMjI1NjVFNUQ0RkVDQjVDRUFCAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702159,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjBFMDdGRDIxQzk0MTU0NUI0QwA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926661889",
+                "title": "Kuvo Tarjeta Digital"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926673675",
+                "title": "Tienda en linea"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926687819",
+                "title": "Otro"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702161,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBMTU4QTM0NTRBMzVGREZGMTgwAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Otro"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702166,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjBFMDdGRDIxQzk0MTU0NUI0QwA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926661889",
+                  "title": "Kuvo Tarjeta Digital"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926673675",
+                  "title": "Tienda en linea"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926687819",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745702161,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjE5Nzk1Njk0MzZFREFDNjc4RgA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "vale, entonces si gustas dime que necesitas y yo vere como te puedo apoyar  😇"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700115785",
+                "title": "Bots Whatsapp"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700133327",
+                "title": "Soporte"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700136090",
+                "title": "Ventas"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702166,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBQkZEOENFMTg2NTdFRjU5NkEzAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Bots Whatsapp"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702170,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjE5Nzk1Njk0MzZFREFDNjc4RgA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "vale, entonces si gustas dime que necesitas y yo vere como te puedo apoyar  😇"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745700115785",
+                  "title": "Bots Whatsapp"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745700133327",
+                  "title": "Soporte"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745700136090",
+                  "title": "Ventas"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745702166,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkVGRkVEMjlDNUYxNTdDOThBMQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Whatsapp bot es para todos aquellos negocios que tienen procesos repetitivos y constantes, y siempre tienen que dar la misma información a todos sus clientes, \n\n¿Deseas saber mas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745699931673",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745699935350",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702171,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBNjJFREY5MTY4RUU5NURERkM1AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Si"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702179,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkVGRkVEMjlDNUYxNTdDOThBMQA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Whatsapp bot es para todos aquellos negocios que tienen procesos repetitivos y constantes, y siempre tienen que dar la misma información a todos sus clientes, \n\n¿Deseas saber mas?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745699931673",
+                  "title": "Si"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745699935350",
+                  "title": "No"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745702171,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjRDNUY4RkUwRjA0NkM3MTY4QQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Perfecto 😁, mira esta es mi tarjeta digital, con que des clic en el siguiente enlace podras ver todos los medios de contactos en 1 sola pantalla\n\nDa clic aqui 👇\nhttps://app.kuvo360.com/alexramos\n\n¿Que te parece es lo que buscas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927477399",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927488206",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702180,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkM0MDM0MkEwOUE5QURBNDQ1QwA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "perfecto, mira tenemos varios tipos de tienda en linea, desde las sencillas con carrito de compra y pedidos de whatsapp hasta tiendas en linea super grandes que te incluyen una app movil, \n\n¿Cuantos productos manejas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927566600",
+                "title": "de 50 a 100"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927573748",
+                "title": "de 100 a 500"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927579504",
+                "title": "más de 1000"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702180,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkY3ODE4RjI3QzQzRDg3RDkyMQA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto 😁, por favor puedes indicarme con quién tengo el gusto?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702181,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBRDZGMUI2NjA0NzEwRjNBNjQxAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702623,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjZERDI5NTI5QUM0Q0VDOEVENwA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto, {{nombre}} voy a transferirte con un agente para que pueda aclarar tus dudas 😉"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702624,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBNTdFMEM5OEJDMTM3Qjk1NDhEAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702648,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkZFNkVGNDQyODE4QTZDMUUwQgA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926661889",
+                "title": "Kuvo Tarjeta Digital"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926673675",
+                "title": "Tienda en linea"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926687819",
+                "title": "Otro"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702648,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBRThGODJBMTMzOTYyQzMxQzk2AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Kuvo Tarjeta Digital"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702652,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkZFNkVGNDQyODE4QTZDMUUwQgA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926661889",
+                  "title": "Kuvo Tarjeta Digital"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926673675",
+                  "title": "Tienda en linea"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926687819",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745702648,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjFDMDNDQTFGMDEwRTZERjRDNgA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927436266",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927439815",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702652,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBMkY5NEE2ODA4RTQyMjE2ODQyAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Si"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702655,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjFDMDNDQTFGMDEwRTZERjRDNgA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927436266",
+                  "title": "Si"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927439815",
+                  "title": "No"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745702652,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjU4NzM0MDA2NkJCRTcwQTFFMwA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "perfecto, mira tenemos varios tipos de tienda en linea, desde las sencillas con carrito de compra y pedidos de whatsapp hasta tiendas en linea super grandes que te incluyen una app movil, \n\n¿Cuantos productos manejas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927566600",
+                "title": "de 50 a 100"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927573748",
+                "title": "de 100 a 500"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927579504",
+                "title": "más de 1000"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702655,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjJDQzIxMzI5RDFCMkMyMTNCNQA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto 😁, por favor puedes indicarme con quién tengo el gusto?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702656,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjFFNEIyRDk0OTZBODhGMUY0QQA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto, Si voy a transferirte con un agente para que pueda aclarar tus dudas 😉"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702656,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBQ0Q1MEU5NzMxNDhCMENEMUI2AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702925,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjFDRTc2NDQyOUFEMjdDREJERgA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Hola que tal, soy Kibot  🤖 👋 "
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702926,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBNEQwNjgzOURCQzRCOTdCMjE1AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "quiero"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702933,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjhCMkNEODYwMURFN0RCMTNENAA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Hola que tal, soy Kibot  🤖 👋 "
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745702934,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBN0E1QTFGOUMxNDBCQzJGOTBDAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703041,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkFGOEI3RjFCQzg3RUIxM0IyNwA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926661889",
+                "title": "Kuvo Tarjeta Digital"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926673675",
+                "title": "Tienda en linea"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926687819",
+                "title": "Otro"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703041,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBM0NGMjhCMUE1ODA2REUyRUJCAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Kuvo Tarjeta Digital"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703045,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkFGOEI3RjFCQzg3RUIxM0IyNwA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926661889",
+                  "title": "Kuvo Tarjeta Digital"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926673675",
+                  "title": "Tienda en linea"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926687819",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745703041,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjVFOTNCQUE3MkNCQzYwMTdCQwA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927436266",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927439815",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703046,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBQzJDRkQyOURGMTU5NjUxMkQxAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Si"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703049,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjVFOTNCQUE3MkNCQzYwMTdCQwA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927436266",
+                  "title": "Si"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927439815",
+                  "title": "No"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745703046,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjM2Q0UwNEJGMTQ5QzkxMUMxNQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "perfecto, mira tenemos varios tipos de tienda en linea, desde las sencillas con carrito de compra y pedidos de whatsapp hasta tiendas en linea super grandes que te incluyen una app movil, \n\n¿Cuantos productos manejas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927566600",
+                "title": "de 50 a 100"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927573748",
+                "title": "de 100 a 500"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927579504",
+                "title": "más de 1000"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703050,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjc2MDY4Qjk5OTE2MzhFMTZEOQA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto 😁, por favor puedes indicarme con quién tengo el gusto?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703050,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjZGNzMzQzlBQUM3ODgwOTE5RgA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto, Si voy a transferirte con un agente para que pueda aclarar tus dudas 😉"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703051,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBQTNFNTk1QUJFMjBEQjIwMTkwAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "de 100 a 500"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703055,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjM2Q0UwNEJGMTQ5QzkxMUMxNQA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "perfecto, mira tenemos varios tipos de tienda en linea, desde las sencillas con carrito de compra y pedidos de whatsapp hasta tiendas en linea super grandes que te incluyen una app movil, \n\n¿Cuantos productos manejas?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927566600",
+                  "title": "de 50 a 100"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927573748",
+                  "title": "de 100 a 500"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927579504",
+                  "title": "más de 1000"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745703050,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjg3MUM1OThCN0Q3MEEzRDE2QgA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto 😁, por favor puedes indicarme con quién tengo el gusto?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703056,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBRkZGQUI2NDc1QkY5QTY1MUJGAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "juan"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703063,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkY4QTYxOEM1QTQxMjFENjFEMAA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto, juan voy a transferirte con un agente para que pueda aclarar tus dudas 😉"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703063,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBREU3MDUyOUIyOEEyRTIzMjQzAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "ok"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703073,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkFBNzhCMzZGMThFN0I4RTA2OQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926661889",
+                "title": "Kuvo Tarjeta Digital"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926673675",
+                "title": "Tienda en linea"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926687819",
+                "title": "Otro"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703074,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBQzUzREIzQjYyNUFDRjJFN0UwAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Kuvo Tarjeta Digital"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703177,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkFBNzhCMzZGMThFN0I4RTA2OQA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926661889",
+                  "title": "Kuvo Tarjeta Digital"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926673675",
+                  "title": "Tienda en linea"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926687819",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745703074,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjRFNEJBM0I4MDgwRjFEMTc0RgA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927436266",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927439815",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703178,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBOERBQkYxRDkzODk4MTgxOTk4AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Si"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703181,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjRFNEJBM0I4MDgwRjFEMTc0RgA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927436266",
+                  "title": "Si"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927439815",
+                  "title": "No"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745703178,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjQ0QjI2MDVERUU5RUJEMUIzQQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "perfecto, mira tenemos varios tipos de tienda en linea, desde las sencillas con carrito de compra y pedidos de whatsapp hasta tiendas en linea super grandes que te incluyen una app movil, \n\n¿Cuantos productos manejas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927566600",
+                "title": "de 50 a 100"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927573748",
+                "title": "de 100 a 500"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927579504",
+                "title": "más de 1000"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703181,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkJCQjgxNTlFRkUxMTBENzkwNAA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto 😁, por favor puedes indicarme con quién tengo el gusto?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703182,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjJERkYyNTM0MTA2RDJBQkM3OAA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto, Si voy a transferirte con un agente para que pueda aclarar tus dudas 😉\n\nEstás de acuerdo?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703183,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBMTg1MDVFMzFDQzIzOUZGNzM2AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "si"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703195,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBRjYyQkYxRTU1NzMxMUYzQUY3AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703208,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjNGNkMwNzQ4MjhENDI0RTMwOQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926661889",
+                "title": "Kuvo Tarjeta Digital"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926673675",
+                "title": "Tienda en linea"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926687819",
+                "title": "Otro"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703208,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBNDAyODA4MzdFM0Q0QUUwNzFEAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Otro"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703213,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjNGNkMwNzQ4MjhENDI0RTMwOQA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926661889",
+                  "title": "Kuvo Tarjeta Digital"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926673675",
+                  "title": "Tienda en linea"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926687819",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745703208,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkQ1MDBDNDkzMEVCOTUxQzVEMAA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "vale, entonces si gustas dime que necesitas y yo vere como te puedo apoyar  😇"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700115785",
+                "title": "Bots Whatsapp"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700133327",
+                "title": "Soporte"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700136090",
+                "title": "Ventas"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703214,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBNUZENjFGREMzN0I2MEU0QUQyAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Bots Whatsapp"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703216,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkQ1MDBDNDkzMEVCOTUxQzVEMAA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "vale, entonces si gustas dime que necesitas y yo vere como te puedo apoyar  😇"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745700115785",
+                  "title": "Bots Whatsapp"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745700133327",
+                  "title": "Soporte"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745700136090",
+                  "title": "Ventas"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745703214,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjA1RjkwRDhCRUE5NUUxQjc2QQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Whatsapp bot es para todos aquellos negocios que tienen procesos repetitivos y constantes, y siempre tienen que dar la misma información a todos sus clientes, \n\n¿Deseas saber mas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745699931673",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745699935350",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703217,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBNTAzNTNDNzA5M0EyQzY5MUVCAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Si"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703220,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjA1RjkwRDhCRUE5NUUxQjc2QQA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Whatsapp bot es para todos aquellos negocios que tienen procesos repetitivos y constantes, y siempre tienen que dar la misma información a todos sus clientes, \n\n¿Deseas saber mas?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745699931673",
+                  "title": "Si"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745699935350",
+                  "title": "No"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745703217,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkNFRjYxMzY1MjI1QjlFN0EzNAA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "perfecto, mira tenemos varios tipos de tienda en linea, desde las sencillas con carrito de compra y pedidos de whatsapp hasta tiendas en linea super grandes que te incluyen una app movil, \n\n¿Cuantos productos manejas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927566600",
+                "title": "de 50 a 100"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927573748",
+                "title": "de 100 a 500"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927579504",
+                "title": "más de 1000"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703220,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkRDREU5ODczNDBFQkI2QjNGNgA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto 😁, por favor puedes indicarme con quién tengo el gusto?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703221,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkI4RkVFNzBEQzFCQjg4OUM1OQA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto, Si voy a transferirte con un agente para que pueda aclarar tus dudas 😉\n\nEstás de acuerdo?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703221,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBNDg5QkMzRDZCNDdFNzYwMzJBAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703266,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjBBRTYzNEE5NDU4RURCRjRDOQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926661889",
+                "title": "Kuvo Tarjeta Digital"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926673675",
+                "title": "Tienda en linea"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926687819",
+                "title": "Otro"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703267,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBNzIzQTg5MjA0RUE1MjUxOUZDAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Tienda en linea"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703270,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjBBRTYzNEE5NDU4RURCRjRDOQA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926661889",
+                  "title": "Kuvo Tarjeta Digital"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926673675",
+                  "title": "Tienda en linea"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926687819",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745703267,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjg3RDg0Q0UwRjI2OTQyNTVCOQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Claro mira te explico, las tiendas en linea son personalizadas y se realizan acorde a tu gusto, cada tienda es unica y por eso nos difernciamos mucho, ya que nosotros NO utilizamos plantillas de wordpress, shopify o demas..\n\n¿Te gustaria ver uno de nuestros demos?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927519042",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927521779",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703270,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBNkNCOTk2MzZBOEQ3OTRBNkRDAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "No"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703273,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjg3RDg0Q0UwRjI2OTQyNTVCOQA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Claro mira te explico, las tiendas en linea son personalizadas y se realizan acorde a tu gusto, cada tienda es unica y por eso nos difernciamos mucho, ya que nosotros NO utilizamos plantillas de wordpress, shopify o demas..\n\n¿Te gustaria ver uno de nuestros demos?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927519042",
+                  "title": "Si"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927521779",
+                  "title": "No"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745703270,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjI1MjUwRjUzRkFCQjAxNDRGOQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926661889",
+                "title": "Kuvo Tarjeta Digital"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926673675",
+                "title": "Tienda en linea"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926687819",
+                "title": "Otro"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703274,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjAyNzkzQUE2QzcyOEE1MkZGNgA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "vale, entonces si gustas dime que necesitas y yo vere como te puedo apoyar  😇"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700115785",
+                "title": "Bots Whatsapp"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700133327",
+                "title": "Soporte"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700136090",
+                "title": "Ventas"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703274,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBMTY3REVGNzNGNUQ5NzQxODk4AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Kuvo Tarjeta Digital"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703305,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjI1MjUwRjUzRkFCQjAxNDRGOQA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926661889",
+                  "title": "Kuvo Tarjeta Digital"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926673675",
+                  "title": "Tienda en linea"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926687819",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745703274,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjA4MTE3NjlDNTQ0NjY4MkI2NwA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927436266",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927439815",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703306,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBRDY3QjE2NDM0RTM3NzRBQzYyAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Si"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703308,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjA4MTE3NjlDNTQ0NjY4MkI2NwA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927436266",
+                  "title": "Si"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927439815",
+                  "title": "No"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745703306,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjZCMzk5OTIwQjY2RUM2NTRBOAA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto 😁, por favor puedes indicarme con quién tengo el gusto?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703309,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkQ2QzhFODM5NUEzRDM1NDFCOQA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto, Si voy a transferirte con un agente para que pueda aclarar tus dudas 😉\n\nEstás de acuerdo?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703309,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBOTE0NTFEMkU1NzQwMjJBQTMwAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703501,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjdGMThDNEZCRDVCQTYwNzJEMgA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926661889",
+                "title": "Kuvo Tarjeta Digital"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926673675",
+                "title": "Tienda en linea"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926687819",
+                "title": "Otro"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703502,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBQTFEN0M1NzI2QTI4RjlGQTU4AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Kuvo Tarjeta Digital"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703504,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjdGMThDNEZCRDVCQTYwNzJEMgA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926661889",
+                  "title": "Kuvo Tarjeta Digital"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926673675",
+                  "title": "Tienda en linea"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926687819",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745703502,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkMxNjI2RjlEMUI0NEMwNDU4OAA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927436266",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927439815",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703505,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYFDNBQ0IwN0Q3OTUzMTIyMTlCRjA3AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Si"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703507,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkMxNjI2RjlEMUI0NEMwNDU4OAA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927436266",
+                  "title": "Si"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927439815",
+                  "title": "No"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745703505,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjE2N0REMUYyRTNCMEYzNjc5MwA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto 😁, por favor puedes indicarme con quién tengo el gusto?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703508,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjcwQUUyM0ZBREZDNjM1MUEwQwA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto, Si voy a transferirte con un agente para que pueda aclarar tus dudas 😉\n\nEstás de acuerdo?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745703508,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYIDFDMEUyMjc2MEY3QkE3NzQ4NzE3MDczRjk1MTFDMEYyAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Hola"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745938403,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkVCMzFFODE0NzdDRUNCOTY3MQA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926661889",
+                "title": "Kuvo Tarjeta Digital"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926673675",
+                "title": "Tienda en linea"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926687819",
+                "title": "Otro"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745938404,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYIENBQTI0MTE0NzUxNTc3M0E5NzFBMzZBNEExRkMyNDM4AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Kuvo Tarjeta Digital"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745938407,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkVCMzFFODE0NzdDRUNCOTY3MQA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926661889",
+                  "title": "Kuvo Tarjeta Digital"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926673675",
+                  "title": "Tienda en linea"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926687819",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745938404,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjdGQzAwQ0U2RTVCNkY4QTA3MgA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927436266",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744927439815",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745938408,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYIDE4NUI5QkU5NDdEMkY1NEZDODcxQjI2RkYzMjk0MTVGAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Si"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745938412,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjdGQzAwQ0U2RTVCNkY4QTA3MgA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927436266",
+                  "title": "Si"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927439815",
+                  "title": "No"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745938408,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkYwN0ExNDE4NTEwRTREMEE4NAA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto 😁, por favor puedes indicarme con quién tengo el gusto?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745938412,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjQ3MTg0NUNDRDc3QTMzQjE1NAA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto, Si voy a transferirte con un agente para que pueda aclarar tus dudas 😉\n\nEstás de acuerdo?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745938413,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYIDBBRkM1QzVBNEMzODY1RDVEMkY2QkFBRTRGMTQzQTM2AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "No"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745938425,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjdGQzAwQ0U2RTVCNkY4QTA3MgA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "perfecto te comparto informacion..\n\nKuvo Tarjeta digital es una herramienta que concentra todas tus redes sociales, medios de contacto, catalogo digital de productos o servicios, es para que con un solo QR o Link puedas compartir toda tu informacion, \n\n¿Te gustaria que te envie un ejemplo?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927436266",
+                  "title": "Si"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744927439815",
+                  "title": "No"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745938408,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjY4RjlDRDgzMEU2MzU2Nzk2MAA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926661889",
+                "title": "Kuvo Tarjeta Digital"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926673675",
+                "title": "Tienda en linea"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1744926687819",
+                "title": "Otro"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745938426,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYIDA1QzQ4QjI2NzNCREUxNjVGQjVCOEQ2NjE2QkNBNkI1AA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Otro"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745938430,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjY4RjlDRDgzMEU2MzU2Nzk2MAA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, soy Kibot  🤖 👋 \n\n¿En que te puedo ayudar?\n"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926661889",
+                  "title": "Kuvo Tarjeta Digital"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926673675",
+                  "title": "Tienda en linea"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1744926687819",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745938426,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkI5NTFGMDQzQTU0MTgyNUU3NAA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "vale, entonces si gustas dime que necesitas y yo vere como te puedo apoyar  😇"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700115785",
+                "title": "Bots Whatsapp"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700133327",
+                "title": "Soporte"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745700136090",
+                "title": "Ventas"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745938431,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYIEQ0MzJBRTA3MkZFODI2NTk2ODdEOTZGRDAwMjYyQ0YyAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Bots Whatsapp"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745938434,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEkI5NTFGMDQzQTU0MTgyNUU3NAA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "vale, entonces si gustas dime que necesitas y yo vere como te puedo apoyar  😇"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745700115785",
+                  "title": "Bots Whatsapp"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745700133327",
+                  "title": "Soporte"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745700136090",
+                  "title": "Ventas"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745938431,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "button",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjNDQ0FBN0Y0NDk5RjI0NkQ0MAA=",
+    "msgContext": {
+      "type": "interactive",
+      "interactive": {
+        "type": "button",
+        "body": {
+          "text": "Whatsapp bot es para todos aquellos negocios que tienen procesos repetitivos y constantes, y siempre tienen que dar la misma información a todos sus clientes, \n\n¿Deseas saber mas?"
+        },
+        "action": {
+          "buttons": [
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745699931673",
+                "title": "Si"
+              }
+            },
+            {
+              "type": "reply",
+              "reply": {
+                "id": "1745699935350",
+                "title": "No"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745938435,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABIYIEE5NkY1MUI0OUI1NUVCMTMyRkI3NUQ0NTdFMDAwODJCAA==",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Si"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745938438,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": {
+      "type": "button",
+      "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjNDQ0FBN0Y0NDk5RjI0NkQ0MAA=",
+      "msgContext": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Whatsapp bot es para todos aquellos negocios que tienen procesos repetitivos y constantes, y siempre tienen que dar la misma información a todos sus clientes, \n\n¿Deseas saber mas?"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745699931673",
+                  "title": "Si"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1745699935350",
+                  "title": "No"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "reaction": "",
+      "timestamp": 1745938435,
+      "senderName": "Alex",
+      "senderMobile": "5213332448649",
+      "status": "delivered",
+      "star": false,
+      "route": "OUTGOING"
+    },
+    "origin": "meta"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjM4RUVDRDUyRDgwQ0Y1ODc0MwA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto 😁, por favor puedes indicarme con quién tengo el gusto?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745938439,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  },
+  {
+    "type": "text",
+    "metaChatId": "wamid.HBgNNTIxMzMzMjQ0ODY0ORUCABEYEjE3MjhEQ0ExNDRCMkZEQTBGQwA=",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "preview_url": true,
+        "body": "Perfecto, Si voy a transferirte con un agente para que pueda aclarar tus dudas 😉\n\nEstás de acuerdo?"
+      }
+    },
+    "reaction": "",
+    "timestamp": 1745938439,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING"
+  }
+]
