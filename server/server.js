@@ -7,6 +7,14 @@ const fileUpload = require("express-fileupload");
 const { runCampaign } = require("./loops/campaignLoop.js");
 const nodeCleanup = require("node-cleanup");
 const { init, cleanup } = require("./helper/addon/qr");
+const path = require("path");
+const currentDir = process.cwd();
+
+// Middleware para loggear peticiones - Añadido para depurar
+app.use((req, res, next) => {
+  console.log(`[Backend Request] ${req.method} ${req.originalUrl}`);
+  next();
+});
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
@@ -53,23 +61,28 @@ app.use("/api/agent", agentRoute);
 const qrRoute = require("./routes/qr");
 app.use("/api/qr", qrRoute);
 
-const path = require("path");
-const { warmerLoopInit } = require("./helper/addon/qr/warmer/index.js");
-
-const currentDir = process.cwd();
-
+// Servir archivos estáticos - Asegúrate de que esta línea esté DESPUÉS de todas tus rutas /api
 app.use(express.static(path.resolve(currentDir, "./client/public")));
 
+// Rutas para servir la landing page y la aplicación React - Asegúrate de que estas estén DESPUÉS de express.static y rutas /api
+app.get("/", (req, res) => {
+  res.sendFile(path.resolve(currentDir, "./client/public", "landing.html"));
+});
+
+app.get("/app/*", (req, res) => {
+  res.sendFile(path.resolve(currentDir, "./client/public", "index.html"));
+});
+
+// Ruta catch-all para servir el index.html (para react-router, etc.) - Asegúrate de que esta sea la ÚLTIMA ruta
 app.get("*", function (request, response) {
   response.sendFile(path.resolve(currentDir, "./client/public", "index.html"));
 });
 
 const server = app.listen(process.env.PORT || 3010, () => {
-  console.log(`WaCrm server is running on port ${process.env.PORT}`);
+  console.log(`WaCrm server is running on port ${process.env.PORT || 3010}`);
   init();
   setTimeout(() => {
     runCampaign();
-    warmerLoopInit();
   }, 1000);
 });
 
