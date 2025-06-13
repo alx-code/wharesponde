@@ -1,0 +1,42 @@
+[
+  {
+    "type": "text",
+    "metaChatId": "95DF81226918BC0BBE83775E4FE2CBF4",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "body": "Hola",
+        "preview_url": true
+      }
+    },
+    "reaction": "",
+    "timestamp": 1749526301,
+    "senderName": "Lore Rivera",
+    "senderMobile": "5213332448649",
+    "status": "delivered",
+    "star": false,
+    "route": "OUTGOING",
+    "context": "",
+    "origin": "qr"
+  },
+  {
+    "type": "text",
+    "metaChatId": "3AA7F4913B3C91C95EAE",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "body": "Hola soy cliente",
+        "preview_url": true
+      }
+    },
+    "reaction": "",
+    "timestamp": 1749526323,
+    "senderName": "Alex",
+    "senderMobile": "5213332448649",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "qr"
+  }
+]

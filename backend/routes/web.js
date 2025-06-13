@@ -7,6 +7,7 @@ const {
   downloadAndExtractFile,
   executeQueries,
   isValidEmail,
+  sendEmailBeta,
 } = require("../functions/function.js");
 const adminValidator = require("../middlewares/admin.js");
 const fs = require("fs");
@@ -15,13 +16,24 @@ const path = require("path");
 const { appVersion, addON } = require("../env.js");
 const bcrypt = require("bcrypt");
 const mysql = require("mysql2/promise");
-const { getConnectionsByUid } = require("../socket.js");
+const { getAllSocketData } = require("../socket.js");
 const { checkQr } = require("../helper/addon/qr/index.js");
+const { handleIncomingMessage } = require("../automation/automation.js");
 
 router.get("/", async (req, res) => {
   try {
-    const data = getConnectionsByUid("lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8");
-    res.json(data);
+    const convo = await query(`SELECT * FROM beta_conversation LIMIT 5`, []);
+    res.json(convo);
+  } catch (err) {
+    res.json({ err, msg: "server error" });
+    console.log(err);
+  }
+});
+
+router.get("/get_all", async (req, res) => {
+  try {
+    const data = getAllSocketData();
+    res.json({ data, id: req.query.id });
   } catch (err) {
     res.json({ err, msg: "server error" });
     console.log(err);
@@ -39,10 +51,14 @@ router.get("/return_module", async (req, res) => {
   }
 });
 
+// Modified backend route to support pagination and search
 router.get("/get-one-translation", async (req, res) => {
   try {
     const cirDir = process.cwd();
     const code = req.query.code;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 0; // 0 means no limit, return all
+    const search = req.query.search || "";
 
     fs.readFile(`${cirDir}/languages/${code}.json`, "utf8", (err, lang) => {
       if (err) {
@@ -51,10 +67,71 @@ router.get("/get-one-translation", async (req, res) => {
         return;
       }
 
-      res.json({
-        success: true,
-        data: JSON.parse(lang),
-      });
+      try {
+        const parsedData = JSON.parse(lang);
+
+        // If no pagination or search is requested, return all data
+        if (!search && !limit) {
+          return res.json({
+            success: true,
+            data: parsedData,
+            total: Object.keys(parsedData).length,
+          });
+        }
+
+        // Filter by search term if provided
+        let filteredData = parsedData;
+        if (search) {
+          const searchLower = search.toLowerCase();
+          const filtered = {};
+
+          Object.keys(parsedData).forEach((key) => {
+            if (
+              key.toLowerCase().includes(searchLower) ||
+              String(parsedData[key]).toLowerCase().includes(searchLower)
+            ) {
+              filtered[key] = parsedData[key];
+            }
+          });
+
+          filteredData = filtered;
+        }
+
+        // Apply pagination if limit is specified
+        if (limit > 0) {
+          const keys = Object.keys(filteredData);
+          const totalItems = keys.length;
+          const startIndex = (page - 1) * limit;
+          const endIndex = startIndex + limit;
+          const paginatedKeys = keys.slice(startIndex, endIndex);
+
+          const paginatedData = {};
+          paginatedKeys.forEach((key) => {
+            paginatedData[key] = filteredData[key];
+          });
+
+          return res.json({
+            success: true,
+            data: paginatedData,
+            pagination: {
+              total: totalItems,
+              page,
+              limit,
+              pages: Math.ceil(totalItems / limit),
+            },
+          });
+        }
+
+        // Return all filtered data if no pagination
+        res.json({
+          success: true,
+          data: filteredData,
+          total: Object.keys(filteredData).length,
+        });
+      } catch (parseError) {
+        console.log("JSON parse error:", parseError);
+        res.json({ success: false, error: "Invalid JSON format" });
+      }
     });
   } catch (err) {
     res.json({ err, msg: "server error" });
@@ -369,7 +446,7 @@ router.post("/update_app", async (req, res) => {
       return res.json({ msg: "Admin password missing", success: false });
     }
 
-    const getAdmin = await query(`SELECT * FROM admin`, []);
+    const getAdmin = await query("SELECT * FROM admin", []);
 
     const compare = await bcrypt.compare(password, getAdmin[0].password);
     if (!compare) {
@@ -378,17 +455,19 @@ router.post("/update_app", async (req, res) => {
       });
     }
 
-    const connection = await mysql.createConnection({
+    // Create a MySQL connection pool
+    const pool = mysql.createPool({
       host: process.env.DBHOST || "localhost",
       user: process.env.DBUSER,
       password: process.env.DBPASS,
       database: process.env.DBNAME,
+      connectionLimit: 10, // Limit the number of concurrent connections
     });
 
     if (queries && JSON.parse(queries)?.length > 0) {
       const parsedQueries = JSON.parse(queries);
       if (Array.isArray(parsedQueries) && parsedQueries.length > 0) {
-        await executeQueries(parsedQueries, connection);
+        await executeQueries(parsedQueries, pool);
       }
     }
 
@@ -397,9 +476,14 @@ router.post("/update_app", async (req, res) => {
       await Promise.all(
         newQuery?.map(async (i) => {
           const { run, check } = i;
-          const checkExist = await query(check, []);
-          if (checkExist.length < 1) {
-            await query(run, []);
+          const connection = await pool.getConnection(); // Get a connection from the pool
+          try {
+            const checkExist = await connection.query(check);
+            if (checkExist[0].length < 1) {
+              await connection.query(run);
+            }
+          } finally {
+            connection.release(); // Always release the connection back to the pool
           }
         })
       );
@@ -530,6 +614,8 @@ router.post("/test", (req, res) => {
   const body = req.body;
   const headers = req.headers;
   const contentType = req.get("Content-Type");
+
+  console.log({ body: req.body });
 
   res.json({
     success: true,

@@ -253,6 +253,52 @@ router.post("/del_assign_chat_by_owner", validateUser, async (req, res) => {
 });
 
 // login agent
+// router.post("/login", async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+
+//     if (!email || !password) {
+//       return res.json({
+//         success: false,
+//         msg: "Please provide email and password",
+//       });
+//     }
+
+//     // check for user
+//     const agentFind = await query(`SELECT * FROM agents WHERE email = ?`, [
+//       email,
+//     ]);
+//     if (agentFind.length < 1) {
+//       return res.json({ msg: "Invalid credentials" });
+//     }
+
+//     const compare = await bcrypt.compare(password, agentFind[0].password);
+
+//     if (!compare) {
+//       return res.json({ msg: "Invalid credentials" });
+//     } else {
+//       const token = sign(
+//         {
+//           uid: agentFind[0].uid,
+//           role: "agent",
+//           password: agentFind[0].password,
+//           email: agentFind[0].email,
+//           owner_uid: agentFind[0]?.owner_uid,
+//         },
+//         process.env.JWTKEY,
+//         {}
+//       );
+//       res.json({
+//         success: true,
+//         token,
+//       });
+//     }
+//   } catch (err) {
+//     res.json({ success: false, msg: "something went wrong", err });
+//     console.log(err);
+//   }
+// });
+
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -264,7 +310,7 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    // check for user
+    // Check for user
     const agentFind = await query(`SELECT * FROM agents WHERE email = ?`, [
       email,
     ]);
@@ -273,29 +319,124 @@ router.post("/login", async (req, res) => {
     }
 
     const compare = await bcrypt.compare(password, agentFind[0].password);
-
     if (!compare) {
       return res.json({ msg: "Invalid credentials" });
-    } else {
-      const token = sign(
-        {
-          uid: agentFind[0].uid,
-          role: "agent",
-          password: agentFind[0].password,
-          email: agentFind[0].email,
-          owner_uid: agentFind[0]?.owner_uid,
-        },
-        process.env.JWTKEY,
-        {}
-      );
-      res.json({
-        success: true,
-        token,
+    }
+
+    // Generate token
+    const token = sign(
+      {
+        uid: agentFind[0].uid,
+        role: "agent",
+        password: agentFind[0].password,
+        email: agentFind[0].email,
+        owner_uid: agentFind[0]?.owner_uid,
+      },
+      process.env.JWTKEY,
+      {}
+    );
+
+    // Prepare tracking data
+    const currentDate = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+    const loginTime = new Date().toISOString();
+
+    // Parse existing logs or initialize
+    const existingLogs = agentFind[0].logs ? JSON.parse(agentFind[0].logs) : {};
+
+    // Initialize dateTracking if not exists
+    if (!existingLogs.dateTracking) {
+      existingLogs.dateTracking = {};
+    }
+
+    // Initialize date entry if not exists
+    if (!existingLogs.dateTracking[currentDate]) {
+      existingLogs.dateTracking[currentDate] = {
+        logins: 0,
+        logouts: 0,
+        lastLogin: loginTime,
+        lastLogout: null,
+      };
+    }
+
+    // Update tracking
+    existingLogs.dateTracking[currentDate].logins++;
+    existingLogs.dateTracking[currentDate].lastLogin = loginTime;
+
+    // Update database
+    await query(`UPDATE agents SET logs = ? WHERE uid = ?`, [
+      JSON.stringify(existingLogs),
+      agentFind[0].uid,
+    ]);
+
+    res.json({
+      success: true,
+      token,
+      todayStats: existingLogs.dateTracking[currentDate], // Optional: Return today's stats
+    });
+  } catch (err) {
+    console.error(err);
+    res.json({ success: false, msg: "Something went wrong", err });
+  }
+});
+
+// logout agent
+router.get("/logout", validateAgent, async (req, res) => {
+  try {
+    const uid = req.decode.uid;
+
+    if (!uid) {
+      return res.json({
+        success: false,
+        msg: "Agent UID is required",
       });
     }
+
+    // Get agent data
+    const agentFind = await query(`SELECT * FROM agents WHERE uid = ?`, [uid]);
+    if (agentFind.length < 1) {
+      return res.json({ success: false, msg: "Agent not found" });
+    }
+
+    // Parse existing logs or initialize
+    const existingLogs = agentFind[0].logs ? JSON.parse(agentFind[0].logs) : {};
+
+    // Initialize dateTracking if not exists
+    if (!existingLogs.dateTracking) {
+      existingLogs.dateTracking = {};
+    }
+
+    // Get current date (YYYY-MM-DD)
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    // Initialize date entry if not exists
+    if (!existingLogs.dateTracking[currentDate]) {
+      existingLogs.dateTracking[currentDate] = {
+        logins: 0,
+        logouts: 0,
+        lastLogin: null,
+        lastLogout: new Date().toISOString(),
+      };
+    } else {
+      // Update existing date entry
+      existingLogs.dateTracking[currentDate].logouts++;
+      existingLogs.dateTracking[currentDate].lastLogout =
+        new Date().toISOString();
+    }
+
+    // Update database
+    await query(`UPDATE agents SET logs = ? WHERE uid = ?`, [
+      JSON.stringify(existingLogs),
+      uid,
+    ]);
+
+    res.json({
+      success: true,
+      msg: "Logout recorded successfully",
+      todayStats: existingLogs.dateTracking[currentDate],
+    });
   } catch (err) {
-    res.json({ success: false, msg: "something went wrong", err });
-    console.log(err);
+    console.error(err);
+    res.json({ success: false, msg: "Something went wrong", err });
   }
 });
 

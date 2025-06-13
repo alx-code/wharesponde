@@ -3,6 +3,7 @@ const path = require("path");
 const { query } = require("../../database/dbpromise");
 const fetch = require("node-fetch");
 const mime = require("mime-types");
+const moment = require("moment-timezone");
 
 function mergeArraysWithPhonebook(chatArray, phonebookArray) {
   // Iterate through the chat array and enrich with phonebook data
@@ -55,10 +56,27 @@ function timeoutPromise(promise, ms) {
   return Promise.race([promise, timeout]);
 }
 
-function getSessionIdFromChatIdQr(str) {
-  const index = str.indexOf("_");
-  if (index === -1) return null;
-  return str.substring(index + 1);
+function extractObjFromChatId(str) {
+  const parts = str.split("_");
+
+  if (parts.length < 3) {
+    return null; // Not enough parts to extract
+  }
+
+  return {
+    fromNumber: parts[0],
+    toNumber: parts[1],
+    uid: parts[2],
+  };
+}
+
+async function getSessionIdFromChatIdQr(str) {
+  const obj = extractObjFromChatId(str);
+  const sessionId = await query(
+    `SELECT * FROM instance WHERE number = ? AND uid = ?`,
+    [obj.fromNumber, obj.uid]
+  );
+  return sessionId[0]?.uniqueId || "na";
 }
 
 function extractPhoneNumber(str) {
@@ -69,7 +87,7 @@ function extractPhoneNumber(str) {
 
 function extractFinalNumber(chatInfo) {
   try {
-    const otherData = JSON.parse(chatInfo?.other);
+    const otherData = JSON.parse(chatInfo?.origin_instance_id);
     const number = extractPhoneNumber(otherData?.id);
     return number;
   } catch (error) {
@@ -77,24 +95,21 @@ function extractFinalNumber(chatInfo) {
   }
 }
 
-function deleteMediaFromConversation(jsonFilePath, mediaFolderPath, type) {
+async function deleteMediaFromConversation({
+  mediaFolderPath,
+  type,
+  uid,
+  chatId,
+  conversationData,
+}) {
   try {
-    if (!fs.existsSync(jsonFilePath)) {
-      console.error("JSON file does not exist:", jsonFilePath);
-      return;
-    }
-
     switch (type) {
       case "media":
-        // Handle "media" type: Remove media-related messages and their files
-        const conversationData = JSON.parse(
-          fs.readFileSync(jsonFilePath, "utf8")
-        );
-
-        const filteredConversation = conversationData.filter((msg) => {
+        conversationData.filter((msg) => {
           if (["image", "video", "document", "audio"].includes(msg.type)) {
             // Collect file link to delete
-            const mediaLink = msg.msgContext[msg.type]?.link;
+            const msgContext = JSON.parse(msg.msgContext);
+            const mediaLink = msgContext[msg.type]?.link;
             if (mediaLink) {
               const filePath = path.join(
                 mediaFolderPath,
@@ -108,29 +123,27 @@ function deleteMediaFromConversation(jsonFilePath, mediaFolderPath, type) {
                 console.warn(`File not found: ${filePath}`);
               }
             }
-            return false; // Exclude this message from the updated conversation
           }
-          return true; // Include non-media messages
         });
 
-        // Write updated conversation back to the JSON file
-        fs.writeFileSync(
-          jsonFilePath,
-          JSON.stringify(filteredConversation, null, 2),
-          "utf8"
-        );
         console.log("Media messages removed, and JSON updated successfully.");
         break;
 
       case "clear":
         // Handle "clear" type: Clear the entire conversation JSON
-        fs.writeFileSync(jsonFilePath, JSON.stringify([], null, 2), "utf8");
+        await query(
+          `DELETE FROM beta_conversation WHERE chat_id = ? AND uid = ?`,
+          [chatId, uid]
+        );
         console.log("Conversation JSON cleared successfully.");
         break;
 
       case "delete":
         // Handle "delete" type: Delete the JSON file
-        fs.unlinkSync(jsonFilePath);
+        await query(
+          `DELETE FROM beta_conversation WHERE chat_id = ? AND uid = ?`,
+          [chatId, uid]
+        );
         console.log("Conversation JSON file deleted successfully.");
         break;
 
@@ -188,6 +201,15 @@ async function sendMetaMsg({ uid, to, msgObj }) {
       ...msgObj,
     };
 
+    console.log({
+      uid,
+      to,
+      msgObj,
+      format: formatNumber(to),
+    });
+
+    console.log(JSON.stringify(payload));
+
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -224,7 +246,7 @@ function setQrMsgObj(obj) {
         image: {
           url: obj?.image?.link,
         },
-        caption: obj?.caption || null,
+        caption: obj?.image?.caption || null,
         jpegThumbnail: fetchImageAsBase64(obj?.image?.link),
       };
 
@@ -233,7 +255,7 @@ function setQrMsgObj(obj) {
         video: {
           url: obj?.video?.link,
         },
-        caption: obj?.caption || null,
+        caption: obj?.video?.caption || null,
       };
 
     case "audio":
@@ -253,7 +275,7 @@ function setQrMsgObj(obj) {
         document: {
           url: obj?.document?.link,
         },
-        caption: obj?.caption || null,
+        caption: obj?.document?.caption || null,
         fileName: extractFileName(obj?.document?.link),
       };
 
@@ -288,7 +310,7 @@ async function sendQrMsg({ uid, to, msgObj, chatInfo }) {
     }
 
     // getting session
-    const sessionId = getSessionIdFromChatIdQr(chatInfo?.chat_id);
+    const sessionId = await getSessionIdFromChatIdQr(chatInfo?.chat_id);
 
     const {
       getSession,
@@ -306,7 +328,7 @@ async function sendQrMsg({ uid, to, msgObj, chatInfo }) {
 
     const jid = chatInfo?.isGroup ? formatGroup(to) : formatPhone(to);
 
-    console.log({ qrObj });
+    console.log({ qrObj, jid });
 
     const send = await timeoutPromise(session?.sendMessage(jid, qrObj), 60000);
 
@@ -325,10 +347,74 @@ async function sendQrMsg({ uid, to, msgObj, chatInfo }) {
   }
 }
 
+async function sendNewMessage({ sessionId, message, number }) {
+  try {
+    const {
+      getSession,
+      formatGroup,
+      formatPhone,
+      isExists,
+    } = require("../../helper/addon/qr");
+
+    const session = await getSession(sessionId);
+
+    if (!session) {
+      return {
+        success: false,
+        msg: "Session not found, Pleasew check if your WhatsApp account is connected",
+      };
+    }
+
+    const msgObj = {
+      text: message,
+    };
+
+    const jid = formatPhone(number);
+
+    const checkNumber = await isExists(session, jid, false);
+
+    console.log({ checkNumber: checkNumber, jid });
+
+    if (!checkNumber) {
+      return {
+        success: false,
+        msg: "This number is not found on WhatsApp",
+      };
+    }
+
+    const send = await timeoutPromise(session?.sendMessage(jid, msgObj), 60000);
+    const msgId = send?.key?.id;
+    if (!msgId) {
+      return {
+        success: false,
+        msg: `Could not send message: ${send?.toString()}`,
+      };
+    } else {
+      return { success: true, id: msgId, sessionData: session };
+    }
+  } catch (err) {
+    console.log(err);
+    return { success: false, msg: err?.toString() || "Could not send message" };
+  }
+}
+
+function getCurrentTimestampInTimeZone(timezone) {
+  const currentTimeInZone = moment.tz(timezone);
+  const currentTimestampInSeconds = Math.round(
+    currentTimeInZone.valueOf() / 1000
+  );
+
+  return currentTimestampInSeconds;
+}
+
 module.exports = {
   mergeArraysWithPhonebook,
   deleteMediaFromConversation,
   returnMsgObjAfterAddingKey,
   sendMetaMsg,
   sendQrMsg,
+  getCurrentTimestampInTimeZone,
+  sendNewMessage,
+  extractPhoneNumber,
+  setQrMsgObj,
 };

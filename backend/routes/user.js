@@ -20,6 +20,10 @@ const {
   generateWhatsAppURL,
   rzCapturePayment,
   validateFacebookToken,
+  getAllTempletsMetaBeta,
+  extractTemplateVariablesBeta,
+  formatPhoneNumber,
+  sendTemplateMessage,
 } = require("../functions/function.js");
 const { sign } = require("jsonwebtoken");
 const validateUser = require("../middlewares/user.js");
@@ -29,6 +33,7 @@ const {
   checkNote,
   checkTags,
   checkContactLimit,
+  checkWaWArmer,
 } = require("../middlewares/plan.js");
 const { recoverEmail } = require("../emails/returnEmails.js");
 const moment = require("moment");
@@ -1252,7 +1257,7 @@ router.post("/update_profile", validateUser, async (req, res) => {
 });
 
 // get dashboard
-router.get("/get_dashboard", validateUser, async (req, res) => {
+router.get("/get_dashboard_old", validateUser, async (req, res) => {
   try {
     const getOpenChat = await query(
       `SELECT * FROM chats WHERE uid = ? AND chat_status = ?`,
@@ -1320,6 +1325,107 @@ router.get("/get_dashboard", validateUser, async (req, res) => {
   } catch (err) {
     console.log(err);
     res.json({ msg: "Something went wrong", err, success: false });
+  }
+});
+
+router.get("/get_dashboard", validateUser, async (req, res) => {
+  try {
+    const uid = req.decode.uid;
+
+    // 1. User Profile Data
+    const user = await query("SELECT * FROM user WHERE uid = ?", [uid]);
+
+    // 2. Statistics
+    const [agents, activeChats, completedTasks, activeInstances] =
+      await Promise.all([
+        query("SELECT COUNT(*) as count FROM agents WHERE owner_uid = ?", [
+          uid,
+        ]),
+        query(
+          "SELECT COUNT(*) as count FROM beta_chats WHERE uid = ? AND unread_count > 0",
+          [uid]
+        ),
+        query(
+          "SELECT COUNT(*) as count FROM agent_task WHERE owner_uid = ? AND status = 'COMPLETED'",
+          [uid]
+        ),
+        query(
+          "SELECT COUNT(*) as count FROM instance WHERE uid = ? AND status = 'ACTIVE'",
+          [uid]
+        ),
+      ]);
+
+    // 3. Recent Conversations (from beta_conversation)
+    const recentConversations = await query(
+      `
+      SELECT c.*, ch.sender_name, ch.sender_mobile, ch.profile 
+      FROM beta_conversation c
+      JOIN beta_chats ch ON c.chat_id = ch.chat_id
+      WHERE c.uid = ?
+      ORDER BY c.createdAt DESC 
+      LIMIT 5
+    `,
+      [uid]
+    );
+
+    // 4. Unread Messages Summary
+    const unreadSummary = await query(
+      `
+      SELECT origin, COUNT(*) as count 
+      FROM beta_chats 
+      WHERE uid = ? AND unread_count > 0
+      GROUP BY origin
+    `,
+      [uid]
+    );
+
+    // 5. Active Chatbots
+    const activeChatbots = await query(
+      `
+      SELECT title, flow_id 
+      FROM beta_chatbot 
+      WHERE uid = ? AND active = 1
+      LIMIT 3
+    `,
+      [uid]
+    );
+
+    // 6. Performance Metrics (last 7 days)
+    const performanceData = await query(
+      `
+      SELECT 
+        DATE(createdAt) as date,
+        COUNT(CASE WHEN route = 'INCOMING' THEN 1 END) as incoming,
+        COUNT(CASE WHEN route = 'OUTGOING' THEN 1 END) as outgoing
+      FROM beta_conversation
+      WHERE uid = ? AND createdAt >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+      GROUP BY DATE(createdAt)
+      ORDER BY date ASC
+    `,
+      [uid]
+    );
+
+    const data = {
+      user: user[0],
+      stats: {
+        agents: agents[0].count,
+        activeChats: activeChats[0].count,
+        completedTasks: completedTasks[0].count,
+        activeInstances: activeInstances[0].count,
+      },
+      recentConversations,
+      unreadSummary,
+      activeChatbots,
+      performanceData,
+      lastUpdated: new Date().toISOString(),
+    };
+
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error("Dashboard error:", err);
+    res
+      .status(500)
+      .json({ success: false, msg: "Failed to load dashboard data" });
   }
 });
 
@@ -1753,6 +1859,798 @@ router.post("/auto_agent_login", validateUser, async (req, res) => {
   } catch (err) {
     console.log(err);
     res.json({ msg: "something went wrong", err });
+  }
+});
+
+// add warmer message
+router.post("/add_warmer_message", validateUser, async (req, res) => {
+  try {
+    const { message } = req.body;
+    if (!message) {
+      return res.json({ msg: "Please enter a message to add" });
+    }
+
+    await query(`INSERT INTO warmer_script (uid, message) VALUES (?,?)`, [
+      req.decode.uid,
+      message,
+    ]);
+
+    res.json({ msg: "Warmer message was added", success: true });
+  } catch (err) {
+    console.log(err);
+    res.json({ msg: "something went wrong", err });
+  }
+});
+
+// get my warmer script
+router.get("/get_warmer_script", validateUser, async (req, res) => {
+  try {
+    const data = await query(`SELECT * FROM warmer_script WHERE uid = ?`, [
+      req.decode.uid,
+    ]);
+    res.json({ data, success: true });
+  } catch (err) {
+    console.log(err);
+    res.json({ msg: "something went wrong", err });
+  }
+});
+
+// del a message
+router.post("/del_warmer_msg", validateUser, async (req, res) => {
+  try {
+    const { id } = req.body;
+    await query(`DELETE FROM warmer_script WHERE id = ? AND uid = ?`, [
+      id,
+      req.decode.uid,
+    ]);
+    res.json({ msg: "Message was deleted", success: true });
+  } catch (err) {
+    console.log(err);
+    res.json({ msg: "something went wrong", err });
+  }
+});
+
+// add to warmer
+router.post(
+  "/add_ins_to_warm",
+  validateUser,
+  checkPlan,
+  checkWaWArmer,
+  async (req, res) => {
+    try {
+      const { instance } = req.body;
+
+      const getWarm = await query(`SELECT * FROM warmers WHERE uid = ?`, [
+        req.decode.uid,
+      ]);
+
+      const addedIns = JSON.parse(getWarm[0]?.instances);
+
+      if (addedIns.includes(instance)) {
+        const finalIns = addedIns.filter((i) => i !== instance);
+
+        await query(`UPDATE warmers SET instances = ? WHERE uid = ?`, [
+          JSON.stringify(finalIns),
+          req.decode.uid,
+        ]);
+      } else {
+        const fiIns = [...addedIns, instance];
+        await query(`UPDATE warmers SET instances = ? WHERE uid = ?`, [
+          JSON.stringify(fiIns),
+          req.decode.uid,
+        ]);
+      }
+
+      res.json({
+        msg: "Warmer updated",
+        success: true,
+      });
+    } catch (err) {
+      console.log(err);
+      res.json({ msg: "something went wrong", err });
+    }
+  }
+);
+
+// get my warmer
+router.get("/get_my_warmer", validateUser, async (req, res) => {
+  try {
+    const { uid } = req.decode;
+
+    const getWarmer = await query(`SELECT * FROM warmers WHERE uid = ?`, [uid]);
+
+    if (getWarmer?.length < 1) {
+      await query(
+        `INSERT INTO warmers (uid, instances, is_active) VALUES (?,?,?)`,
+        [uid, JSON.stringify([]), 1]
+      );
+
+      // getting warmer again
+      const warmer = await query(`SELECT * FROM warmers WHERE uid = ?`, [uid]);
+
+      warmer[0].instances = JSON.parse(warmer[0].instances);
+      res.json({ data: warmer[0], success: true });
+    } else {
+      getWarmer[0].instances = JSON.parse(getWarmer[0].instances);
+
+      res.json({ data: getWarmer[0], success: true });
+    }
+  } catch (err) {
+    res.json({ success: false, msg: "something went wrong", err });
+    console.log(err);
+  }
+});
+
+// change warmer status
+router.post("/change_warmer_status", validateUser, async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    await query(`UPDATE warmers SET is_active = ? WHERE uid = ?`, [
+      status ? 1 : 0,
+      req.decode.uid,
+    ]);
+
+    res.json({ msg: "Status updated", success: true });
+  } catch (err) {
+    res.json({ success: false, msg: "something went wrong", err });
+    console.log(err);
+  }
+});
+
+// add google auth
+router.post("/add_g_auth", validateUser, checkPlan, async (req, res) => {
+  try {
+    const { label, url } = req.body;
+    console.log(req.body);
+    if (!url || !label) {
+      return res.json({
+        msg: "Please upload and file and give a label to the auth",
+      });
+    }
+
+    await query(`INSERT INTO g_auth (uid, label, url) VALUES (?,?,?)`, [
+      req.decode.uid,
+      label,
+      url,
+    ]);
+
+    res.json({ success: true, msg: "Credentials uploaded" });
+  } catch (err) {
+    res.json({ success: false, msg: "something went wrong", err });
+    console.log(err);
+  }
+});
+
+// get my creds
+router.get("/get_my_g_creds", validateUser, async (req, res) => {
+  try {
+    const data = await query(`SELECT * FROM g_auth WHERE uid = ?`, [
+      req.decode.uid,
+    ]);
+    res.json({ data, success: true });
+  } catch (err) {
+    res.json({ success: false, msg: "something went wrong", err });
+    console.log(err);
+  }
+});
+
+// router.post("/get_agent_report", validateUser, async (req, res) => {
+//   try {
+//     const { agentUid } = req.body;
+//     // const agentChats = await query(
+//     //   `SELECT * FROM beta_chats WHERE assigned_agent LIKE ?`,
+//     //   [`%${req.decode.uid}%`]
+//     // );
+
+//     // const convo = await query(
+//     //   `SELECT * FROM beta_conversation WHERE chat_id = ? LIMIT 5`,
+//     //   ["919690309316_918430088300_lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8"]
+//     // );
+
+//     // console.log(JSON.stringify(convo)); = [{"id":3,"type":"text","chat_id":"919690309316_918430088300_lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8","uid":"lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8","status":null,"metaChatId":"3EB0174731FF56FF1016B5","msgContext":"{\"type\":\"text\",\"text\":{\"body\":\"hey yo\",\"preview_url\":true}}","reaction":"","timestamp":"1748528872","senderName":"codeyon.com","senderMobile":"918430088300","star":"0","route":"INCOMING","context":null,"origin":"qr","createdAt":"2025-05-29T14:27:52.000Z"},{"id":4,"type":"text","chat_id":"919690309316_918430088300_lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8","uid":"lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8","status":"delivered","metaChatId":"3EB0474435D1276E068EC3","msgContext":"{\"type\":\"text\",\"text\":{\"preview_url\":true,\"body\":\"Hello there, welcome to the chatbot how can i help?\\n\\nSupport or sales ?\"}}","reaction":"","timestamp":"1748528873","senderName":"codeyon.com","senderMobile":"918430088300","star":"0","route":"OUTGOING","context":null,"origin":"qr","createdAt":"2025-05-29T14:27:52.000Z"},{"id":5,"type":"text","chat_id":"919690309316_918430088300_lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8","uid":"lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8","status":null,"metaChatId":"3EB0B5F209F0276BE4D2B1","msgContext":"{\"type\":\"text\",\"text\":{\"body\":\"hi\",\"preview_url\":true}}","reaction":"","timestamp":"1748528889","senderName":"codeyon.com","senderMobile":"918430088300","star":"0","route":"INCOMING","context":null,"origin":"qr","createdAt":"2025-05-29T14:28:09.000Z"},{"id":6,"type":"text","chat_id":"919690309316_918430088300_lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8","uid":"lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8","status":"delivered","metaChatId":"3EB0EB4C14839114831269","msgContext":"{\"type\":\"text\",\"text\":{\"preview_url\":true,\"body\":\"Hello there, welcome to the chatbot how can i help?\\n\\nSupport or sales ?\"}}","reaction":"","timestamp":"1748528889","senderName":"codeyon.com","senderMobile":"918430088300","star":"0","route":"OUTGOING","context":null,"origin":"qr","createdAt":"2025-05-29T14:28:09.000Z"},{"id":7,"type":"text","chat_id":"919690309316_918430088300_lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8","uid":"lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8","status":null,"metaChatId":"3EB074C5C3F40FC8F63E3D","msgContext":"{\"type\":\"text\",\"text\":{\"body\":\"hi\",\"preview_url\":true}}","reaction":"","timestamp":"1748528931","senderName":"codeyon.com","senderMobile":"918430088300","star":"0","route":"INCOMING","context":null,"origin":"qr","createdAt":"2025-05-29T14:28:50.000Z"}]
+
+//     // Total chats
+//     // agentChats = [{"id":1,"uid":"lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8","old_chat_id":null,"profile":"{\"profileImage\":\"https://pps.whatsapp.net/v/t61.24694-24/299565350_1011060832895306_6503983270112962656_n.jpg?ccb=11-4&oh=01_Q5Aa1gFKFah66vRyRU4AFN8GDLmunVNSpmKJrQ4KMJTBNzdD0A&oe=684BC664&_nc_sid=5e03e0&_nc_cat=103\"}","origin_instance_id":"{\"id\":\"919690309316:65@s.whatsapp.net\",\"lid\":\"186775309943014:65@lid\",\"name\":\"hamidsaifi.com\"}","chat_id":"919690309316_918430088300_lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8","last_message":"{\"type\":\"text\",\"metaChatId\":\"3EB0072904F5E6697F373A\",\"msgContext\":{\"type\":\"text\",\"text\":{\"preview_url\":true,\"body\":\"We got this:\\nPassword: $2b$10$gf6jkuByoJUOF23GAl.WuesT6DUGiCA1LT8nnYWvQcXzfePGu4rrG\"}},\"reaction\":\"\",\"timestamp\":1748936511,\"senderName\":\"codeyon.com\",\"senderMobile\":\"918430088300\",\"star\":0,\"route\":\"OUTGOING\",\"context\":null,\"origin\":\"qr\"}","chat_label":null,"chat_note":"[]","sender_name":"codeyon.com","sender_mobile":"918430088300","unread_count":0,"origin":"qr","assigned_agent":"{\"id\":3,\"owner_uid\":\"lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8\",\"uid\":\"n9xrxIvwIajEo2JO2poQ0b3UyUnhUF3g\",\"role\":\"agent\",\"email\":\"john@agent.com\",\"password\":\"$2b$10$/LRIrp/i6vE0bKArKaDj7OzN/KxO.QUCZLT5rjo02VK96ka0FWjdO\",\"name\":\"john\",\"mobile\":\"7778888000\",\"comments\":\"some comments\",\"is_active\":1,\"createdAt\":\"2024-04-06T06:45:15.000Z\"}","createdAt":"2025-05-24T08:32:10.000Z"}]
+
+//     // Time spent in panel
+//     // const [agentData] = await query(`SELECT * FROM agents WHERE uid = ?`, [
+//     //   req.decode.uid,
+//     // ]);
+
+//     // it has agentData.logs for Time spent in panel and Last login/logout
+
+//     // Avg. response time = check all the chats and see when time reply means route cehck from the databse means SELECT * FROM beta_conversation WHRE chat_id = ? agentChatsarraymap.cat_id and then you will get all the arary and then check route of each message INCOMING then see next message OUTGOING and calculate the time difference
+
+//     // Unread messages = check for unread_count in agentChats
+
+//     // Open/Pending/Unresolved chats = check for agentChat has chat_label it might be anything like pending etc or remove or newOrder so check and get the chat label based how many are pending or let say if there are order label then how many are order etc
+
+//     // const total convo
+//     // const convoData = await query(`SELECT COUNT(*) where chat_id IN (?)`, [the agentChats.map(chat => chat.chat_id)]);
+
+//     // Incoming/outgoing messages  you can check route INCOMING or OUTGOING in the beta_conversation table
+
+//     // Date-based filters  make it so that i can fetch based on date too
+
+//     const agentData = await query(`SELECT * FROM agents WHERE uid = ?`, [
+//       agentUid,
+//     ]);
+//     // agentData = [{"id":3,"owner_uid":"lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8","uid":"n9xrxIvwIajEo2JO2poQ0b3UyUnhUF3g","role":"agent","email":"john@agent.com","password":"$2b$10$JGNSEHq.tErhcQKmvuh6PuWCVXWzxWIZ.WrnkuDNp8izuDgsWkZi.","name":"john","mobile":"7778888000","comments":"some comments","is_active":1,"createdAt":"2024-04-06T06:45:15.000Z","logs":"{\"dateTracking\":{\"2025-06-03\":{\"logins\":3,\"logouts\":3,\"lastLogin\":\"2025-06-03T12:44:57.454Z\",\"lastLogout\":\"2025-06-03T12:45:18.979Z\"}},\"spendTime\":{\"2025-06-03\":45}}"}]
+
+//     res.json({ msg: "YO" });
+//   } catch (err) {
+//     console.error("Error fetching agent report:", err);
+//     res.status(500).json({
+//       success: false,
+//       msg: "Failed to fetch agent report",
+//       error: err.message,
+//     });
+//   }
+// });
+
+router.post("/get_agent_report_old", validateUser, async (req, res) => {
+  try {
+    let { agentUid, startDate, endDate } = req.body;
+
+    // Validate date range
+    if (!startDate || !endDate) {
+      return res.status(400).json({
+        success: false,
+        msg: "Start date and end date are required",
+      });
+    }
+
+    // 1. Get agent data (including logs)
+    const [agentData] = await query(`SELECT * FROM agents WHERE uid = ?`, [
+      agentUid,
+    ]);
+    if (!agentData) {
+      return res.status(404).json({
+        success: false,
+        msg: "Agent not found",
+      });
+    }
+
+    // Parse agent logs
+    const agentLogs = agentData.logs ? JSON.parse(agentData.logs) : {};
+
+    // 2. Get all chats assigned to this agent
+    const agentChats = await query(
+      `SELECT * FROM beta_chats WHERE assigned_agent LIKE ? AND createdAt BETWEEN ? AND ?`,
+      [`%${agentUid}%`, startDate, endDate]
+    );
+
+    // 3. Get all conversations for these chats
+    const chatIds = agentChats.map((chat) => chat.chat_id);
+    let allConvos = [];
+    if (chatIds.length > 0) {
+      allConvos = await query(
+        `SELECT * FROM beta_conversation WHERE chat_id IN (?) ORDER BY timestamp ASC`,
+        [chatIds]
+      );
+    }
+
+    // Calculate metrics
+    const metrics = {
+      // Total chats assigned to agent
+      totalChats: agentChats.length,
+
+      // Time spent in panel (from logs)
+      timeSpent: calculateTimeSpent(agentLogs, startDate, endDate),
+
+      // Average response time
+      avgResponseTime: calculateAvgResponseTime(allConvos),
+
+      // Unread messages count
+      unreadMessages: agentChats.reduce(
+        (sum, chat) => sum + (chat.unread_count || 0),
+        0
+      ),
+
+      // Chat status breakdown
+      chatStatus: calculateChatStatus(agentChats),
+
+      // Total messages count
+      totalMessages: allConvos.length,
+
+      // Incoming/outgoing breakdown
+      messageDirection: calculateMessageDirection(allConvos),
+
+      // Last login/logout
+      lastActivity: getLastActivity(agentLogs),
+
+      // Daily breakdown for table
+      dailyMetrics: calculateDailyMetrics(
+        agentChats,
+        allConvos,
+        agentLogs,
+        startDate,
+        endDate
+      ),
+    };
+
+    res.json({
+      success: true,
+      data: {
+        agentInfo: {
+          name: agentData.name,
+          email: agentData.email,
+          mobile: agentData.mobile,
+        },
+        metrics,
+      },
+    });
+  } catch (err) {
+    console.error("Error fetching agent report:", err);
+    res.status(500).json({
+      success: false,
+      msg: "Failed to fetch agent report",
+      error: err.message,
+    });
+  }
+});
+
+// Helper functions
+function calculateTimeSpent(logs, startDate, endDate) {
+  let totalSeconds = 0;
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  for (let date in logs.spendTime) {
+    const currentDate = new Date(date);
+    if (currentDate >= start && currentDate <= end) {
+      totalSeconds += logs.spendTime[date] || 0;
+    }
+  }
+
+  // Convert to hours and minutes
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  return `${hours}h ${minutes}m`;
+}
+
+function calculateAvgResponseTime(conversations) {
+  let totalResponseTime = 0;
+  let responseCount = 0;
+
+  for (let i = 0; i < conversations.length - 1; i++) {
+    const current = conversations[i];
+    const next = conversations[i + 1];
+
+    if (current.route === "INCOMING" && next.route === "OUTGOING") {
+      const currentTime = new Date(current.createdAt).getTime();
+      const nextTime = new Date(next.createdAt).getTime();
+      totalResponseTime += (nextTime - currentTime) / 1000; // in seconds
+      responseCount++;
+    }
+  }
+
+  if (responseCount === 0) return "N/A";
+
+  const avgSeconds = Math.round(totalResponseTime / responseCount);
+  const minutes = Math.floor(avgSeconds / 60);
+  const seconds = avgSeconds % 60;
+  return `${minutes}m ${seconds}s`;
+}
+
+function calculateChatStatus(chats) {
+  const statusCounts = {
+    pending: 0,
+    open: 0,
+    resolved: 0,
+    other: 0,
+  };
+
+  chats.forEach((chat) => {
+    const label = chat.chat_label ? chat.chat_label.toLowerCase() : "other";
+    if (label.includes("pending")) {
+      statusCounts.pending++;
+    } else if (label.includes("open")) {
+      statusCounts.open++;
+    } else if (label.includes("resolved")) {
+      statusCounts.resolved++;
+    } else {
+      statusCounts.other++;
+    }
+  });
+
+  return statusCounts;
+}
+
+function calculateMessageDirection(conversations) {
+  return conversations.reduce(
+    (acc, msg) => {
+      acc[msg.route === "INCOMING" ? "incoming" : "outgoing"]++;
+      return acc;
+    },
+    { incoming: 0, outgoing: 0 }
+  );
+}
+
+function getLastActivity(logs) {
+  if (!logs.dateTracking) return { lastLogin: "N/A", lastLogout: "N/A" };
+
+  let lastLogin = null;
+  let lastLogout = null;
+
+  for (const date in logs.dateTracking) {
+    const dayData = logs.dateTracking[date];
+    if (
+      dayData.lastLogin &&
+      (!lastLogin || new Date(dayData.lastLogin) > new Date(lastLogin))
+    ) {
+      lastLogin = dayData.lastLogin;
+    }
+    if (
+      dayData.lastLogout &&
+      (!lastLogout || new Date(dayData.lastLogout) > new Date(lastLogout))
+    ) {
+      lastLogout = dayData.lastLogout;
+    }
+  }
+
+  return {
+    lastLogin: lastLogin ? formatDate(lastLogin) : "N/A",
+    lastLogout: lastLogout ? formatDate(lastLogout) : "N/A",
+  };
+}
+
+function calculateDailyMetrics(chats, convos, logs, startDate, endDate) {
+  const dailyData = {};
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  // Initialize all dates in range
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    const dateStr = d.toISOString().split("T")[0];
+    dailyData[dateStr] = {
+      date: dateStr,
+      totalChats: 0,
+      avgResponseTime: 0,
+      incomingMessages: 0,
+      outgoingMessages: 0,
+      timeSpent: logs.spendTime?.[dateStr] || 0,
+    };
+  }
+
+  // Count chats per day
+  chats.forEach((chat) => {
+    const chatDate = new Date(chat.createdAt).toISOString().split("T")[0];
+    if (dailyData[chatDate]) {
+      dailyData[chatDate].totalChats++;
+    }
+  });
+
+  // Calculate response times and message counts per day
+  const dailyConvos = {};
+  convos.forEach((convo) => {
+    const convoDate = new Date(convo.createdAt).toISOString().split("T")[0];
+    if (!dailyConvos[convoDate]) {
+      dailyConvos[convoDate] = [];
+    }
+    dailyConvos[convoDate].push(convo);
+  });
+
+  for (const date in dailyConvos) {
+    if (dailyData[date]) {
+      const dayConvos = dailyConvos[date];
+      dailyData[date].incomingMessages = dayConvos.filter(
+        (c) => c.route === "INCOMING"
+      ).length;
+      dailyData[date].outgoingMessages = dayConvos.filter(
+        (c) => c.route === "OUTGOING"
+      ).length;
+      dailyData[date].avgResponseTime = calculateDailyResponseTime(dayConvos);
+    }
+  }
+
+  return Object.values(dailyData);
+}
+
+function calculateDailyResponseTime(conversations) {
+  let totalResponseTime = 0;
+  let responseCount = 0;
+
+  for (let i = 0; i < conversations.length - 1; i++) {
+    const current = conversations[i];
+    const next = conversations[i + 1];
+
+    if (current.route === "INCOMING" && next.route === "OUTGOING") {
+      const currentTime = new Date(current.createdAt).getTime();
+      const nextTime = new Date(next.createdAt).getTime();
+      totalResponseTime += (nextTime - currentTime) / 1000; // in seconds
+      responseCount++;
+    }
+  }
+
+  if (responseCount === 0) return 0;
+  return Math.round(totalResponseTime / responseCount / 60); // in minutes
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleString();
+}
+
+router.post("/get_agent_report", validateUser, async (req, res) => {
+  try {
+    const { uid, startDate, endDate } = req.body;
+
+    console.log({ uid, startDate, endDate });
+
+    // Date validation and formatting
+    const dateFilter = {};
+    if (startDate && endDate) {
+      dateFilter.chatDate = {
+        start: new Date(startDate),
+        end: new Date(endDate),
+      };
+    }
+
+    // Get agent's chats with optional date filtering
+    let agentChatsQuery = `SELECT * FROM beta_chats WHERE assigned_agent LIKE ?`;
+    const agentChatsParams = [`%${uid}%`];
+
+    if (dateFilter.chatDate) {
+      agentChatsQuery += ` AND createdAt BETWEEN ? AND ?`;
+      agentChatsParams.push(dateFilter.chatDate.start, dateFilter.chatDate.end);
+    }
+
+    const agentChats = await query(agentChatsQuery, agentChatsParams);
+
+    // Get agent data including logs
+    const agentData = await query(`SELECT * FROM agents WHERE uid = ?`, [uid]);
+
+    // Calculate time spent in panel
+    let totalTimeSpent = 0;
+    let lastLogin = null;
+    let lastLogout = null;
+
+    if (agentData[0]?.logs) {
+      const logs = JSON.parse(agentData[0].logs);
+      if (logs.spendTime) {
+        totalTimeSpent = Object.values(logs.spendTime).reduce(
+          (sum, time) => sum + time,
+          0
+        );
+      }
+      if (logs.dateTracking) {
+        const dates = Object.values(logs.dateTracking);
+        if (dates.length > 0) {
+          lastLogin = dates[dates.length - 1].lastLogin;
+          lastLogout = dates[dates.length - 1].lastLogout;
+        }
+      }
+    }
+
+    // Get chat IDs for conversation query
+    const chatIds = agentChats.map((chat) => chat.chat_id);
+
+    // Initialize empty conversations array
+    let conversations = [];
+
+    // Only query conversations if we have chat IDs
+    if (chatIds.length > 0) {
+      // Get conversations with optional date filtering
+      let conversationsQuery = `SELECT * FROM beta_conversation WHERE chat_id IN (?)`;
+      const conversationsParams = [chatIds];
+
+      if (dateFilter.chatDate) {
+        conversationsQuery += ` AND createdAt BETWEEN ? AND ?`;
+        conversationsParams.push(
+          dateFilter.chatDate.start,
+          dateFilter.chatDate.end
+        );
+      }
+
+      conversationsQuery += ` ORDER BY createdAt ASC`; // Sort from oldest to newest
+      conversations = await query(conversationsQuery, conversationsParams);
+    }
+
+    // Calculate metrics
+    const metrics = {
+      totalChats: agentChats.length,
+      timeSpentInPanel: totalTimeSpent, // in minutes
+      lastLogin,
+      lastLogout,
+      unreadMessages: agentChats.reduce(
+        (sum, chat) => sum + (chat.unread_count || 0),
+        0
+      ),
+      totalConversations: conversations.length,
+      incomingMessages: conversations.filter((msg) => msg.route === "INCOMING")
+        .length,
+      outgoingMessages: conversations.filter((msg) => msg.route === "OUTGOING")
+        .length,
+    };
+
+    // Calculate average response time
+    let responseTimes = [];
+    let lastIncoming = null;
+
+    conversations.forEach((msg) => {
+      if (msg.route === "INCOMING") {
+        lastIncoming = new Date(msg.timestamp);
+      } else if (msg.route === "OUTGOING" && lastIncoming) {
+        const outgoingTime = new Date(msg.timestamp);
+        const diff = (outgoingTime - lastIncoming) / 1000; // in seconds
+        responseTimes.push(diff);
+        lastIncoming = null;
+      }
+    });
+
+    metrics.avgResponseTime =
+      responseTimes.length > 0
+        ? Math.round(
+            responseTimes.reduce((sum, time) => sum + time, 0) /
+              responseTimes.length
+          )
+        : 0;
+
+    // Calculate chat status counts
+    const statusCounts = {
+      open: 0,
+      pending: 0,
+      unresolved: 0,
+      important: 0,
+    };
+
+    agentChats.forEach((chat) => {
+      if (chat.chat_label) {
+        const label = JSON.parse(chat.chat_label);
+        if (label.title === "Important") statusCounts.important++;
+        // Add more status checks as needed
+      }
+      // Add other status checks based on your business logic
+    });
+
+    metrics.statusCounts = statusCounts;
+
+    res.json({
+      success: true,
+      data: {
+        metrics,
+        agentData: agentData[0],
+        conversations: conversations.slice(0, 100), // Limit to 100 most recent
+        agentChats: agentChats.slice(0, 100), // Limit to 100 most recent
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    res.json({
+      success: false,
+      msg: "Failed to generate agent report",
+      err: err.message,
+    });
+  }
+});
+
+router.get("/get_my_meta_templets_beta", validateUser, async (req, res) => {
+  try {
+    console.log({ query: req.query });
+
+    const getMETA = await query(`SELECT * FROM meta_api WHERE uid = ?`, [
+      req.decode.uid,
+    ]);
+    if (getMETA.length < 1) {
+      return res.json({
+        success: false,
+        msg: "Please check your meta API keys",
+      });
+    }
+
+    // Add pagination and filtering options
+    const limit = req.query.limit || 9;
+    const after = req.query.after || null;
+    const before = req.query.before || null;
+    const status = req.query.status || "APPROVED";
+
+    const resp = await getAllTempletsMetaBeta(
+      "v21.0", // Use your API version
+      getMETA[0]?.waba_id,
+      getMETA[0]?.access_token,
+      limit,
+      after,
+      before,
+      status
+    );
+
+    if (resp?.error) {
+      res.json({
+        success: false,
+        msg: resp?.error?.message || "Please check your API",
+      });
+    } else {
+      // Process templates to extract variable information
+      const templatesWithVars =
+        resp?.data?.map((template) => {
+          const variables = extractTemplateVariablesBeta(template);
+          return {
+            ...template,
+            variables,
+          };
+        }) || [];
+
+      res.json({
+        success: true,
+        data: templatesWithVars,
+        paging: resp?.paging || {},
+      });
+    }
+  } catch (err) {
+    res.json({ success: false, msg: "something went wrong", err });
+    console.log(err);
+  }
+});
+
+router.post("/send_template_message", validateUser, async (req, res) => {
+  try {
+    const {
+      template_name,
+      template_language = "en_US",
+      recipient_phone,
+      body_variables = [],
+      header_variable = null,
+      button_variables = [],
+    } = req.body;
+
+    // Validate required fields
+    if (!template_name || !recipient_phone) {
+      return res.json({
+        success: false,
+        msg: "Template name and recipient phone are required",
+      });
+    }
+
+    // Format phone number (ensure it has country code)
+    const formattedPhone = formatPhoneNumber(recipient_phone);
+
+    // Get user's Meta API credentials
+    const getMETA = await query(`SELECT * FROM meta_api WHERE uid = ?`, [
+      req.decode.uid,
+    ]);
+
+    if (getMETA.length < 1) {
+      return res.json({
+        success: false,
+        msg: "Please check your meta API keys",
+      });
+    }
+
+    // Send the template message
+    const response = await sendTemplateMessage(
+      "v18.0",
+      getMETA[0]?.business_phone_number_id,
+      getMETA[0]?.access_token,
+      template_name,
+      template_language,
+      formattedPhone,
+      body_variables,
+      header_variable,
+      button_variables
+    );
+
+    if (response?.error) {
+      return res.json({
+        success: false,
+        msg: response?.error?.message || "Failed to send template message",
+        error: response.error,
+      });
+    }
+
+    res.json({
+      success: true,
+      msg: "Template message sent successfully",
+      data: response,
+    });
+  } catch (err) {
+    console.error("Error sending template message:", err);
+    res.json({
+      success: false,
+      msg: "Something went wrong while sending the template",
+      error: err.message,
+    });
   }
 });
 

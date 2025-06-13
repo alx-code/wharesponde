@@ -3,6 +3,124 @@ const moment = require("moment-timezone");
 const fetch = require("node-fetch");
 const { addON } = require("../env.js");
 const fs = require("fs");
+const { google } = require("googleapis");
+
+async function authenticate(credentials) {
+  const { client_email, private_key } = credentials;
+
+  const auth = new google.auth.JWT(client_email, null, private_key, [
+    "https://www.googleapis.com/auth/spreadsheets",
+  ]);
+  await auth.authorize();
+  return google.sheets({ version: "v4", auth });
+}
+
+async function getSheetByName(sheets, spreadsheetId, sheetName) {
+  try {
+    const spreadsheet = await sheets.spreadsheets.get({
+      spreadsheetId,
+    });
+
+    const sheet = spreadsheet.data.sheets.find(
+      (s) => s.properties.title === sheetName
+    );
+
+    if (!sheet) {
+      return { exists: false };
+    }
+
+    const data = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${sheetName}!A:Z`,
+    });
+
+    return {
+      exists: true,
+      data: data.data.values || [],
+      sheetId: sheet.properties.sheetId,
+      properties: sheet.properties,
+    };
+  } catch (error) {
+    console.error("Error getting sheet:", error.message);
+    throw error;
+  }
+}
+
+async function pushOrCreateSheet(sheets, spreadsheetId, sheetName, data) {
+  try {
+    // First check if sheet exists
+    const sheetInfo = await getSheetByName(sheets, spreadsheetId, sheetName);
+
+    if (!sheetInfo.exists) {
+      // Create the sheet if it doesn't exist
+      await sheets.spreadsheets.batchUpdate({
+        spreadsheetId,
+        resource: {
+          requests: [
+            {
+              addSheet: {
+                properties: {
+                  title: sheetName,
+                  gridProperties: {
+                    rowCount: 1000,
+                    columnCount: 26,
+                  },
+                },
+              },
+            },
+          ],
+        },
+      });
+      console.log(`Created new sheet: ${sheetName}`);
+    }
+
+    // Prepare data (convert object to array if needed)
+    const values = Array.isArray(data) ? data : [Object.values(data)];
+
+    // Push data to sheet
+    const result = await sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range: `${sheetName}!A1`,
+      valueInputOption: "USER_ENTERED",
+      insertDataOption: "INSERT_ROWS",
+      resource: { values },
+    });
+
+    return {
+      success: true,
+      updatedCells: result.data.updates.updatedCells,
+      updatedRange: result.data.updates.updatedRange,
+    };
+  } catch (error) {
+    console.error("Error in pushOrCreateSheet:", error.message);
+    throw error;
+  }
+}
+
+async function pushSpreadSheet({ authUrl, sheetName, sheetId, jsonData }) {
+  try {
+    const res = await fetch(authUrl);
+    if (!res.ok) throw new Error("Failed to fetch service account JSON");
+    const credsPath = await res.json();
+
+    const spreadsheetId = sheetId;
+
+    const sheets = await authenticate(credsPath);
+    const sheetData = await getSheetByName(sheets, spreadsheetId, sheetName);
+    console.log("Sheet exists:", sheetData.exists);
+
+    const pushResult = await pushOrCreateSheet(
+      sheets,
+      spreadsheetId,
+      sheetName,
+      jsonData
+    );
+
+    console.log("Push result:", pushResult);
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 function readJSONFile(filePath, length) {
   try {
@@ -67,6 +185,35 @@ function readJSONFile(filePath, length) {
     return []; // Return empty array if there's an error
   }
 }
+
+const replaceJsonWithVar = (val, variables) => {
+  console.log({ val, variables });
+  if (typeof val === "string") {
+    if (val.startsWith("{{{") && val.endsWith("}}}")) {
+      const key = val.slice(3, -3).trim();
+      const keys = key.split(".");
+      let resolvedValue = variables;
+
+      for (const k of keys) {
+        resolvedValue = resolvedValue && resolvedValue[k];
+      }
+
+      return resolvedValue !== undefined ? resolvedValue : val;
+    } else {
+      return val;
+    }
+  }
+
+  if (typeof val === "object" && val !== null) {
+    const result = Array.isArray(val) ? [] : {};
+    for (const key in val) {
+      result[key] = replaceJsonWithVar(val[key], variables);
+    }
+    return result;
+  }
+
+  return val;
+};
 
 async function makeRequest({
   method,
@@ -181,6 +328,8 @@ async function makeRequest({
 
     const data = await response.json();
 
+    // console.log({ data });
+
     if (typeof data === "object" || Array.isArray(data)) {
       return { success: true, data };
     } else {
@@ -194,9 +343,9 @@ async function makeRequest({
 
 // Function to check if a date has passed in a given timezone
 function hasDatePassedInTimezone(timezone, date) {
-  const momentDate = moment.tz(date, timezone);
-  const currentMoment = moment.tz(timezone);
-  return momentDate.isBefore(currentMoment);
+  const givenDate = new Date(date); // Parses as local or ISO depending on format
+  const now = new Date(); // Current system/server time
+  return givenDate < now;
 }
 
 const msgType = [
@@ -217,6 +366,8 @@ const toolsType = [
   "MAKE_REQUEST",
   "TAKE_INPUT",
   "SAVE_AS_VAR",
+  "SPREADSHEET",
+  "CONDITION",
 ];
 
 const addonType = ["AI_BOT"];
@@ -320,6 +471,8 @@ async function completeTools({
   uniqueId,
   conversationPath,
   newMessage,
+  incomingMsg,
+  flowData,
 }) {
   try {
     // assigning chat to agent
@@ -458,58 +611,39 @@ async function completeTools({
               nodes,
               edges,
               variablesOld: {},
+              flowData,
             });
           }
         }
       }
     }
 
-    // making for save as var
-    // if (k?.type === "SAVE_AS_VAR") {
-    //   // Helper function to access nested keys like "msgContext.text.body"
-    //   const getNestedValue = (obj, path) => {
-    //     return path.split(".").reduce((acc, key) => acc?.[key], obj);
-    //   };
-
-    //   // Main logic
-    //   const [getFlowData] = await query(
-    //     `SELECT * FROM flow_data WHERE uniqueId = ?`,
-    //     [uniqueId]
-    //   );
-
-    //   const previousMsg = newMessage;
-    //   const variableName = k?.data?.variableName;
-    //   const keyToSave = k?.data?.keyToSave;
-
-    //   const valueToSave =
-    //     keyToSave === "JSON.stringify(previousMsg)"
-    //       ? JSON.stringify(previousMsg)
-    //       : getNestedValue(previousMsg, keyToSave);
-
-    //   if (getFlowData) {
-    //     const oldInput = getFlowData?.inputs
-    //       ? JSON.parse(getFlowData.inputs)
-    //       : {};
-
-    //     const newInput = { ...oldInput, [variableName]: valueToSave };
-
-    //     console.log({ newInput });
-
-    //     await query(`UPDATE flow_data SET inputs = ? WHERE uniqueId = ?`, [
-    //       JSON.stringify(newInput),
-    //       uniqueId,
-    //     ]);
-    //   } else {
-    //     const inputToSave = JSON.stringify({ [variableName]: valueToSave });
-
-    //     await query(
-    //       `INSERT INTO flow_data (uid, uniqueId, inputs) VALUES (?, ?, ?)`,
-    //       [uid, uniqueId, inputToSave]
-    //     );
+    // if (k.type === "CONDITION") {
+    //   function cleanValue(input) {
+    //     const [first, ...rest] = input.split(" ");
+    //     const cleanedFirst = first.split("_")[0];
+    //     return [cleanedFirst, ...rest].join(" ");
     //   }
 
-    //   // moving to next node
-    //   const findSourceFromEdge = edges?.filter((x) => x.source == k?.id);
+    //   const conditionStringValue = replacePlaceholders(k?.data?.stringValue, {
+    //     senderMobile: senderNumber,
+    //     senderName: toName,
+    //     ...variables,
+    //   });
+
+    //   const cleanNodeId = cleanValue(k?.id);
+    //   const newNodeId = JSON.stringify(incomingMsg)?.includes(
+    //     conditionStringValue
+    //   )
+    //     ? `${cleanNodeId}_equal`
+    //     : `${cleanNodeId}_notEqual`;
+
+    //   console.log({ newNodeId });
+
+    //   // moving to the next connected node
+    //   const findSourceFromEdge = edges?.filter(
+    //     (x) => x.sourceHandle == newNodeId
+    //   );
 
     //   if (findSourceFromEdge?.length > 0) {
     //     for (const f of findSourceFromEdge) {
@@ -526,15 +660,116 @@ async function completeTools({
     //           chatId,
     //           nodes,
     //           edges,
-    //           variablesOld: variables,
+    //           variablesOld: {},
     //         });
     //       }
     //     }
     //   }
     // }
 
+    if (k.type === "CONDITION") {
+      function cleanValue(input) {
+        const [first, ...rest] = input.split(" ");
+        const cleanedFirst = first.split("_")[0];
+        return [cleanedFirst, ...rest].join(" ");
+      }
+
+      const conditionStringValue = replacePlaceholders(k?.data?.stringValue, {
+        senderMobile: senderNumber,
+        senderName: toName,
+        ...variables,
+      });
+
+      const cleanNodeId = cleanValue(k?.id);
+
+      const msgToCompare = k?.data?.caseSensitive
+        ? JSON.stringify(incomingMsg)
+        : JSON.stringify(incomingMsg).toLowerCase();
+
+      const conditionToCompare = k?.data?.caseSensitive
+        ? conditionStringValue
+        : conditionStringValue?.toLowerCase();
+
+      const newNodeId = msgToCompare.includes(conditionToCompare)
+        ? `${cleanNodeId}_equal`
+        : `${cleanNodeId}_notEqual`;
+
+      console.log({ newNodeId });
+
+      // moving to the next connected node
+      const findSourceFromEdge = edges?.filter(
+        (x) => x.sourceHandle == newNodeId
+      );
+
+      if (findSourceFromEdge?.length > 0) {
+        for (const f of findSourceFromEdge) {
+          const getNodeFromSource = nodes?.filter((x) => x.id == f?.target);
+
+          for (const k of getNodeFromSource) {
+            await destributeTaskFlow({
+              uid,
+              k,
+              chatbotFromMysq,
+              toName,
+              senderNumber,
+              sendMetaMsg,
+              chatId,
+              nodes,
+              edges,
+              variablesOld: {},
+              flowData,
+            });
+          }
+        }
+      }
+    }
+
+    if (k?.type === "SPREADSHEET") {
+      const { authUrl, authLabel, jsonData, sheetName, sheetId } = k.data;
+      if (authUrl && authLabel && jsonData && sheetName && sheetId) {
+        await pushSpreadSheet({
+          authUrl,
+          sheetName,
+          sheetId,
+          jsonData: replaceJsonWithVar(jsonData, {
+            ...variables,
+            senderName: toName,
+            senderMobile: senderNumber,
+          }),
+        });
+
+        // moving to the next connected node
+        const findSourceFromEdge = edges?.filter((x) => x.source == k?.id);
+
+        if (findSourceFromEdge?.length > 0) {
+          for (const f of findSourceFromEdge) {
+            const getNodeFromSource = nodes?.filter((x) => x.id == f?.target);
+
+            for (const k of getNodeFromSource) {
+              await destributeTaskFlow({
+                uid,
+                k,
+                chatbotFromMysq,
+                toName,
+                senderNumber,
+                sendMetaMsg,
+                chatId,
+                nodes,
+                edges,
+                variablesOld: {},
+                flowData,
+              });
+            }
+          }
+        }
+      } else {
+        console.log("In the spreadsheet node all required fields not found");
+      }
+    }
+
     // adding disabling chat to mysql for chat
     if (k?.type == "DISABLE_CHAT") {
+      console.log("DISABLE_CHAT");
       const getChat = await query(
         `SELECT * FROM chats WHERE chat_id = ? AND uid = ?`,
         [chatId, uid]
@@ -545,13 +780,22 @@ async function completeTools({
           ? JSON.parse(getChat[0]?.prevent_list)
           : [];
 
+        const now = new Date();
+        now.setHours(now.getHours() + Number(k?.data?.hours || 0));
+        now.setMinutes(now.getMinutes() + Number(k?.data?.minutes || 0));
+        const timestamp = now.getTime(); // capture the timestamp in milliseconds
+
         const newObj = {
           mobile: senderNumber,
-          timestamp: k?.data?.msgContent?.timestamp,
+          timestamp: k?.data?.hours
+            ? timestamp
+            : k?.data?.msgContent?.timestamp,
           timezone: k?.data?.msgContent?.timezone,
         };
 
         const finalArr = [...oldObj, newObj];
+
+        console.log({ finalArr, flow, uid });
 
         await query(
           `UPDATE flow SET prevent_list = ? WHERE uid = ? AND flow_id = ?`,
@@ -573,7 +817,6 @@ async function completeTools({
       const urll = replacePlaceholders(msgContent?.url, {
         senderMobile: senderNumber,
         senderName: toName,
-        senderMsg: sendMetaMsg,
         ...variables,
       });
 
@@ -615,6 +858,7 @@ async function completeTools({
                 nodes,
                 edges,
                 variablesOld: { ...variables, ...resp, ...resp.data },
+                flowData,
               });
             }
           }
@@ -693,8 +937,6 @@ async function manupulateAiForAll({
       (x) => x.senderNumber == senderNumber
     );
 
-    console.log({ findIncomingNumber });
-
     // Checking if assigned to AI
     if (k?.data?.msgContent?.assignAi) {
       console.log("this chat is assigned to ai");
@@ -759,12 +1001,6 @@ async function returnVariables({
         [JSON.stringify(inputs), null, uniqueId]
       );
 
-      // Parse flow_data.other appropriately.
-      // If it's an integer stored as a string:
-
-      // If flow_data.other is a JSON string, use:
-      // const savedNode = JSON.parse(flow_data.other) || {};
-
       const findSourceFromEdge = edges?.find((x) => x.source == savedNode?.id);
       if (findSourceFromEdge) {
         k = nodes?.find((x) => x.id == findSourceFromEdge?.target) || {};
@@ -798,6 +1034,7 @@ async function destributeTaskFlow({
   conversationPath = null,
 }) {
   // console.log(JSON.stringify({ k }));
+  console.log("destributeTaskFlow");
   const uniqueId = `${uid}-${senderNumber}-${chatId}`;
   const { variables, flow_data, updatedK } = await returnVariables({
     uniqueId,
@@ -868,12 +1105,13 @@ async function destributeTaskFlow({
       edges,
       incomingMsg,
       variables,
+      flowData,
     });
   }
 
   // if the node type is addon
   if (addonType.includes(taskName)) {
-    console.log("GOing to completeAddon");
+    console.log("Going to completeAddon");
     await completeAddon({
       uid,
       k,
@@ -907,6 +1145,8 @@ async function destributeTaskFlow({
       uniqueId,
       conversationPath,
       newMessage,
+      incomingMsg,
+      flowData,
     });
   }
 }

@@ -1,26 +1,22 @@
-const { downloadMediaMessage } = require("@whiskeysockets/baileys");
-const fs = require("fs");
+const { downloadMediaMessage } = require("baileys");
 const randomstring = require("randomstring");
-const path = require("path");
 const moment = require("moment");
 const { query } = require("../../../database/dbpromise");
-const {
-  getConnectionsByUid,
-  sendToSocketId,
-  sendRingToUid,
-} = require("../../../socket");
-const { mergeArraysWithPhonebook } = require("../../socket/function");
 const mime = require("mime-types");
-const { fetchProfileUrl, fetchPersonPresence } = require("./control");
+const { fetchProfileUrl } = require("./control");
+const fs = require("fs");
 
 function timeoutPromise(promise, ms) {
-  const timeout = new Promise(
-    (resolve) => setTimeout(() => resolve(null), ms) // Instead of rejecting, resolve null
-  );
+  const timeout = new Promise((resolve) => setTimeout(() => resolve(null), ms));
   return Promise.race([promise, timeout]);
 }
 
-// updating profile image
+function extractPhoneNumber(str) {
+  if (!str) return null;
+  const match = str.match(/^(\d+)(?=:|\@)/);
+  return match ? match[1] : null;
+}
+
 async function updateProfileMysql({
   chatId,
   uid,
@@ -29,41 +25,34 @@ async function updateProfileMysql({
   sessionId,
 }) {
   try {
-    const isGroup = remoteJid.includes("@g.us") ? true : false;
-    if (isGroup) return;
+    if (remoteJid.includes("@g.us")) return;
 
-    let profileImg;
     const session = await timeoutPromise(getSession(sessionId || "a"), 60000);
-    if (session) {
-      const image = await fetchProfileUrl(session, remoteJid);
-      // const presence = await fetchPersonPresence(
-      //   session,
-      //   `918126458934@s.whatsapp.net`
-      // );
-      // console.log({ presence: presence });
-      if (!image) return;
+    if (!session) return;
 
-      const [chat] = await query(
-        `SELECT profile FROM chats WHERE uid = ? AND chat_id = ?`,
-        [uid, chatId]
-      );
+    const image = await fetchProfileUrl(session, remoteJid);
+    if (!image) return;
 
-      const profile = chat?.profile
-        ? { ...JSON.parse(chat.profile), profileImage: image }
+    // Get existing chat data to preserve other fields
+    const [chat] = await query(
+      `SELECT * FROM beta_chats WHERE uid = ? AND chat_id = ?`,
+      [uid, chatId]
+    );
+
+    if (chat) {
+      const profile = chat.profile_image
+        ? { ...JSON.parse(chat.profile_image), profileImage: image }
         : { profileImage: image };
-
       await query(
-        `UPDATE chats SET profile = ? WHERE uid = ? AND chat_id = ?`,
-        [JSON.stringify(profile), uid, chatId]
+        `UPDATE beta_chats SET last_message = JSON_SET(COALESCE(last_message, '{}'), '$.profileImage', ?), profile = ? WHERE uid = ? AND chat_id = ?`,
+        [image, JSON.stringify(profile), uid, chatId]
       );
     }
   } catch (err) {
-    console.log("error in updating profile image", err);
+    console.log("Error updating profile data:", err);
   }
 }
 
-// -----------------------------------------------------------------------------
-// Update or insert a chat into MySQL.
 async function updateChatInMysql({
   chatId,
   uid,
@@ -74,76 +63,61 @@ async function updateChatInMysql({
   getSession,
   jid,
 }) {
-  const allowedMessageTypes = ["text", "image", "document", "video", "audio"];
+  try {
+    const allowedMessageTypes = ["text", "image", "document", "video", "audio"];
+    const isIncoming = actualMsg?.route === "INCOMING";
 
-  updateProfileMysql({
-    chatId,
-    uid,
-    getSession,
-    remoteJid: jid,
-    sessionId,
-  });
+    // Update profile data if needed
+    updateProfileMysql({ chatId, uid, getSession, remoteJid: jid, sessionId });
 
-  // Fetch user details. Exit early if not found.
-  const [user] = await query(`SELECT * FROM user WHERE uid = ?`, [uid]);
-  if (!user) return;
+    // Check if user exists
+    const [user] = await query(`SELECT * FROM user WHERE uid = ?`, [uid]);
+    if (!user) return;
 
-  const userTimezone = getCurrentTimestampInTimeZone(
-    user?.timezone || Date.now() / 1000
-  );
-  const shouldUpdateTimestamp =
-    allowedMessageTypes.includes(actualMsg?.type) &&
-    actualMsg?.route === "INCOMING";
+    // Get session data for origin_instance_id
+    const sessionData = await getSession(sessionId);
+    const originInstanceId =
+      sessionData?.authState?.creds?.me || sessionData.user;
 
-  // Check if chat exists.
-  const [chat] = await query(
-    `SELECT * FROM chats WHERE chat_id = ? AND uid = ?`,
-    [chatId, uid]
-  );
-
-  if (chat) {
-    // Prepare dynamic update fields.
-    const queryFields = [];
-    const queryValues = [];
-
-    if (shouldUpdateTimestamp) {
-      queryFields.push("last_message_came = ?");
-      queryValues.push(userTimezone);
-    }
-    queryFields.push("last_message = ?", "is_opened = ?");
-    queryValues.push(JSON.stringify(actualMsg), 0);
-    // Append WHERE clause values.
-    queryValues.push(chatId, uid);
-
-    await query(
-      `UPDATE chats SET ${queryFields.join(
-        ", "
-      )} WHERE chat_id = ? AND uid = ?`,
-      queryValues
+    // Check if chat exists
+    const [chat] = await query(
+      `SELECT * FROM beta_chats WHERE chat_id = ? AND uid = ?`,
+      [chatId, uid]
     );
-  } else {
-    const sessionData = getSession(sessionId);
-    const userData = sessionData?.authState?.creds?.me || sessionData.user;
-    // Insert new chat record.
-    await query(
-      `INSERT INTO chats (chat_id, uid, last_message_came, other, sender_name, sender_mobile, last_message, is_opened, origin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
+
+    const updateFields = {
+      last_message: JSON.stringify(actualMsg),
+      sender_name: senderName || "NA",
+      sender_mobile: senderMobile || "NA",
+      origin: "qr",
+      origin_instance_id: JSON.stringify(originInstanceId),
+    };
+
+    if (isIncoming && allowedMessageTypes.includes(actualMsg?.type)) {
+      updateFields.unread_count = chat?.unread_count
+        ? chat.unread_count + 1
+        : 1;
+    }
+
+    if (chat) {
+      await query(`UPDATE beta_chats SET ? WHERE chat_id = ? AND uid = ?`, [
+        updateFields,
         chatId,
         uid,
-        shouldUpdateTimestamp ? userTimezone : null,
-        JSON.stringify(userData),
-        senderName || "NA",
-        senderMobile || "NA",
-        JSON.stringify(actualMsg),
-        0,
-        "qr",
-      ]
-    );
+      ]);
+    } else {
+      await query(`INSERT INTO beta_chats SET ?`, {
+        ...updateFields,
+        uid,
+        chat_id: chatId,
+        assigned_agent: null,
+      });
+    }
+  } catch (err) {
+    console.log("Error updating chat:", err);
   }
 }
 
-// -----------------------------------------------------------------------------
-// Returns the current timestamp in seconds using the provided timezone info.
 function getCurrentTimestampInTimeZone(timezone) {
   if (typeof timezone === "number") {
     return timezone;
@@ -156,17 +130,13 @@ function getCurrentTimestampInTimeZone(timezone) {
 
 function saveImageToFile(imageBuffer, filePath, mimetype) {
   try {
-    // Save the image buffer to a file
     fs.writeFileSync(filePath, imageBuffer);
-
     console.log(`${mimetype || "IMG"} saved successfully as ${filePath}`);
   } catch (error) {
     console.error(`Error saving image: ${error.message}`);
   }
 }
 
-// -----------------------------------------------------------------------------
-// Download media and save it to file. Returns an object with success and fileName.
 function downloadMediaPromise(m, mimetype) {
   return new Promise(async (resolve) => {
     try {
@@ -192,116 +162,68 @@ function extractPhoneNumber(str) {
   return match ? match[1] : null;
 }
 
-// -----------------------------------------------------------------------------
-// Extract chatId from the message body.
-function getChatId(body, sessionId) {
+function getChatId({ instanceNumber, senderMobile, uid }) {
   try {
-    const number = extractPhoneNumber(body.key.remoteJid);
-    if (!number) return null;
-    return `${number}_${sessionId}`;
+    return `${instanceNumber}_${extractPhoneNumber(senderMobile)}_${uid}`;
   } catch (error) {
     return null;
   }
 }
 
-// -----------------------------------------------------------------------------
-// Process incoming Baileys messages and update conversation file.
-async function processBaileysMsg({
-  body,
-  uid,
-  userFromMysql,
-  conversationPath,
-}) {
+async function saveMessageToConversation({ uid, chatId, messageData }) {
+  try {
+    await query(`INSERT INTO beta_conversation SET ?`, {
+      type: messageData.type,
+      metaChatId: messageData.metaChatId,
+      msgContext: JSON.stringify(messageData.msgContext),
+      reaction: messageData.reaction || "",
+      timestamp: messageData.timestamp,
+      senderName: messageData.senderName,
+      senderMobile: messageData.senderMobile,
+      star: messageData.star ? 1 : 0,
+      route: messageData.route,
+      context: messageData.context ? JSON.stringify(messageData.context) : null,
+      origin: messageData.origin,
+      uid,
+      chat_id: chatId,
+    });
+    return true;
+  } catch (err) {
+    console.log("Error saving message to conversation:", err);
+    return false;
+  }
+}
+
+async function processBaileysMsg({ body, uid, userFromMysql, chatId }) {
   try {
     if (!body) return null;
 
-    // --- Status Update Handling ---
+    // Status Update Handling
     if (body.update && typeof body.update.status === "number") {
-      // Only update status if the message is outgoing.
       if (!body.key?.fromMe) {
         console.log(
           `Status update for incoming message ${body.key.id} ignored.`
         );
-        let conversationArray = [];
-        if (fs.existsSync(conversationPath)) {
-          const fileContent = fs.readFileSync(conversationPath, "utf-8");
-          conversationArray = JSON.parse(fileContent);
-        }
-        const latestMessages = conversationArray.slice(-10);
-        return { newMessage: null, latestMessages };
+        return { newMessage: null, chatId };
       }
 
-      // Mapping: 2 → "sent", 3 → "delivered", 4 → "read"
       const statusMapping = { 2: "sent", 3: "delivered", 4: "read" };
-      // Reverse mapping to compare numeric values.
-      const reverseStatusMapping = { sent: 2, delivered: 3, read: 4 };
       const newStatusNumber = body.update.status;
       const newStatus = statusMapping[newStatusNumber] || "";
 
-      console.log(
-        `Status update received for message id ${body.key.id}: new status number ${newStatusNumber} (${newStatus})`
+      await query(
+        `UPDATE beta_conversation SET status = ? WHERE metaChatId = ? AND uid = ?`,
+        [newStatus, body.key.id, uid]
       );
 
-      // Ensure conversation directory exists.
-      const directoryPath = path.dirname(conversationPath);
-      if (!fs.existsSync(directoryPath)) {
-        fs.mkdirSync(directoryPath, { recursive: true });
-        console.log("Created conversation directory:", directoryPath);
-      }
-
-      let conversationArray = [];
-      if (fs.existsSync(conversationPath)) {
-        const fileContent = fs.readFileSync(conversationPath, "utf-8");
-        conversationArray = JSON.parse(fileContent);
-      } else {
-        console.warn("Conversation file does not exist for status update.");
-        // Return structure with no new message and empty latestMessages.
-        return { newMessage: null, latestMessages: [] };
-      }
-
-      // Find the message to update.
-      const index = conversationArray.findIndex(
-        (msg) => msg.metaChatId === body.key.id
-      );
-      if (index !== -1) {
-        const currentStatusStr = conversationArray[index].status;
-        const currentStatusNumber = currentStatusStr
-          ? reverseStatusMapping[currentStatusStr] || 0
-          : 0;
-        if (newStatusNumber > currentStatusNumber) {
-          console.log(
-            `Updating status for message ${body.key.id} from ${
-              currentStatusStr || "none"
-            } to ${newStatus}`
-          );
-          conversationArray[index].status = newStatus;
-        } else {
-          console.log(
-            `Not updating status for message ${body.key.id} because current status (${currentStatusStr}) is higher or equal than new status (${newStatus}).`
-          );
-        }
-        fs.writeFileSync(
-          conversationPath,
-          JSON.stringify(conversationArray, null, 2)
-        );
-      } else {
-        console.warn(
-          "No message found with metaChatId:",
-          body.key.id,
-          "to update status."
-        );
-      }
-      const latestMessages = conversationArray.slice(-10);
-      return { newMessage: null, latestMessages };
+      return { newMessage: null, chatId };
     }
-    // --- End Status Update Handling ---
 
     let msgContext = null;
-    let referencedMessageData = null; // For reply/quoted messages.
+    let referencedMessageData = null;
 
-    // Determine message type.
+    // Determine message type
     if (body.message.conversation) {
-      // Plain text message.
       msgContext = {
         type: "text",
         text: {
@@ -309,8 +231,32 @@ async function processBaileysMsg({
           preview_url: true,
         },
       };
+    } else if (body.message.reactionMessage) {
+      const reaction = body.message.reactionMessage;
+
+      // Find the original message that was reacted to
+      const [originalMessage] = await query(
+        `SELECT * FROM beta_conversation WHERE metaChatId = ? AND uid = ?`,
+        [reaction.key.id, uid]
+      );
+
+      if (originalMessage) {
+        // Update the reaction field in the original message
+        await query(
+          `UPDATE beta_conversation SET reaction = ? WHERE metaChatId = ? AND uid = ?`,
+          [reaction.text, reaction.key.id, uid]
+        );
+
+        // Return null as we don't need to create a new message for reactions
+        return { newMessage: null, chatId };
+      }
+
+      // If original message not found, log warning
+      console.warn(
+        `Original message ${reaction.key.id} not found for reaction`
+      );
+      return { newMessage: null, chatId };
     } else if (body.message.extendedTextMessage) {
-      // Extended (quoted) text message.
       const extText = body.message.extendedTextMessage;
       msgContext = {
         type: "text",
@@ -323,7 +269,6 @@ async function processBaileysMsg({
         referencedMessageData = extText.contextInfo.quotedMessage;
       }
     } else if (body.message.imageMessage) {
-      // Image message.
       const img = body.message.imageMessage;
       const downloadResult = await downloadMediaPromise(body, img.mimetype);
       msgContext = {
@@ -336,7 +281,6 @@ async function processBaileysMsg({
         },
       };
     } else if (body.message.videoMessage) {
-      // Video message.
       const vid = body.message.videoMessage;
       const downloadResult = await downloadMediaPromise(body, vid.mimetype);
       msgContext = {
@@ -348,8 +292,16 @@ async function processBaileysMsg({
           caption: vid.caption || "",
         },
       };
+    } else if (body.message.contactMessage) {
+      const contact = body.message.contactMessage;
+      msgContext = {
+        type: "contact",
+        contact: {
+          name: contact.displayName || "Unknown Contact",
+          vcard: contact.vcard || "",
+        },
+      };
     } else if (body.message.audioMessage) {
-      // Audio message.
       const aud = body.message.audioMessage;
       const downloadResult = await downloadMediaPromise(body, aud.mimetype);
       msgContext = {
@@ -361,7 +313,6 @@ async function processBaileysMsg({
         },
       };
     } else if (body.message.locationMessage) {
-      // location message.
       msgContext = {
         type: "location",
         location: {
@@ -372,7 +323,6 @@ async function processBaileysMsg({
         },
       };
     } else if (body.message.documentWithCaptionMessage) {
-      // Document message (pdf, js, sql, csv, etc.)
       const doc =
         body.message.documentWithCaptionMessage.message.documentMessage;
       const downloadResult = await downloadMediaPromise(
@@ -399,34 +349,19 @@ async function processBaileysMsg({
       return null;
     }
 
-    // Ensure conversation directory exists.
-    const directoryPath = path.dirname(conversationPath);
-    if (!fs.existsSync(directoryPath)) {
-      fs.mkdirSync(directoryPath, { recursive: true });
-    }
-
-    // Read or initialize the conversation file.
-    let conversationArray = [];
-    if (fs.existsSync(conversationPath)) {
-      const fileContent = fs.readFileSync(conversationPath, "utf-8");
-      conversationArray = JSON.parse(fileContent);
-    } else {
-      fs.writeFileSync(conversationPath, JSON.stringify([], null, 2));
-    }
-
-    // Determine context from quoted message if available.
+    // Determine context from quoted message if available
     let contextData = "";
     if (referencedMessageData?.stanzaId) {
-      const refId = referencedMessageData.stanzaId;
-      const foundMsg = conversationArray.find(
-        (msg) => msg.metaChatId === refId
+      const [foundMsg] = await query(
+        `SELECT * FROM beta_conversation WHERE metaChatId = ? AND uid = ?`,
+        [referencedMessageData.stanzaId, uid]
       );
       contextData = foundMsg || referencedMessageData;
     } else if (referencedMessageData) {
       contextData = referencedMessageData;
     }
 
-    // Create the new message object.
+    // Create the new message object
     const newMessage = {
       type: msgContext.type,
       metaChatId: body.key.id,
@@ -439,31 +374,27 @@ async function processBaileysMsg({
       senderMobile: body.key.remoteJid
         ? body.key.remoteJid.split("@")[0]
         : "NA",
-      status: "", // Initially empty; updated later via status updates.
+      status: "",
       star: false,
       route: body.key?.fromMe ? "OUTGOING" : "INCOMING",
       context: contextData,
       origin: "qr",
     };
 
-    // Append new message and update the conversation file.
-    conversationArray.push(newMessage);
-    fs.writeFileSync(
-      conversationPath,
-      JSON.stringify(conversationArray, null, 2)
-    );
+    // Save message to MySQL
+    await saveMessageToConversation({
+      uid,
+      chatId,
+      messageData: newMessage,
+    });
 
-    // Retrieve the latest 10 messages.
-    const latestMessages = conversationArray.slice(-10);
-    return { newMessage, latestMessages };
+    return { newMessage, chatId };
   } catch (err) {
-    console.error("Error processing Baileys message:", err.message);
+    console.error("Error processing Baileys message:", err);
     return null;
   }
 }
 
-// -----------------------------------------------------------------------------
-// Retrieve user details based on sessionId.
 async function getUserDetails(sessionId) {
   try {
     const [instance] = await query(
@@ -484,8 +415,6 @@ async function getUserDetails(sessionId) {
   }
 }
 
-// -----------------------------------------------------------------------------
-// Process QR message: validate, update conversation & chat list, and notify sockets.
 async function processMessageQr({
   type,
   message,
@@ -503,33 +432,37 @@ async function processMessageQr({
       return;
     }
 
-    // Build conversation path using extracted chatId.
-    const chatId = getChatId(message, sessionId);
-    const conversationPath = path.join(
-      __dirname,
-      "../../../conversations/inbox/",
-      `${uid}`,
-      `${chatId}.json`
-    );
+    const instanceNumber = userDetails?.instance?.number;
 
+    if (!instanceNumber || !message.key.remoteJid || !uid) {
+      console.log("Details not found to update chat list");
+      console.log({
+        instanceNumber,
+        senderMobile: message.key.remoteJid,
+        uid,
+      });
+    }
+
+    const chatId = getChatId({
+      instanceNumber,
+      senderMobile: message.key.remoteJid,
+      uid,
+    });
     const data = await processBaileysMsg({
       body: message,
       uid: uid,
       userFromMysql: userData,
-      conversationPath,
-      getSession,
+      chatId,
     });
 
-    // Update chat in MySQL with the latest message.
-    if (data?.latestMessages?.length > 0) {
-      const { latestMessages, newMessage } = data;
-      const lastObj = latestMessages[latestMessages.length - 1];
+    // Update chat in MySQL with the latest message
+    if (data?.newMessage) {
       await updateChatInMysql({
         chatId,
         uid: uid,
-        senderName: lastObj.senderName,
-        senderMobile: lastObj.senderMobile,
-        actualMsg: lastObj,
+        senderName: data.newMessage.senderName,
+        senderMobile: data.newMessage.senderMobile,
+        actualMsg: data.newMessage,
         sessionId,
         getSession,
         jid: message?.remoteJid || message?.key?.remoteJid,
@@ -537,33 +470,6 @@ async function processMessageQr({
     }
 
     return data;
-
-    // // Notify all socket connections with updated chat list.
-    // const socketConnections = getConnectionsByUid(userDetails.uid) || [];
-    // for (const socket of socketConnections) {
-    //   const updateChatSocketData = await updateChatListSocket({
-    //     connectionInfo: socket,
-    //   });
-    //   sendToSocketId(socket.id, updateChatSocketData, "update_chat_list");
-    //   console.log("Chat update sent to socket");
-    // }
-
-    // sendRingToUid(userDetails.uid);
-
-    // // Send conversation update to the socket if it matches the currently open chat.
-    // for (const socket of socketConnections) {
-    //   const openedChat = socket.data?.selectedChat || null;
-    //   if (
-    //     openedChat?.sender_mobile === newMessage?.senderMobile ||
-    //     openedChat?.sender_mobile === latestMessages[0]?.senderMobile
-    //   ) {
-    //     sendToSocketId(
-    //       socket.id,
-    //       { conversation: data },
-    //       "update_conversation"
-    //     );
-    //   }
-    // }
   } catch (err) {
     console.error("processMessageQr error:", err);
     return null;

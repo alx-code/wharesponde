@@ -1,0 +1,62 @@
+[
+  {
+    "type": "image",
+    "metaChatId": "3FFB6A9F7813E2447F26",
+    "msgContext": {
+      "type": "image",
+      "image": {
+        "link": "https://kibot.kuvo360.com/meta-media/gPh0Wg_qr.jpeg",
+        "caption": ""
+      }
+    },
+    "reaction": "",
+    "timestamp": 1749654940,
+    "senderName": "Lore Rivera",
+    "senderMobile": "5213334842923",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING",
+    "context": "",
+    "origin": "qr"
+  },
+  {
+    "type": "text",
+    "metaChatId": "3F47285E33368BF4F75F",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "body": "33 1600 3069",
+        "preview_url": true
+      }
+    },
+    "reaction": "",
+    "timestamp": 1749657479,
+    "senderName": "Lore Rivera",
+    "senderMobile": "5213334842923",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING",
+    "context": "",
+    "origin": "qr"
+  },
+  {
+    "type": "text",
+    "metaChatId": "3AB470C108B41E6F353D",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "body": "A qué hora viene Tekiro? Para recoger la ropa del tendedero",
+        "preview_url": true
+      }
+    },
+    "reaction": "",
+    "timestamp": 1749657582,
+    "senderName": "Lore",
+    "senderMobile": "5213334842923",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "qr"
+  }
+]

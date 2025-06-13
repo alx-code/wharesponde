@@ -85,7 +85,26 @@ async function runChatbot(
         const edges = readJsonFromFile(edgePath);
 
         if (nodes.length > 0 && edges.length > 0) {
-          const answer = getReply(nodes, edges, incomingMsg);
+          let answer = getReply(nodes, edges, incomingMsg);
+
+          if (answer?.length < 1) {
+            const uniqueId = `${uid}-${senderNumber}-${chatId}`;
+            const [flow_data] = await query(
+              `SELECT * FROM flow_data WHERE uniqueId = ?`,
+              [uniqueId]
+            );
+            if (flow_data && flow_data?.other) {
+              const savedNode = JSON.parse(flow_data.other) || {};
+              const findSourceFromEdge = edges?.find(
+                (x) => x.source == savedNode?.id
+              );
+              if (findSourceFromEdge) {
+                answer =
+                  nodes?.filter((x) => x.id == findSourceFromEdge?.target) ||
+                  [];
+              }
+            }
+          }
 
           if (answer.length > 0) {
             for (const k of answer) {
@@ -118,7 +137,26 @@ async function runChatbot(
       const edges = readJsonFromFile(edgePath);
 
       if (nodes.length > 0 && edges.length > 0) {
-        const answer = getReply(nodes, edges, incomingMsg);
+        let answer = getReply(nodes, edges, incomingMsg);
+
+        if (answer?.length < 1) {
+          const uniqueId = `${uid}-${senderNumber}-${chatId}`;
+          const [flow_data] = await query(
+            `SELECT * FROM flow_data WHERE uniqueId = ?`,
+            [uniqueId]
+          );
+          if (flow_data && flow_data?.other) {
+            const savedNode = JSON.parse(flow_data.other) || {};
+            const findSourceFromEdge = edges?.find(
+              (x) => x.source == savedNode?.id
+            );
+            if (findSourceFromEdge) {
+              answer =
+                nodes?.filter((x) => x.id == findSourceFromEdge?.target) || [];
+            }
+          }
+        }
+
         if (answer.length > 0) {
           for (const k of answer) {
             await destributeTaskFlow({
@@ -182,7 +220,7 @@ async function metaChatbotInit({
           );
         }
 
-        console.log({ chatbots });
+        // console.log({ chatbots });
 
         if (chatbots.length > 0) {
           await Promise.all(

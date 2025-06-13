@@ -1,4 +1,5 @@
 const fs = require("fs");
+const fsPromise = require("fs").promises;
 const path = require("path");
 const moment = require("moment-timezone");
 const { query } = require("../database/dbpromise");
@@ -10,23 +11,545 @@ const mime = require("mime-types");
 const nodemailer = require("nodemailer");
 const unzipper = require("unzipper");
 const { destributeTaskFlow } = require("./chatbot");
+const { URLSearchParams } = require("url");
+const mysql = require("mysql2/promise");
 
-function executeQueries(queries, connection) {
-  return new Promise(async (resolve) => {
-    try {
-      for (const query of queries) {
-        await connection.query(query);
-      }
-      resolve({
-        success: true,
-      });
-    } catch (err) {
-      resolve({
-        success: false,
-        err,
-      });
+async function executeMySQLQuery(config) {
+  let connection;
+  try {
+    // Create connection using provided config
+    connection = await mysql.createConnection({
+      host: config.connection.host,
+      port: config.connection.port,
+      user: config.connection.username,
+      password: config.connection.password,
+      database: config.connection.database,
+      ssl: config.connection.ssl ? { rejectUnauthorized: false } : undefined,
+    });
+
+    // Execute query
+    const [rows] = await connection.query(config.query, config.variables);
+
+    return {
+      success: true,
+      data: rows,
+      moveToNextNode: config.moveToNextNode,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message,
+      sqlState: error.code,
+      moveToNextNode: false, // Always halt on error
+    };
+  } finally {
+    // Close connection if it was created
+    if (connection) await connection.end();
+  }
+}
+
+async function makeRequestBeta(config, variables = {}) {
+  // Helper function to substitute variables in strings
+  const substituteVariables = (str) => {
+    if (typeof str !== "string") return str;
+    return str.replace(/\{\{\{(.+?)\}\}\}/g, (match, varName) => {
+      return variables[varName] !== undefined ? variables[varName] : match;
+    });
+  };
+
+  // Validate configuration
+  if (!config)
+    return { success: false, data: {}, msg: "Configuration is required" };
+  if (!config.method)
+    return { success: false, data: {}, msg: "HTTP method is required" };
+  if (!config.url) return { success: false, data: {}, msg: "URL is required" };
+
+  // Substitute variables in URL
+  const url = substituteVariables(config.url);
+
+  // Prepare headers with variable substitution
+  const headers = {};
+  (config.headers || []).forEach((header) => {
+    if (header.key && header.value) {
+      headers[substituteVariables(header.key)] = substituteVariables(
+        header.value
+      );
     }
   });
+
+  // Prepare body based on content type
+  let body;
+  const contentType = config.contentType || "application/json";
+
+  switch (contentType) {
+    case "application/json":
+      if (config.bodyInputMode === "visual" && config.bodyData?.json) {
+        // Build JSON from visual editor data
+        const jsonObj = {};
+        config.bodyData.json.forEach((item) => {
+          if (item.enabled !== false && item.key) {
+            try {
+              jsonObj[substituteVariables(item.key)] = JSON.parse(
+                substituteVariables(item.value)
+              );
+            } catch {
+              jsonObj[substituteVariables(item.key)] = substituteVariables(
+                item.value
+              );
+            }
+          }
+        });
+        body = JSON.stringify(jsonObj);
+      } else {
+        // Use raw JSON body with variable substitution
+        body = substituteVariables(config.bodyData?.raw || "{}");
+        // Validate JSON if in raw mode
+        if (config.bodyInputMode !== "visual") {
+          try {
+            JSON.parse(body);
+          } catch (error) {
+            throw new Error(`Invalid JSON: ${error.message}`);
+          }
+        }
+      }
+      break;
+
+    case "application/x-www-form-urlencoded":
+      if (config.bodyInputMode === "visual" && config.bodyData?.urlEncoded) {
+        const params = new URLSearchParams();
+        config.bodyData.urlEncoded.forEach((item) => {
+          if (item.enabled !== false && item.key) {
+            params.append(
+              substituteVariables(item.key),
+              substituteVariables(item.value)
+            );
+          }
+        });
+        body = params.toString();
+      } else {
+        body = substituteVariables(config.bodyData?.raw || "");
+      }
+      break;
+
+    default:
+      // For text/plain, application/xml, etc.
+      body = substituteVariables(config.bodyData?.raw || "");
+  }
+
+  // Set up abort controller for timeout (50 seconds)
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 50000);
+
+  try {
+    const response = await fetch(url, {
+      method: config.method,
+      headers,
+      body: ["GET", "HEAD"].includes(config.method.toUpperCase())
+        ? undefined
+        : body,
+      signal: controller.signal,
+      redirect: "follow",
+      timeout: 50000,
+    });
+
+    clearTimeout(timeout);
+
+    // Process response headers
+    const responseHeaders = {};
+    response.headers.forEach((value, key) => {
+      responseHeaders[key] = value;
+    });
+
+    // Process response body based on content type
+    let responseBody;
+    const responseContentType = response.headers.get("content-type") || "";
+
+    if (responseContentType.includes("application/json")) {
+      responseBody = await response.json();
+    } else if (
+      responseContentType.includes("text/") ||
+      responseContentType.includes("application/xml")
+    ) {
+      responseBody = await response.text();
+    } else {
+      responseBody = await response.buffer();
+    }
+
+    return {
+      success: true,
+      data: {
+        status: response.status,
+        statusText: response.statusText,
+        headers: responseHeaders,
+        body: responseBody,
+        ok: response.ok,
+        redirected: response.redirected,
+        url: response.url,
+      },
+    };
+  } catch (error) {
+    clearTimeout(timeout);
+    console.log(error);
+    return { success: false, msg: "Request timed out after 50 seconds" };
+  }
+}
+
+async function importConversationsFromJson({
+  newChatId,
+  uid,
+  senderName,
+  senderMobile,
+  convos,
+  batchSize = 50,
+}) {
+  if (!Array.isArray(convos) || convos.length === 0) {
+    console.log("No conversation data to import.");
+    return;
+  }
+
+  const batches = chunkArray(convos, batchSize);
+  let totalInserted = 0;
+  let totalFailed = 0;
+
+  function toMySQLTimestamp(unix) {
+    if (typeof unix !== "number" || isNaN(unix)) return null;
+    const date = new Date(unix * 1000);
+    if (isNaN(date.getTime())) return null;
+    return date.toISOString().slice(0, 19).replace("T", " ");
+  }
+
+  for (let i = 0; i < batches.length; i++) {
+    const batch = batches[i];
+    console.log(`Processing conversation batch ${i + 1}`);
+
+    const results = await Promise.all(
+      batch.map(async (convo, index) => {
+        try {
+          await query(
+            `INSERT INTO beta_conversation 
+              (type, chat_id, uid, status, metaChatId, msgContext, reaction, timestamp, senderName, senderMobile, star, route, context, origin, createdAt)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+              convo.type || "text",
+              newChatId,
+              uid,
+              convo.status || "",
+              convo.metaChatId || "",
+              JSON.stringify(convo.msgContext || {}),
+              convo.reaction || null,
+              convo.timestamp || Math.floor(Date.now() / 1000),
+              senderName,
+              senderMobile,
+              convo.star ? 1 : 0,
+              convo.route || "OUTGOING",
+              convo.context ? JSON.stringify(convo.context) : null,
+              convo.origin || "meta",
+              toMySQLTimestamp(convo.timestamp),
+            ]
+          );
+          return { success: true };
+        } catch (err) {
+          console.error(`Error inserting conversation ${index + 1}:`, err);
+          return { success: false };
+        }
+      })
+    );
+
+    const inserted = results.filter((r) => r.success).length;
+    const failed = results.filter((r) => !r.success).length;
+
+    totalInserted += inserted;
+    totalFailed += failed;
+
+    console.log(
+      `Batch ${i + 1} done. Inserted: ${inserted}, Failed: ${failed}`
+    );
+
+    if (i < batches.length - 1) {
+      await new Promise((res) => setTimeout(res, 100));
+    }
+  }
+
+  console.log(
+    `\nIMPORT COMPLETE. Total Inserted: ${totalInserted}, Failed: ${totalFailed}`
+  );
+}
+
+// Function to split array into chunks
+function chunkArray(array, chunkSize) {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += chunkSize) {
+    chunks.push(array.slice(i, i + chunkSize));
+  }
+  return chunks;
+}
+
+async function checkExistingChat(uid, chatId) {
+  try {
+    const [existing] = await query(
+      `SELECT 1 FROM beta_chats WHERE uid = ? AND chat_id = ? LIMIT 1`,
+      [uid, chatId]
+    );
+    return !!existing;
+  } catch (err) {
+    console.error("Error checking existing chat:", err);
+    return false; // Assume not exists if there's an error
+  }
+}
+
+async function processBatch(batch, batchNumber) {
+  console.log(`Processing batch ${batchNumber} with ${batch.length} items`);
+
+  const insertPromises = batch.map(async (chat) => {
+    try {
+      // Parse the last_message JSON
+      const lastMessage = JSON.parse(chat.last_message || "{}");
+
+      // Determine origin_instance_id
+      let originInstanceId = "{}";
+      if (chat.other) {
+        try {
+          const other = JSON.parse(chat.other);
+          if (other && typeof other === "object") {
+            originInstanceId = JSON.stringify(other);
+          }
+        } catch (e) {
+          console.error("Error parsing other field:", e);
+        }
+      }
+
+      // Generate chat_id based on rules
+      let chatId;
+      try {
+        const other = chat.other ? JSON.parse(chat.other) : {};
+        let whatsappNumber = "";
+
+        // Extract whatsapp number from other.id if it exists
+        if (
+          other.id &&
+          typeof other.id === "string" &&
+          other.id.includes("@s.whatsapp.net")
+        ) {
+          whatsappNumber = other.id.split("@")[0].split(":")[0];
+        }
+
+        if (whatsappNumber) {
+          chatId = `${whatsappNumber}_${chat.sender_mobile}_${chat.uid}`;
+        } else {
+          // Fallback to meta_senderMobile if no whatsapp number found
+          chatId = `meta_${chat.sender_mobile}`;
+        }
+      } catch (e) {
+        console.error("Error generating chat_id:", e);
+        chatId = `meta_${chat.sender_mobile}`;
+      }
+
+      // Check if chat already exists with same uid and chat_id
+      const exists = await checkExistingChat(chat.uid, chatId);
+      if (exists) {
+        console.log(
+          `Skipping duplicate chat: uid ${chat.uid}, chat_id ${chatId}`
+        );
+        return { success: true, id: chat.id, skipped: true };
+      }
+
+      await query(
+        `INSERT INTO beta_chats (
+          id,
+          uid,
+          old_chat_id,
+          profile,
+          origin_instance_id,
+          chat_id,
+          last_message,
+          chat_label,
+          chat_note,
+          sender_name,
+          sender_mobile,
+          unread_count,
+          origin,
+          assigned_agent,
+          createdAt
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          chat.id, // auto-generated ID
+          chat.uid,
+          chat.chat_id || null, // old_chat_id
+          chat.profile ? JSON.stringify({ profileImage: chat.profile }) : null,
+          originInstanceId,
+          chatId, // newly generated chat_id
+          JSON.stringify({
+            type: lastMessage.type || "text",
+            metaChatId: lastMessage.metaChatId || "",
+            msgContext: lastMessage.msgContext || {
+              type: "text",
+              text: { preview_url: true, body: "" },
+            },
+            reaction: lastMessage.reaction || "",
+            timestamp: lastMessage.timestamp || Math.floor(Date.now() / 1000),
+            senderName: lastMessage.senderName || chat.sender_name || "",
+            senderMobile: lastMessage.senderMobile || chat.sender_mobile || "",
+            status: lastMessage.status || "",
+            star: lastMessage.star || false,
+            route: lastMessage.route || "OUTGOING",
+            context: lastMessage.context || null,
+            origin: chat.origin || "meta",
+          }),
+          chat.chat_tags ? chat.chat_tags : null,
+          chat.chat_note || null,
+          chat.sender_name || "",
+          chat.sender_mobile || "",
+          chat.is_opened === 1 ? 1 : 0,
+          chat.origin || "meta",
+          null, // assigned_agent
+          chat.createdAt ? new Date(chat.createdAt) : new Date(),
+        ]
+      );
+      return { success: true, id: chat.id };
+    } catch (err) {
+      console.log(`Error inserting chat ${chat.id}:`, err);
+      return { success: false, id: chat.id, error: err };
+    }
+  });
+
+  return Promise.all(insertPromises);
+}
+
+async function importChatsFromv3({ chatData }) {
+  try {
+    console.log(`Total chats to be imported: ${chatData.length}`);
+
+    // First deduplicate chats to keep only the latest version of each chat
+    const chatIdMap = new Map();
+    const uniqueChats = chatData.filter((chat) => {
+      try {
+        // Generate chat_id to use as deduplication key
+        let chatId;
+        const other = chat.other ? JSON.parse(chat.other) : {};
+        let whatsappNumber = "";
+
+        if (
+          other.id &&
+          typeof other.id === "string" &&
+          other.id.includes("@s.whatsapp.net")
+        ) {
+          whatsappNumber = other.id.split("@")[0].split(":")[0];
+        }
+
+        chatId = whatsappNumber
+          ? `${whatsappNumber}_${chat.sender_mobile}_${chat.uid}`
+          : `meta_${chat.sender_mobile}`;
+
+        const existingChat = chatIdMap.get(chatId);
+        if (existingChat) {
+          const existingDate = new Date(existingChat.createdAt);
+          const currentDate = new Date(chat.createdAt);
+          if (currentDate > existingDate) {
+            chatIdMap.set(chatId, chat);
+          }
+          return false; // Skip this one as it's not the latest
+        } else {
+          chatIdMap.set(chatId, chat);
+          return true;
+        }
+      } catch (e) {
+        console.error("Error processing chat for deduplication:", chat.id, e);
+        return true; // Keep it if we can't process it
+      }
+    });
+
+    console.log(
+      `Total unique chats after deduplication: ${uniqueChats.length}`
+    );
+
+    const batchSize = 40;
+    const batches = chunkArray(uniqueChats, batchSize);
+
+    let totalSuccessful = 0;
+    let totalFailed = 0;
+    let totalSkipped = 0;
+    const allFailedResults = [];
+
+    for (let i = 0; i < batches.length; i++) {
+      try {
+        const results = await processBatch(batches[i], i + 1);
+
+        const successful = results.filter(
+          (r) => r.success && !r.skipped
+        ).length;
+        const skipped = results.filter((r) => r.skipped).length;
+        const failed = results.filter((r) => !r.success).length;
+
+        totalSuccessful += successful;
+        totalSkipped += skipped;
+        totalFailed += failed;
+
+        // Collect failed results
+        allFailedResults.push(...results.filter((r) => !r.success));
+
+        console.log(
+          `Batch ${
+            i + 1
+          } complete. Success: ${successful}, Skipped: ${skipped}, Failed: ${failed}`
+        );
+
+        // Small delay between batches to be gentle on the database
+        if (i < batches.length - 1) {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+      } catch (err) {
+        console.log(`Error processing batch ${i + 1}:`, err);
+      }
+    }
+
+    console.log(
+      `\nIMPORT COMPLETE. Total Success: ${totalSuccessful}, Total Skipped: ${totalSkipped}, Total Failed: ${totalFailed}`
+    );
+
+    // Log failed inserts if any
+    if (totalFailed > 0) {
+      console.log("Failed inserts:", allFailedResults);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function saveMessageToConversation({ uid, chatId, messageData }) {
+  try {
+    await query(`INSERT INTO beta_conversation SET ?`, {
+      type: messageData.type,
+      metaChatId: messageData.metaChatId,
+      msgContext: JSON.stringify(messageData.msgContext),
+      reaction: messageData.reaction || "",
+      timestamp: messageData.timestamp,
+      senderName: messageData.senderName,
+      senderMobile: messageData.senderMobile,
+      star: messageData.star ? 1 : 0,
+      route: messageData.route,
+      context: messageData.context ? JSON.stringify(messageData.context) : null,
+      origin: messageData.origin,
+      uid,
+      chat_id: chatId,
+    });
+    return true;
+  } catch (err) {
+    console.log("Error saving message to conversation:", err);
+    return false;
+  }
+}
+
+async function executeQueries(queries, pool) {
+  try {
+    const connection = await pool.getConnection(); // Get a connection from the pool
+    for (const query of queries) {
+      await connection.query(query);
+    }
+    connection.release(); // Release the connection back to the pool
+    return { success: true };
+  } catch (err) {
+    return { success: false, err };
+  }
 }
 
 function findTargetNodes(nodes, edges, incomingWord) {
@@ -1478,6 +2001,48 @@ function validateEmail(email) {
   return re.test(String(email).toLowerCase());
 }
 
+async function sendEmailBeta(config) {
+  try {
+    const {
+      host,
+      port,
+      email,
+      pass,
+      username,
+      from,
+      to,
+      subject,
+      html,
+      security,
+      useAuth,
+    } = config;
+
+    const transporter = nodemailer.createTransport({
+      host,
+      port,
+      secure: port === 465, // Use true for port 465 (SSL), false for 587 (TLS)
+      auth: useAuth
+        ? {
+            user: username,
+            pass: pass,
+          }
+        : undefined,
+      tls: security === "tls" ? { rejectUnauthorized: false } : undefined,
+    });
+
+    const info = await transporter.sendMail({
+      from,
+      to,
+      subject,
+      html,
+    });
+
+    return { success: true, messageId: info.messageId };
+  } catch (err) {
+    return { success: false, msg: err.message };
+  }
+}
+
 function sendEmail(host, port, email, pass, html, subject, from, to, username) {
   console.log({
     host,
@@ -1966,7 +2531,675 @@ async function validateFacebookToken(userAccessToken, appId, appSecret) {
   }
 }
 
+function extractFileName(url) {
+  try {
+    const decodedUrl = decodeURIComponent(url.split("?")[0]); // Remove query params
+    return decodedUrl.substring(decodedUrl.lastIndexOf("/") + 1);
+  } catch (error) {
+    console.error("Error extracting file name:", error.message);
+    return null;
+  }
+}
+
+async function checkWarmerPlan({ uid }) {
+  try {
+    const [user] = await query(`SELECT * FROM user WHERE uid = ?`, [uid]);
+    const warmer = user?.plan ? JSON.parse(user?.plan)?.wa_warmer : 0;
+    return parseInt(warmer) > 0 ? true : false;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function getAllTempletsMetaBeta(
+  apiVersion,
+  waba_id,
+  bearerToken,
+  limit = 9,
+  after = null,
+  before = null,
+  status = "APPROVED"
+) {
+  let url = `https://graph.facebook.com/${apiVersion}/${waba_id}/message_templates?limit=${limit}&status=${status}`;
+
+  // Add cursor parameters if provided
+  if (after) {
+    url += `&after=${after}`;
+  } else if (before) {
+    url += `&before=${before}`;
+  }
+
+  const options = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${bearerToken}`,
+    },
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+}
+
+// Helper function to extract variables from a template
+function extractTemplateVariablesBeta(template) {
+  const variables = [];
+
+  // Check components for variables
+  if (template.components) {
+    template.components.forEach((component) => {
+      // Check body component for variables
+      if (component.type === "BODY" && component.text) {
+        const matches = component.text.match(/{{(\d+)}}/g) || [];
+        matches.forEach((match) => {
+          const varNumber = match.replace("{{", "").replace("}}", "");
+          variables.push({
+            component: "BODY",
+            index: varNumber,
+            example:
+              component.example?.body_text?.[Number(varNumber) - 1] || "",
+          });
+        });
+      }
+
+      // Check header for media variables
+      if (component.type === "HEADER" && component.format !== "TEXT") {
+        variables.push({
+          component: "HEADER",
+          type: component.format.toLowerCase(),
+          example: component.example?.header_handle?.[0] || "",
+        });
+      }
+
+      // Check buttons for variables
+      if (component.type === "BUTTONS" && component.buttons) {
+        component.buttons.forEach((button, idx) => {
+          if (button.type === "URL" && button.url.includes("{{")) {
+            variables.push({
+              component: "BUTTON",
+              index: idx,
+              buttonType: "URL",
+              example: button.example || "",
+            });
+          }
+        });
+      }
+    });
+  }
+
+  return variables;
+}
+
+// Helper function to format phone number
+function formatPhoneNumber(phone) {
+  // Remove any non-digit characters
+  let cleaned = phone.replace(/\D/g, "");
+
+  // Ensure it has country code (add default 1 for US if needed)
+  if (cleaned.length === 10) {
+    cleaned = "1" + cleaned;
+  }
+
+  // Add + prefix if not present
+  if (!cleaned.startsWith("+")) {
+    cleaned = "+" + cleaned;
+  }
+
+  return cleaned;
+}
+
+// Function to send template message
+async function sendTemplateMessage(
+  apiVersion,
+  phoneNumberId,
+  accessToken,
+  templateName,
+  language,
+  recipientPhone,
+  bodyVariables = [],
+  headerVariable = null,
+  buttonVariables = []
+) {
+  const url = `https://graph.facebook.com/${apiVersion}/${phoneNumberId}/messages`;
+
+  // Prepare the message payload
+  const messagePayload = {
+    messaging_product: "whatsapp",
+    recipient_type: "individual",
+    to: recipientPhone,
+    type: "template",
+    template: {
+      name: templateName,
+      language: {
+        code: language,
+      },
+      components: [],
+    },
+  };
+
+  // Add body component with variables if provided
+  if (bodyVariables && bodyVariables.length > 0) {
+    const bodyComponent = {
+      type: "body",
+      parameters: bodyVariables.map((variable) => {
+        return {
+          type: "text",
+          text: variable,
+        };
+      }),
+    };
+    messagePayload.template.components.push(bodyComponent);
+  }
+
+  // Add header component with variable if provided
+  if (headerVariable) {
+    const headerComponent = {
+      type: "header",
+      parameters: [],
+    };
+
+    // Determine header variable type
+    if (headerVariable.type === "image") {
+      headerComponent.parameters.push({
+        type: "image",
+        image: {
+          link: headerVariable.url,
+        },
+      });
+    } else if (headerVariable.type === "document") {
+      headerComponent.parameters.push({
+        type: "document",
+        document: {
+          link: headerVariable.url,
+          filename: headerVariable.filename || "document",
+        },
+      });
+    } else if (headerVariable.type === "video") {
+      headerComponent.parameters.push({
+        type: "video",
+        video: {
+          link: headerVariable.url,
+        },
+      });
+    }
+
+    messagePayload.template.components.push(headerComponent);
+  }
+
+  // Add button variables if provided
+  if (buttonVariables && buttonVariables.length > 0) {
+    buttonVariables.forEach((buttonVar, index) => {
+      if (buttonVar.value) {
+        const buttonComponent = {
+          type: "button",
+          sub_type: "url",
+          index: buttonVar.index.toString(),
+          parameters: [
+            {
+              type: "text",
+              text: buttonVar.value,
+            },
+          ],
+        };
+
+        messagePayload.template.components.push(buttonComponent);
+      }
+    });
+  }
+
+  // Send the request
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(messagePayload),
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error sending template message:", error);
+    throw error;
+  }
+}
+
+// Helper function to get recent messages for context
+async function getRecentMessages(chatId, uid, limit = 5) {
+  try {
+    const messages = await query(
+      `SELECT * FROM beta_conversation 
+       WHERE chat_id = ? AND uid = ? 
+       ORDER BY timestamp DESC LIMIT ?`,
+      [chatId, uid, limit]
+    );
+
+    return messages
+      .map((msg) => {
+        try {
+          const parsedContext = msg.msgContext
+            ? JSON.parse(msg.msgContext)
+            : {};
+          return {
+            type: msg.type,
+            text: parsedContext.text?.body || "",
+            route: msg.route,
+            timestamp: msg.timestamp,
+          };
+        } catch (e) {
+          return {
+            type: msg.type,
+            text: "",
+            route: msg.route,
+            timestamp: msg.timestamp,
+          };
+        }
+      })
+      .reverse(); // Return in chronological order
+  } catch (error) {
+    console.error("Error fetching recent messages:", error);
+    return [];
+  }
+}
+
+async function suggestReplyWithOpenAI(messages, lastMessage, apiKey) {
+  try {
+    // Format conversation history
+    const formattedMessages = messages.map((msg) => ({
+      role: msg.route === "INCOMING" ? "user" : "assistant",
+      content: msg.text,
+    }));
+
+    // Add system message at the beginning
+    formattedMessages.unshift({
+      role: "system",
+      content:
+        "You are a helpful assistant. Generate a concise, natural-sounding reply to the conversation. The reply should be friendly, helpful, and appropriate for a business conversation. Only return the suggested reply without explanations.",
+    });
+    if (lastMessage) {
+      formattedMessages.push({
+        role: "user",
+        content: lastMessage,
+      });
+    }
+
+    const response = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        model: "gpt-3.5-turbo",
+        messages: formattedMessages,
+        temperature: 0.7,
+        max_tokens: 500,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+      }
+    );
+
+    return response.data.choices[0].message.content.trim();
+  } catch (error) {
+    console.error(
+      "OpenAI suggestion error:",
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.error?.message || "OpenAI suggestion failed"
+    );
+  }
+}
+
+async function suggestReplyWithGemini(messages, lastMessage, apiKey) {
+  try {
+    // Format conversation history
+    let conversationText = "Here is the conversation history:\n\n";
+
+    messages.forEach((msg) => {
+      const role = msg.route === "INCOMING" ? "Customer" : "Support";
+      conversationText += `${role}: ${msg.text}\n`;
+    });
+
+    // Add the latest message if provided
+    if (lastMessage) {
+      conversationText += `Customer: ${lastMessage}\n`;
+    }
+
+    conversationText +=
+      "\nGenerate a concise, natural-sounding reply from Support. The reply should be friendly, helpful, and appropriate for a business conversation. Only return the suggested reply without explanations.";
+
+    const response = await axios.post(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+      {
+        contents: [
+          {
+            parts: [
+              {
+                text: conversationText,
+              },
+            ],
+          },
+        ],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 500,
+        },
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response.data.candidates[0].content.parts[0].text.trim();
+  } catch (error) {
+    console.error(
+      "Gemini suggestion error:",
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.error?.message || "Gemini suggestion failed"
+    );
+  }
+}
+
+async function suggestReplyWithDeepseek(messages, lastMessage, apiKey) {
+  try {
+    // Format conversation history
+    const formattedMessages = messages.map((msg) => ({
+      role: msg.route === "INCOMING" ? "user" : "assistant",
+      content: msg.text,
+    }));
+
+    // Add system message at the beginning
+    formattedMessages.unshift({
+      role: "system",
+      content:
+        "You are a helpful assistant. Generate a concise, natural-sounding reply to the conversation. The reply should be friendly, helpful, and appropriate for a business conversation. Only return the suggested reply without explanations.",
+    });
+
+    // Add the latest message if provided
+    if (lastMessage) {
+      formattedMessages.push({
+        role: "user",
+        content: lastMessage,
+      });
+    }
+
+    const response = await axios.post(
+      "https://api.deepseek.com/v1/chat/completions",
+      {
+        model: "deepseek-chat",
+        messages: formattedMessages,
+        temperature: 0.7,
+        max_tokens: 500,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+      }
+    );
+
+    return response.data.choices[0].message.content.trim();
+  } catch (error) {
+    console.error(
+      "Deepseek suggestion error:",
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.error?.message || "Deepseek suggestion failed"
+    );
+  }
+}
+
+const languageNames = [
+  { code: "af", name: "Afrikaans" },
+  { code: "am", name: "Amharic" },
+  { code: "ar", name: "Arabic" },
+  { code: "az", name: "Azerbaijani" },
+  { code: "be", name: "Belarusian" },
+  { code: "bg", name: "Bulgarian" },
+  { code: "bn", name: "Bengali" },
+  { code: "bs", name: "Bosnian" },
+  { code: "ca", name: "Catalan" },
+  { code: "ceb", name: "Cebuano" },
+  { code: "cs", name: "Czech" },
+  { code: "cy", name: "Welsh" },
+  { code: "da", name: "Danish" },
+  { code: "de", name: "German" },
+  { code: "el", name: "Greek" },
+  { code: "en", name: "English" },
+  { code: "eo", name: "Esperanto" },
+  { code: "es", name: "Spanish" },
+  { code: "et", name: "Estonian" },
+  { code: "eu", name: "Basque" },
+  { code: "fa", name: "Persian" },
+  { code: "fi", name: "Finnish" },
+  { code: "fr", name: "French" },
+  { code: "fy", name: "Frisian" },
+  { code: "ga", name: "Irish" },
+  { code: "gd", name: "Scottish Gaelic" },
+  { code: "gl", name: "Galician" },
+  { code: "gu", name: "Gujarati" },
+  { code: "ha", name: "Hausa" },
+  { code: "haw", name: "Hawaiian" },
+  { code: "he", name: "Hebrew" },
+  { code: "hi", name: "Hindi" },
+  { code: "hmn", name: "Hmong" },
+  { code: "hr", name: "Croatian" },
+  { code: "ht", name: "Haitian Creole" },
+  { code: "hu", name: "Hungarian" },
+  { code: "hy", name: "Armenian" },
+  { code: "id", name: "Indonesian" },
+  { code: "ig", name: "Igbo" },
+  { code: "is", name: "Icelandic" },
+  { code: "it", name: "Italian" },
+  { code: "ja", name: "Japanese" },
+  { code: "jw", name: "Javanese" },
+  { code: "ka", name: "Georgian" },
+  { code: "kk", name: "Kazakh" },
+  { code: "km", name: "Khmer" },
+  { code: "kn", name: "Kannada" },
+  { code: "ko", name: "Korean" },
+  { code: "ku", name: "Kurdish" },
+  { code: "ky", name: "Kyrgyz" },
+  { code: "la", name: "Latin" },
+  { code: "lo", name: "Lao" },
+  { code: "lt", name: "Lithuanian" },
+  { code: "lv", name: "Latvian" },
+  { code: "mg", name: "Malagasy" },
+  { code: "mi", name: "Maori" },
+  { code: "mk", name: "Macedonian" },
+  { code: "ml", name: "Malayalam" },
+  { code: "mn", name: "Mongolian" },
+  { code: "mr", name: "Marathi" },
+  { code: "ms", name: "Malay" },
+  { code: "mt", name: "Maltese" },
+  { code: "my", name: "Burmese" },
+  { code: "ne", name: "Nepali" },
+  { code: "nl", name: "Dutch" },
+  { code: "no", name: "Norwegian" },
+  { code: "ny", name: "Chichewa" },
+  { code: "pa", name: "Punjabi" },
+  { code: "pl", name: "Polish" },
+  { code: "ps", name: "Pashto" },
+  { code: "pt", name: "Portuguese" },
+  { code: "ro", name: "Romanian" },
+  { code: "ru", name: "Russian" },
+  { code: "rw", name: "Kinyarwanda" },
+  { code: "sd", name: "Sindhi" },
+  { code: "si", name: "Sinhala" },
+  { code: "sk", name: "Slovak" },
+  { code: "sl", name: "Slovenian" },
+  { code: "sm", name: "Samoan" },
+  { code: "sn", name: "Shona" },
+  { code: "so", name: "Somali" },
+  { code: "sq", name: "Albanian" },
+  { code: "sr", name: "Serbian" },
+  { code: "st", name: "Sesotho" },
+  { code: "su", name: "Sundanese" },
+  { code: "sv", name: "Swedish" },
+  { code: "sw", name: "Swahili" },
+  { code: "ta", name: "Tamil" },
+  { code: "te", name: "Telugu" },
+  { code: "tg", name: "Tajik" },
+  { code: "th", name: "Thai" },
+  { code: "tk", name: "Turkmen" },
+  { code: "tl", name: "Filipino" },
+  { code: "tr", name: "Turkish" },
+  { code: "tt", name: "Tatar" },
+  { code: "ug", name: "Uyghur" },
+  { code: "uk", name: "Ukrainian" },
+  { code: "ur", name: "Urdu" },
+  { code: "uz", name: "Uzbek" },
+  { code: "vi", name: "Vietnamese" },
+  { code: "xh", name: "Xhosa" },
+  { code: "yi", name: "Yiddish" },
+  { code: "yo", name: "Yoruba" },
+  { code: "zh", name: "Chinese" },
+  { code: "zu", name: "Zulu" },
+];
+
+async function translateWithOpenAI(text, targetLanguage, apiKey) {
+  const targetLanguageName = languageNames[targetLanguage] || targetLanguage;
+
+  try {
+    const response = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content: `You are a translator. Translate the following text to ${targetLanguageName}. Preserve formatting and tone. Only return the translated text without explanations.`,
+          },
+          {
+            role: "user",
+            content: text,
+          },
+        ],
+        temperature: 0.3,
+        max_tokens: 1000,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+      }
+    );
+
+    return response.data.choices[0].message.content.trim();
+  } catch (error) {
+    console.error(
+      "OpenAI translation error:",
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.error?.message || "OpenAI translation failed"
+    );
+  }
+}
+
+async function translateWithGemini(text, targetLanguage, apiKey) {
+  const targetLanguageName = languageNames[targetLanguage] || targetLanguage;
+
+  try {
+    const response = await axios.post(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+      {
+        contents: [
+          {
+            parts: [
+              {
+                text: `Translate the following text to ${targetLanguageName}. Only return the translated text without explanations:\n\n${text}`,
+              },
+            ],
+          },
+        ],
+        generationConfig: {
+          temperature: 0.2,
+          maxOutputTokens: 1000,
+        },
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response.data.candidates[0].content.parts[0].text.trim();
+  } catch (error) {
+    console.error(
+      "Gemini translation error:",
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.error?.message || "Gemini translation failed"
+    );
+  }
+}
+
+async function translateWithDeepseek(text, targetLanguage, apiKey) {
+  const targetLanguageName = languageNames[targetLanguage] || targetLanguage;
+
+  try {
+    const response = await axios.post(
+      "https://api.deepseek.com/v1/chat/completions",
+      {
+        model: "deepseek-chat",
+        messages: [
+          {
+            role: "system",
+            content: `You are a translator. Translate the following text to ${targetLanguageName}. Preserve formatting and tone. Only return the translated text without explanations.`,
+          },
+          {
+            role: "user",
+            content: text,
+          },
+        ],
+        temperature: 0.3,
+        max_tokens: 1000,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+      }
+    );
+
+    return response.data.choices[0].message.content.trim();
+  } catch (error) {
+    console.error(
+      "Deepseek translation error:",
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.error?.message || "Deepseek translation failed"
+    );
+  }
+}
+
 module.exports = {
+  translateWithOpenAI,
+  translateWithGemini,
+  translateWithDeepseek,
+  formatPhoneNumber,
+  sendTemplateMessage,
   isValidEmail,
   downloadAndExtractFile,
   folderExists,
@@ -2010,4 +3243,18 @@ module.exports = {
   rzCapturePayment,
   validateFacebookToken,
   addObjectToFile,
+  extractFileName,
+  checkWarmerPlan,
+  saveMessageToConversation,
+  importChatsFromv3,
+  importConversationsFromJson,
+  makeRequestBeta,
+  sendEmailBeta,
+  executeMySQLQuery,
+  getAllTempletsMetaBeta,
+  extractTemplateVariablesBeta,
+  getRecentMessages,
+  suggestReplyWithOpenAI,
+  suggestReplyWithGemini,
+  suggestReplyWithDeepseek,
 };

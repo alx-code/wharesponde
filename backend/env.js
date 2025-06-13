@@ -1,4 +1,4 @@
-const appVersion = "3.0.1";
+const appVersion = "5.0";
 const addON = [""];
 
 module.exports = { appVersion, addON };

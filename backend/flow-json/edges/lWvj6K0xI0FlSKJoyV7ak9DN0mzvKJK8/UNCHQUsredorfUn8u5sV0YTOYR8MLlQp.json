@@ -1,0 +1,52 @@
+[
+  {
+    "source": "1749513337070",
+    "sourceHandle": "{{OTHER_MSG}}",
+    "target": "1749513366595",
+    "targetHandle": "1749513366595_target",
+    "id": "reactflow__edge-1749513337070{{OTHER_MSG}}-17495133665951749513366595_target"
+  },
+  {
+    "source": "1749513366595",
+    "sourceHandle": "Paquetes",
+    "target": "1749513445699",
+    "targetHandle": "1749513445699_target",
+    "id": "reactflow__edge-1749513366595Paquetes-17495134456991749513445699_target"
+  },
+  {
+    "source": "1749513366595",
+    "sourceHandle": "Pedidos",
+    "target": "1749513470493",
+    "targetHandle": "1749513470493_target",
+    "id": "reactflow__edge-1749513366595Pedidos-17495134704931749513470493_target"
+  },
+  {
+    "source": "1749513366595",
+    "sourceHandle": "Otro",
+    "target": "1749513520510",
+    "targetHandle": "1749513520510_target",
+    "id": "reactflow__edge-1749513366595Otro-17495135205101749513520510_target"
+  },
+  {
+    "source": "1749513520510",
+    "sourceHandle": "si",
+    "target": "1749513571561",
+    "targetHandle": "1749513571561_target",
+    "id": "reactflow__edge-1749513520510si-17495135715611749513571561_target",
+    "selected": false
+  },
+  {
+    "source": "1749513520510",
+    "sourceHandle": "Marketing",
+    "target": "1749513571561",
+    "targetHandle": "1749513571561_target",
+    "id": "reactflow__edge-1749513520510Marketing-17495135715611749513571561_target"
+  },
+  {
+    "source": "1749513520510",
+    "sourceHandle": "Ventas",
+    "target": "1749513719430",
+    "targetHandle": "1749513719430_target",
+    "id": "reactflow__edge-1749513520510Ventas-17495137194301749513719430_target"
+  }
+]

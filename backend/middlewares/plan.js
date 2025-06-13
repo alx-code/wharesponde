@@ -89,4 +89,52 @@ const checkTags = async (req, res, next) => {
   }
 };
 
-module.exports = { checkPlan, checkContactLimit, checkNote, checkTags };
+const checkWaWArmer = async (req, res, next) => {
+  try {
+    if (req.plan?.wa_warmer > 0) {
+      next();
+    } else {
+      return res.json({
+        msg: "Your plan does not allow you this feature",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({ msg: "server error", err });
+  }
+};
+
+const checkQrScan = async (req, res, next) => {
+  try {
+    if (req.plan?.qr_account > 0) {
+      const accounts = parseInt(req?.plan?.qr_account) || 0;
+      const instances = await query(`SELECT * FROM instance WHERE uid = ?`, [
+        req.decode.uid,
+      ]);
+
+      if (instances?.length >= accounts) {
+        return res.json({
+          msg: `Your plan allows you to add ${accounts} instances only`,
+        });
+      }
+
+      next();
+    } else {
+      return res.json({
+        msg: "Your plan does not allow you this feature",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({ msg: "server error", err });
+  }
+};
+
+module.exports = {
+  checkPlan,
+  checkContactLimit,
+  checkNote,
+  checkTags,
+  checkWaWArmer,
+  checkQrScan,
+};

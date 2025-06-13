@@ -3,12 +3,14 @@ const {
   getConnectionsByUid,
   sendToUid,
   sendRingToUid,
-  sendToSocketId,
+  sendToSocket,
 } = require("../../socket");
 const { mergeArraysWithPhonebook } = require("../socket/function");
 const { processMetaMessage } = require("./meta");
 const { metaChatbotInit } = require("../chatbot/meta");
 const { processMessageQr } = require("../addon/qr/processThings");
+const { processWebhook } = require("./chatbot");
+const { processAutomation } = require("../../automation/automation");
 
 async function updateChatListSocket({ connectionInfo }) {
   try {
@@ -71,8 +73,6 @@ async function processMessage({
 
     let latestConversation = [];
 
-    // console.dir({ body }, { depth: null });
-
     switch (origin) {
       case "meta":
         const metaMsg = await processMetaMessage({
@@ -100,58 +100,53 @@ async function processMessage({
         break;
     }
 
-    // Send the latest chat list to all sockets of the user.
-    const socketConnections = getConnectionsByUid(uid) || [];
+    // // Send the latest chat list to all sockets of the user.
+    const socketConnections = getConnectionsByUid(uid, true) || [];
 
     socketConnections.forEach(async (socket) => {
-      const updateChatSocketData = await updateChatListSocket({
-        connectionInfo: socket,
-      });
-
-      sendToSocketId(socket?.id, updateChatSocketData, "update_chat_list");
-      console.log("Chat update sent to socket");
-    });
-
-    // console.log({ latestConversation: latestConversation });
-
-    if (latestConversation?.newMessage) {
-      sendRingToUid(uid);
-    }
-
-    // Send the latest chat list to all sockets of the user. end
-
-    // sending conversation update
-    socketConnections.forEach(async (socket) => {
-      const opendedChat = socket?.data?.selectedChat || null;
-
-      if (
-        opendedChat?.sender_mobile ===
-          latestConversation?.newMessage?.senderMobile ||
-        opendedChat?.sender_mobile ===
-          latestConversation?.latestMessages?.[0]?.senderMobile
-      ) {
-        const socketId = socket?.id;
-        sendToSocketId(
-          socketId,
-          { conversation: latestConversation },
-          "update_conversation"
-        );
+      sendToSocket(
+        socket?.socketId,
+        { chatId: latestConversation?.chatId },
+        "request_update_chat_list"
+      );
+      if (latestConversation?.newMessage) {
+        sendToSocket(socket?.socketId, {}, "ring");
       }
     });
 
-    // console.dir({ latestConversation }, { depth: null });
-    const { conversationPath } = latestConversation;
-
     // chatbot init
-    // console.log({ latestConversation });
     if (latestConversation?.newMessage && uid) {
-      metaChatbotInit({
-        latestConversation,
+      if (origin === "qr") {
+        if (body?.key?.fromMe) {
+          return;
+        }
+      }
+
+      // Get user details
+      const [user] = await query("SELECT * FROM user WHERE uid = ?", [uid]);
+      if (!user) {
+        return console.log("User not found");
+      }
+
+      // Process the message through the flow builder
+      await processWebhook(latestConversation?.newMessage, user);
+
+      await processAutomation({
         uid,
-        origin,
-        conversationPath: conversationPath || null,
+        message: latestConversation?.newMessage,
+        user,
         sessionId,
+        origin,
+        chatId: latestConversation?.chatId,
       });
+
+      // metaChatbotInit({
+      //   latestConversation,
+      //   uid,
+      //   origin,
+      //   conversationPath: conversationPath || null,
+      //   sessionId,
+      // });
     }
   } catch (err) {
     console.log(err);

@@ -1,0 +1,82 @@
+[
+  {
+    "type": "text",
+    "metaChatId": "5059BD28CB6B12DB0F35DF09621C35A8",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "body": "Muchas gracias 😊",
+        "preview_url": true
+      }
+    },
+    "reaction": "",
+    "timestamp": 1749665035,
+    "senderName": "Lore Rivera",
+    "senderMobile": "5217443331292",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING",
+    "context": "",
+    "origin": "qr"
+  },
+  {
+    "type": "text",
+    "metaChatId": "3F2D28DA183247928B4D",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "body": "a ti, gracias",
+        "preview_url": true
+      }
+    },
+    "reaction": "",
+    "timestamp": 1749665040,
+    "senderName": "JorgeE",
+    "senderMobile": "5217443331292",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "qr"
+  },
+  {
+    "type": "text",
+    "metaChatId": "3F47CF5E7745634402D6",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "body": "disculpa la demora",
+        "preview_url": true
+      }
+    },
+    "reaction": "",
+    "timestamp": 1749665045,
+    "senderName": "JorgeE",
+    "senderMobile": "5217443331292",
+    "status": "",
+    "star": false,
+    "route": "INCOMING",
+    "context": "",
+    "origin": "qr"
+  },
+  {
+    "type": "text",
+    "metaChatId": "0E1338175454411FF111F1362AA0281E",
+    "msgContext": {
+      "type": "text",
+      "text": {
+        "body": "No te preocupes 😊",
+        "preview_url": true
+      }
+    },
+    "reaction": "",
+    "timestamp": 1749665111,
+    "senderName": "Lore Rivera",
+    "senderMobile": "5217443331292",
+    "status": "read",
+    "star": false,
+    "route": "OUTGOING",
+    "context": "",
+    "origin": "qr"
+  }
+]

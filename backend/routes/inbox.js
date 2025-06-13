@@ -15,12 +15,16 @@ const {
   updateMetaTempletInMsg,
   getUserPlayDays,
   deleteFileIfExists,
+  importChatsFromv3,
+  importConversationsFromJson,
 } = require("../functions/function.js");
 const { sign } = require("jsonwebtoken");
 const validateUser = require("../middlewares/user.js");
 const { getIOInstance } = require("../socket.js");
 const { checkPlan } = require("../middlewares/plan.js");
 const { processMessage } = require("../helper/inbox/inbox.js");
+const con = require("../database/config.js");
+const { updateMessageStatus } = require("../loops/campaignBeta.js");
 
 // handle post webhook
 router.post("/webhook/:uid", async (req, res) => {
@@ -32,11 +36,34 @@ router.post("/webhook/:uid", async (req, res) => {
 
     const getDays = await getUserPlayDays(userUID);
     if (getDays < 1) {
+      console.log("User plan expired");
       return;
     }
 
     // Updating broadcast log message
     const statuses = body?.entry?.[0]?.changes?.[0]?.value?.statuses;
+
+    // updating for new campaign
+    // Handle message status updates - SIMPLE VERSION
+    if (req.body && req.body.entry) {
+      for (const entry of req.body.entry) {
+        if (entry.changes) {
+          for (const change of entry.changes) {
+            if (change.value && change.value.statuses) {
+              for (const status of change.value.statuses) {
+                if (status.id) {
+                  // Call the updateMessageStatus function
+                  await updateMessageStatus(
+                    status.id,
+                    status.status // delivered, read, sent, failed
+                  );
+                }
+              }
+            }
+          }
+        }
+      }
+    }
 
     if (statuses?.length > 0) {
       const { status, id } = statuses[0];
@@ -596,6 +623,88 @@ function groupChatsByNumberArrayFormat(chats) {
 // merge chat
 router.post("/merge_chats", validateUser, async (req, res) => {
   try {
+  } catch (err) {
+    console.log(err);
+    res.json({ err, success: false, msg: "Something went wrong" });
+  }
+});
+
+function convertNumberToRandomString(number) {
+  const mapping = {
+    0: "i",
+    1: "j",
+    2: "I",
+    3: "u",
+    4: "I",
+    5: "U",
+    6: "S",
+    7: "D",
+    8: "B",
+    9: "j",
+  };
+
+  const numStr = number.toString();
+  let result = "";
+  for (let i = 0; i < numStr.length; i++) {
+    const digit = numStr[i];
+    result += mapping[digit];
+  }
+  return result;
+}
+
+router.post("/import_convo_from_v3", validateUser, async (req, res) => {
+  try {
+    const { newChatId, senderName, senderMobile, oldChatId } = req.body;
+
+    if (!newChatId || !senderName || !senderMobile) {
+      return res.json({ msg: "Invalid request" });
+    }
+
+    if (!oldChatId) {
+      return res.json({
+        msg: "This chat is from version 4. No converstaion found to be imported",
+      });
+    }
+
+    const convoPath = `${__dirname}/../conversations/inbox/${req.decode.uid}/${oldChatId}.json`;
+    const convoData = readJSONFile(convoPath);
+
+    if (convoData?.length < 1) {
+      return res.json({ msg: "No chat messages found to import" });
+    }
+
+    res.json({
+      success: true,
+      msg: "Conversation migrating has been started",
+    });
+
+    importConversationsFromJson({
+      convos: convoData,
+      newChatId,
+      senderMobile,
+      senderName,
+      uid: req.decode.uid,
+    });
+  } catch (err) {
+    console.log(err);
+    res.json({ err, success: false, msg: "Something went wrong" });
+  }
+});
+
+router.get("/import_chats_from_v3", validateUser, async (req, res) => {
+  try {
+    const chatData = await query(`SELECT * FROM chats`, []);
+    if (chatData?.length < 1) {
+      return res.json({
+        msg: "We could not find any chat list in older version, Please click Cancel icon to delete the [Import chats] button",
+      });
+    }
+    res.json({
+      msg: "Chats started importning... Please click Cancel icon to delete the [Import chats] button",
+      success: true,
+    });
+
+    importChatsFromv3({ chatData });
   } catch (err) {
     console.log(err);
     res.json({ err, success: false, msg: "Something went wrong" });

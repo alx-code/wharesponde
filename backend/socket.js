@@ -1,241 +1,351 @@
 // socket.js
 const { Server } = require("socket.io");
-const jwt = require("jsonwebtoken"); // Make sure to install this package (npm install jsonwebtoken)
+const jwt = require("jsonwebtoken");
+const { query } = require("./database/dbpromise");
 const { processSocketEvent } = require("./helper/socket");
 
-// Module-level variable to store the io instance.
 let ioInstance = null;
 
-/**
- * Initialize the Socket.IO server and attach event handlers.
- * @param {http.Server} server - Your HTTP server instance.
- * @returns {Server} The initialized Socket.IO server instance.
- */
+// Database functions
+async function getUserData(uid) {
+  try {
+    const [user] = await query("SELECT * FROM user WHERE uid = ?", [uid]);
+    return user || null;
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    throw error; // Rethrow for better error handling upstream
+  }
+}
+
+async function getAgentData(uid) {
+  try {
+    const [agent] = await query(`SELECT * FROM agents where uid = ?`, [uid]);
+    if (agent) {
+      const [owner] = await query(`SELECT * FROM user where uid = ?`, [
+        agent?.owner_uid,
+      ]);
+      return {
+        ...agent,
+        owner: owner || {},
+      };
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching agent data:", error);
+    throw error;
+  }
+}
+
+// Socket initialization
 function initializeSocket(server) {
-  // Create a new Socket.IO server with basic CORS settings.
   ioInstance = new Server(server, {
     cors: {
-      origin: "*", // In production, restrict this to your client URL.
+      origin: "*", // Consider environment-based configuration
       methods: ["GET", "POST"],
+    },
+    connectionStateRecovery: {
+      maxDisconnectionDuration: 2 * 60 * 1000, // 2 minutes
+      skipMiddlewares: true,
     },
   });
 
-  // When a client connects...
-  ioInstance.on("connection", (socket) => {
-    // Retrieve uid, agent, and userToken from query parameters.
-    const { uid, agent, userToken } = socket.handshake.query;
+  // Authentication middleware
+  ioInstance.use(async (socket, next) => {
+    try {
+      const { token } = socket.handshake.query; // Changed from query to auth for better security
 
-    // Decode userToken using jwt.decode (for verification, you might use jwt.verify with a secret)
-    let decodedValue = {};
-    if (userToken) {
-      try {
-        decodedValue = jwt.decode(userToken);
-      } catch (error) {
-        console.error("Error decoding token:", error);
+      if (!token) {
+        return next(new Error("Authentication token required"));
       }
+
+      const decoded = jwt.verify(token, process.env.JWTKEY);
+      socket.decodedToken = decoded;
+      next();
+    } catch (error) {
+      console.error("Authentication failed:", error.message);
+      next(new Error("Authentication failed"));
+    }
+  });
+
+  // Connection handler
+  ioInstance.on("connection", async (socket) => {
+    try {
+      const { uid, role } = socket.decodedToken;
+      const isAgent = role === "agent";
+
+      // console.log(`New connection attempt from UID: ${uid}`);
+
+      const userData = isAgent
+        ? await getAgentData(uid)
+        : await getUserData(uid);
+
+      if (!userData) {
+        throw new Error("User data not found");
+      }
+
+      // Store user data on socket
+      socket.userData = {
+        ...userData,
+        socketId: socket.id,
+        isAgent,
+        connectedAt: new Date(),
+      };
+
+      // Success response
+      socket.emit("connection_ack", {
+        status: "success",
+        socketId: socket.id,
+        userData: {
+          uid: userData.uid,
+          name: userData.name,
+          email: userData.email,
+          isAgent,
+          ...(isAgent && { owner: userData.owner_uid }),
+        },
+      });
+
+      // console.log({
+      //   msg: "Socket established",
+      //   id: socket.id,
+      //   uid: uid,
+      //   isAgent,
+      // });
+    } catch (error) {
+      console.error("Connection setup failed:", error.message);
+      socket.emit("connection_ack", {
+        status: "error",
+        message: error.message,
+      });
+      socket.disconnect(true);
+      return;
     }
 
-    // Save connection info on the socket with the desired structure.
-    socket.connectionInfo = {
-      uid: uid || null, // The user identifier (may be common among multiple sockets).
-      id: socket.id, // The unique Socket.IO id.
-      data: {}, // Additional data if needed.
-      agent: agent === "true", // Convert agent to Boolean.
-      decodedValue: decodedValue, // The decoded token payload.
-      owner_uid: decodedValue?.owner_uid,
-    };
-
-    console.log("New connection established:");
-    console.dir({ socket: socket.connectionInfo.id });
-
-    // Immediately send an acknowledgement containing connection info.
-    socket.emit("connection_ack", socket.connectionInfo);
-
-    // Listen for generic "message" events.
-    socket.on("message", (message) => {
-      // Log the message along with the connectionInfo from the socket.
-      console.log(`Received message from ${socket.id}:`, message);
-      console.log("Connection Info:", socket.connectionInfo);
-    });
-
-    // Listen for custom events from the client.
-    // This will catch any event that is not specifically handled.
-    socket.onAny((event, ...args) => {
-      // Optionally, filter out events that you want to ignore.
-      if (event !== "connection_ack" && event !== "message") {
-        // console.log(`Received event "${event}" from ${socket.id}:`, ...args);
-      }
-    });
-
-    // Process additional socket events (defined in a helper module).
     processSocketEvent({
       socket,
-      connectionInfo: socket.connectionInfo,
-      sendToSocketId,
+      initializeSocket,
       sendToUid,
+      sendToSocket,
       sendToAll,
-      updateConnectionDataBySocketId,
+      getConnectedUsers,
       getConnectionsByUid,
+      getConnectionBySocketId,
+      getAllSocketData,
     });
 
-    // Handle disconnects.
-    socket.on("disconnect", () => {
-      console.log(`Client disconnected: ${socket.id}`);
+    // Disconnection handler
+    socket.on("disconnect", (reason) => {
+      console.log(`Disconnected: ${socket.id} | Reason: ${reason}`);
+    });
+
+    // Error handler
+    socket.on("error", (error) => {
+      console.error(`Socket error (${socket.id}):`, error);
     });
   });
 
   return ioInstance;
 }
 
-/**
- * Send a message to all connected sockets with a matching uid.
- * @param {string} targetUid - The uid to match.
- * @param {*} data - The data to send.
- * @param {string} [eventName="message"] - The event name to emit.
- */
-function sendToUid(targetUid, data, eventName = "message") {
+// Utility functions
+function sendToUid(uid, data, event = "message") {
   if (!ioInstance) {
-    console.error("Socket.IO instance is not initialized");
-    return;
+    console.warn("Socket.IO instance not initialized");
+    return false;
   }
+
+  let sentCount = 0;
   ioInstance.sockets.sockets.forEach((socket) => {
-    if (socket.connectionInfo && socket.connectionInfo.uid === targetUid) {
-      console.log(
-        `Emitting ${eventName} to socket ${socket.id} for uid ${targetUid}`
-      );
-      socket.emit(eventName, data);
+    if (
+      socket.userData &&
+      (socket.userData.uid === uid ||
+        (socket.userData.isAgent && socket.userData.owner_uid === uid))
+    ) {
+      socket.emit(event, data);
+      sentCount++;
     }
   });
+
+  return sentCount;
 }
 
-/**
- * Send a message to a specific socket by its id.
- * @param {string} socketId - The unique socket id.
- * @param {*} data - The data to send.
- * @param {string} [eventName="message"] - The event name to emit.
- */
-function sendToSocketId(socketId, data, eventName = "message") {
+function sendToSocket(socketId, data, event = "message") {
   if (!ioInstance) {
-    console.error("Socket.IO instance is not initialized");
-    return;
+    console.warn("Socket.IO instance not initialized");
+    return false;
   }
-  const targetSocket = ioInstance.sockets.sockets.get(socketId);
-  if (targetSocket) {
-    console.log(`Emitting ${eventName} to socket ${socketId}`);
-    targetSocket.emit(eventName, data);
-  } else {
-    console.error(`Socket with id ${socketId} not found.`);
+
+  const socket = ioInstance.sockets.sockets.get(socketId);
+  if (socket) {
+    socket.emit(event, data);
+    return true;
   }
+
+  console.warn(`Socket not found: ${socketId}`);
+  return false;
 }
 
-/**
- * Send a message to all connected sockets.
- * @param {*} data - The data to send.
- * @param {string} [eventName="message"] - The event name to emit.
- */
-function sendToAll(data, eventName = "message") {
+function sendToAll(data, event = "message") {
   if (!ioInstance) {
-    console.error("Socket.IO instance is not initialized");
-    return;
+    console.warn("Socket.IO instance not initialized");
+    return false;
   }
+
+  ioInstance.emit(event, data);
+  return true;
+}
+
+function getConnectedUsers() {
+  if (!ioInstance) return [];
+
+  const users = [];
   ioInstance.sockets.sockets.forEach((socket) => {
-    console.log(`Emitting ${eventName} to socket ${socket.id}`);
-    socket.emit(eventName, data);
-  });
-}
-
-/**
- * Example: Send a "ring" event to all sockets with a matching uid.
- * @param {string} targetUid - The uid to match.
- * @param {*} data - The data to send (default: { ring: true }).
- * @param {string} [eventName="ring"] - The event name to emit.
- */
-function sendRingToUid(targetUid, data = { ring: true }, eventName = "ring") {
-  if (!ioInstance) {
-    console.error("Socket.IO instance is not initialized");
-    return;
-  }
-  ioInstance.sockets.sockets.forEach((socket) => {
-    if (socket.connectionInfo && socket.connectionInfo.uid === targetUid) {
-      console.log(
-        `Emitting ${eventName} to socket ${socket.id} for uid ${targetUid}`
-      );
-      socket.emit(eventName, data);
+    if (socket.userData) {
+      users.push({
+        socketId: socket.id,
+        uid: socket.userData.uid,
+        isAgent: socket.userData.isAgent,
+        connectedAt: socket.userData.connectedAt,
+        ...(socket.userData.isAgent && { owner: socket.userData.owner_uid }),
+      });
     }
   });
+  return users;
 }
 
-/**
- * Return an array of connection info objects for all sockets matching the given uid.
- * @param {string} targetUid - The uid to match.
- * @returns {Array} Array of connection info objects.
- */
-function getConnectionsByUid(targetUid) {
+// New functions
+// function getConnectionsByUid(uid) {
+//   if (!ioInstance) {
+//     console.warn("Socket.IO instance not initialized");
+//     return [];
+//   }
+
+//   const connections = [];
+//   ioInstance.sockets.sockets.forEach((socket) => {
+//     if (socket.userData && socket.userData.uid === uid) {
+//       connections.push({
+//         socketId: socket.id,
+//         userData: socket.userData,
+//         connectedAt: socket.userData.connectedAt,
+//       });
+//     }
+//   });
+
+//   return connections;
+// }
+
+function getConnectionsByUid(uid, includeAgents = false) {
   if (!ioInstance) {
-    console.error("Socket.IO instance is not initialized");
+    console.warn("Socket.IO instance not initialized");
     return [];
   }
 
-  const connections = new Set(); // Using Set to avoid duplicate entries
-
+  const connections = [];
   ioInstance.sockets.sockets.forEach((socket) => {
-    const connectionInfo = socket.connectionInfo;
-
-    if (connectionInfo) {
-      const { uid, owner_uid } = connectionInfo;
-
-      if (uid === targetUid || owner_uid === targetUid) {
-        connections.add(connectionInfo); // Set will handle duplicates
+    if (socket.userData) {
+      // Include direct uid matches
+      if (socket.userData.uid === uid) {
+        connections.push({
+          socketId: socket.id,
+          userData: socket.userData,
+          connectedAt: socket.userData.connectedAt,
+        });
+      }
+      // If includeAgents is true, also include agents where owner_uid matches
+      else if (
+        includeAgents &&
+        socket.userData.isAgent &&
+        socket.userData.owner_uid === uid
+      ) {
+        connections.push({
+          socketId: socket.id,
+          userData: socket.userData,
+          connectedAt: socket.userData.connectedAt,
+          isOwnedAgent: true, // Optional flag to identify these connections
+        });
       }
     }
   });
 
-  return Array.from(connections); // Convert Set back to Array before returning
+  return connections;
 }
 
-/**
- * Update the connectionInfo.data object for a specific socket by its id.
- * @param {string} socketId - The unique socket id.
- * @param {object} newData - The new data to merge into connectionInfo.data.
- * @returns {object|null} The updated connectionInfo.data, or null if the socket wasn't found.
- */
-function updateConnectionDataBySocketId(socketId, newData) {
+function getConnectionBySocketId(socketId) {
   if (!ioInstance) {
-    console.error("Socket.IO instance is not initialized");
+    console.warn("Socket.IO instance not initialized");
     return null;
   }
-  const targetSocket = ioInstance.sockets.sockets.get(socketId);
-  if (!targetSocket) {
-    console.error(`Socket with id ${socketId} not found.`);
+
+  const socket = ioInstance.sockets.sockets.get(socketId);
+  if (!socket || !socket.userData) {
     return null;
   }
-  // Merge newData into the existing connectionInfo.data.
-  targetSocket.connectionInfo.data = {
-    ...targetSocket.connectionInfo.data,
-    ...newData,
+
+  return {
+    socketId: socket.id,
+    userData: socket.userData,
+    connectedAt: socket.userData.connectedAt,
+    handshake: socket.handshake,
+    rooms: Array.from(socket.rooms),
   };
-  // console.log(
-  //   `Updated connection data for socket ${socketId}:`,
-  //   targetSocket.connectionInfo.data
-  // );
-  return targetSocket.connectionInfo.data;
 }
 
-/**
- * Getter for the current Socket.IO instance.
- * @returns {Server} The Socket.IO server instance.
- */
-function getSocketIo() {
-  return ioInstance;
+function getAllSocketData() {
+  if (!ioInstance) {
+    console.warn("Socket.IO instance not initialized");
+    return [];
+  }
+
+  const socketsData = [];
+
+  ioInstance.sockets.sockets.forEach((socket) => {
+    const socketInfo = {
+      // Core identification
+      id: socket.id,
+      connected: socket.connected,
+      disconnected: socket.disconnected,
+
+      // User context
+      userData: socket.userData || null,
+      decodedToken: socket.decodedToken || null,
+
+      // Network details
+      handshake: {
+        headers: socket.handshake.headers,
+        time: socket.handshake.time,
+        address: socket.handshake.address,
+        xdomain: socket.handshake.xdomain,
+        secure: socket.handshake.secure,
+      },
+
+      // Room membership
+      rooms: Array.from(socket.rooms),
+
+      // Operational state
+      flags: {
+        hasJoinedDefaultRoom: socket.rooms.has(socket.id), // Always true for default room
+        isAuthenticated: !!socket.decodedToken,
+      },
+
+      // Timestamps
+      connectedAt: socket.userData?.connectedAt || null,
+      lastActivity: new Date(), // Current time as last activity proxy
+    };
+
+    socketsData.push(socketInfo);
+  });
+
+  return socketsData;
 }
 
 module.exports = {
   initializeSocket,
   sendToUid,
-  sendToSocketId,
+  sendToSocket,
   sendToAll,
+  getConnectedUsers,
   getConnectionsByUid,
-  getSocketIo,
-  sendRingToUid,
-  updateConnectionDataBySocketId,
+  getConnectionBySocketId,
+  getAllSocketData,
+  getSocketIo: () => ioInstance,
 };

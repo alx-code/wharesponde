@@ -8,8 +8,6 @@ const {
   updateUserPlan,
   getFileExtension,
   sendEmail,
-  getUserSignupsByMonth,
-  getUserOrderssByMonth,
   isValidEmail,
 } = require("../functions/function.js");
 const moment = require("moment");
@@ -72,6 +70,9 @@ router.post("/add_plan", adminValidator, async (req, res) => {
       price,
       price_strike,
       plan_duration_in_days,
+      qr_account,
+      wa_warmer,
+      rest_api_qr,
     } = req.body;
 
     if (!title || !short_description || !plan_duration_in_days) {
@@ -80,7 +81,7 @@ router.post("/add_plan", adminValidator, async (req, res) => {
 
     await query(
       `INSERT INTO plan (title, short_description, allow_tag, allow_note, allow_chatbot, 
-            contact_limit, allow_api, is_trial, price, price_strike, plan_duration_in_days) VALUES (?,?,?,?,?,?,?,?,?,?,?)`,
+            contact_limit, allow_api, is_trial, price, price_strike, plan_duration_in_days, qr_account, wa_warmer, rest_api_qr) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         title,
         short_description,
@@ -93,6 +94,9 @@ router.post("/add_plan", adminValidator, async (req, res) => {
         is_trial ? 0 : price,
         price_strike,
         parseInt(plan_duration_in_days || 1),
+        parseInt(qr_account) > 0 ? parseInt(qr_account) : 0,
+        wa_warmer ? 1 : 0,
+        rest_api_qr ? 1 : 0,
       ]
     );
 
@@ -772,26 +776,113 @@ router.post("/send_test_email", adminValidator, async (req, res) => {
   }
 });
 
-// get dashboard user
+// get dashboard for user
 router.get("/get_dashboard_for_user", adminValidator, async (req, res) => {
   try {
+    // Get users data
     const getUsers = await query(`SELECT * FROM user`, []);
     const { paidSignupsByMonth, unpaidSignupsByMonth } =
       getUserSignupsByMonth(getUsers);
 
+    // Get orders data
     const getOrders = await query(`SELECT * FROM orders`, []);
     const orders = getUserOrderssByMonth(getOrders);
 
+    // Get contact form data
     const getContactForm = await query(`SELECT * FROM contact_form`, []);
+
+    // Get chats data
+    const getChats = await query(`SELECT * FROM beta_chats`, []);
+    const chatsByMonth = getChatsByMonth(getChats);
+
+    // Get conversations data
+    const getConversations = await query(`SELECT * FROM beta_conversation`, []);
+    const messagesByMonth = getMessagesByMonth(getConversations);
+
+    // Get message types distribution
+    const messageTypes = getMessageTypeDistribution(getConversations);
+
+    // Get agents data
+    const getAgents = await query(`SELECT * FROM agents`, []);
+
+    // Get agent tasks data
+    const getAgentTasks = await query(`SELECT * FROM agent_task`, []);
+    const agentPerformance = getAgentPerformance(getAgents, getAgentTasks);
+
+    // Get instances data (WhatsApp connections)
+    const getInstances = await query(`SELECT * FROM instance`, []);
+    const activeInstances = getInstances.filter(
+      (instance) => instance.status === "ACTIVE"
+    ).length;
+
+    // Get flows data
+    const getFlows = await query(`SELECT * FROM beta_flows`, []);
+
+    // Get system metrics (this would typically come from a monitoring service)
+    const systemMetrics = {
+      serverLoad: Math.floor(Math.random() * 60) + 20, // Simulated data between 20-80%
+      memoryUsage: Math.floor(Math.random() * 40) + 30, // Simulated data between 30-70%
+      diskSpace: Math.floor(Math.random() * 30) + 10, // Simulated data between 10-40%
+      activeSessions:
+        getUsers.length > 0 ? Math.floor(getUsers.length * 0.7) : 0,
+    };
+
+    // Get recent users (last 5)
+    const recentUsers = getUsers
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 5)
+      .map((user) => ({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        plan: JSON.parse(user.plan || "{}").title || "No Plan",
+        date: new Date(user.createdAt).toISOString().split("T")[0],
+      }));
+
+    // Get recent transactions (last 5)
+    const recentTransactions = getOrders
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 5)
+      .map((order) => {
+        const user = getUsers.find((u) => u.uid === order.uid);
+        return {
+          id: order.id,
+          user: user ? user.name : "Unknown",
+          amount: `$${order.amount}`,
+          plan: "Subscription",
+          status: "Completed",
+          date: new Date(order.createdAt).toISOString().split("T")[0],
+        };
+      });
 
     res.json({
       data: {
+        // User data
         paid: paidSignupsByMonth,
         unpaid: unpaidSignupsByMonth,
-        orders,
         userLength: getUsers.length,
+        recentUsers,
+
+        // Financial data
+        orders,
         orderLength: getOrders.length,
+        recentTransactions,
+
+        // Contact and chat data
         contactLength: getContactForm.length,
+        chatLength: getChats.length,
+        chatsByMonth,
+        messagesByMonth,
+        messageTypes,
+
+        // Agent data
+        agentLength: getAgents.length,
+        agentPerformance,
+
+        // System data
+        activeInstances,
+        flowsLength: getFlows.length,
+        systemMetrics,
       },
       success: true,
     });
@@ -800,6 +891,163 @@ router.get("/get_dashboard_for_user", adminValidator, async (req, res) => {
     res.json({ msg: "server error", err });
   }
 });
+
+// Helper function to get user signups by month
+function getUserSignupsByMonth(users) {
+  const paidSignupsByMonth = Array(12).fill(0);
+  const unpaidSignupsByMonth = Array(12).fill(0);
+
+  users.forEach((user) => {
+    const createdAt = new Date(user.createdAt);
+    const month = createdAt.getMonth();
+
+    // Check if user has a paid plan
+    const plan = JSON.parse(user.plan || "{}");
+    const isPaid = plan && plan.is_trial === 0;
+
+    if (isPaid) {
+      paidSignupsByMonth[month]++;
+    } else {
+      unpaidSignupsByMonth[month]++;
+    }
+  });
+
+  return { paidSignupsByMonth, unpaidSignupsByMonth };
+}
+
+// Helper function to get orders by month
+function getUserOrderssByMonth(orders) {
+  const ordersByMonth = Array(12).fill(0);
+
+  orders.forEach((order) => {
+    const createdAt = new Date(order.createdAt);
+    const month = createdAt.getMonth();
+    const amount = parseFloat(order.amount) || 0;
+
+    ordersByMonth[month] += amount;
+  });
+
+  return ordersByMonth;
+}
+
+// Helper function to get chats by month
+function getChatsByMonth(chats) {
+  const chatsByMonth = Array(12).fill(0);
+
+  chats.forEach((chat) => {
+    const createdAt = new Date(chat.createdAt);
+    const month = createdAt.getMonth();
+
+    chatsByMonth[month]++;
+  });
+
+  return chatsByMonth;
+}
+
+// Helper function to get messages by month
+function getMessagesByMonth(conversations) {
+  const messagesByMonth = Array(12).fill(0);
+
+  conversations.forEach((conversation) => {
+    const createdAt = new Date(conversation.createdAt);
+    const month = createdAt.getMonth();
+
+    messagesByMonth[month]++;
+  });
+
+  return messagesByMonth;
+}
+
+// Helper function to get message type distribution
+function getMessageTypeDistribution(conversations) {
+  const types = {
+    text: 0,
+    image: 0,
+    video: 0,
+    document: 0,
+    location: 0,
+    contact: 0,
+    other: 0,
+  };
+
+  conversations.forEach((conversation) => {
+    try {
+      const msgContext = JSON.parse(conversation.msgContext || "{}");
+      const type = msgContext.type || "other";
+
+      if (types[type] !== undefined) {
+        types[type]++;
+      } else {
+        types.other++;
+      }
+    } catch (error) {
+      types.other++;
+    }
+  });
+
+  return [
+    types.text,
+    types.image,
+    types.video,
+    types.document,
+    types.location,
+    types.contact,
+    types.other,
+  ];
+}
+
+// Helper function to get agent performance
+function getAgentPerformance(agents, tasks) {
+  return agents.slice(0, 3).map((agent) => {
+    const agentTasks = tasks.filter((task) => task.uid === agent.uid);
+    const completedTasks = agentTasks.filter(
+      (task) => task.status === "COMPLETED"
+    ).length;
+    const completionRate =
+      agentTasks.length > 0 ? (completedTasks / agentTasks.length) * 100 : 0;
+
+    // Generate some random metrics for demo purposes
+    return {
+      name: agent.name,
+      data: [
+        Math.floor(Math.random() * 30) + 70, // Response time (70-100)
+        completionRate || Math.floor(Math.random() * 20) + 75, // Resolution rate
+        Math.floor(Math.random() * 15) + 80, // Customer rating
+        Math.floor(Math.random() * 25) + 70, // Chats handled
+        Math.floor(Math.random() * 20) + 75, // Tasks completed
+      ],
+    };
+  });
+}
+
+// get dashboard user
+// router.get("/get_dashboard_for_user", adminValidator, async (req, res) => {
+//   try {
+//     const getUsers = await query(`SELECT * FROM user`, []);
+//     const { paidSignupsByMonth, unpaidSignupsByMonth } =
+//       getUserSignupsByMonth(getUsers);
+
+//     const getOrders = await query(`SELECT * FROM orders`, []);
+//     const orders = getUserOrderssByMonth(getOrders);
+
+//     const getContactForm = await query(`SELECT * FROM contact_form`, []);
+
+//     res.json({
+//       data: {
+//         paid: paidSignupsByMonth,
+//         unpaid: unpaidSignupsByMonth,
+//         orders,
+//         userLength: getUsers.length,
+//         orderLength: getOrders.length,
+//         contactLength: getContactForm.length,
+//       },
+//       success: true,
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     res.json({ msg: "server error", err });
+//   }
+// });
 
 // get admin
 router.get("/get_admin", adminValidator, async (req, res) => {

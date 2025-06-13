@@ -1,0 +1,208 @@
+[
+  {
+    "id": "1748536617302",
+    "position": {
+      "x": 98,
+      "y": 3.9999999999999716
+    },
+    "nodeType": "TEXT",
+    "data": {
+      "msgContent": {
+        "type": "text",
+        "text": {
+          "preview_url": true,
+          "body": "{{OTHER_MSG}}"
+        }
+      },
+      "keyword": [
+        "{{OTHER_MSG}}"
+      ]
+    },
+    "type": "TEXT",
+    "width": 268,
+    "height": 262,
+    "selected": false,
+    "dragging": false,
+    "positionAbsolute": {
+      "x": 98,
+      "y": 3.9999999999999716
+    }
+  },
+  {
+    "id": "1748537582784",
+    "position": {
+      "x": 604.3510635297529,
+      "y": -197.00494097803232
+    },
+    "nodeType": "IMAGE",
+    "data": {
+      "msgContent": {
+        "type": "image",
+        "image": {
+          "link": "https://kibot.kuvo360.com/media/7vgoBNhgShfPEQ9E4JhQGyeIkFi58J7M.png",
+          "caption": "¿Hola buenas tardes, en que te puedo ayudar?\n\n1️⃣ Ver catálogo\n2️⃣ Seguimiento de pedido\n3️⃣ Ver precios de envios"
+        }
+      },
+      "keyword": [
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    "type": "IMAGE",
+    "width": 318,
+    "height": 668,
+    "selected": false,
+    "positionAbsolute": {
+      "x": 604.3510635297529,
+      "y": -197.00494097803232
+    },
+    "dragging": false
+  },
+  {
+    "id": "1748539187278",
+    "position": {
+      "x": 1067.591824298645,
+      "y": -385.12757449323794
+    },
+    "nodeType": "VIDEO",
+    "data": {
+      "msgContent": {
+        "type": "video",
+        "video": {
+          "link": "https://kibot.kuvo360.com/media/YuwzUtY4v5Fbn0ckM5Vr9lJLxJWD3vzc.mp4",
+          "caption": "Muy bien….\nDisfruta nuestro catálogo...\nGracias por preferir *TORZO*, estoy a tus órdenes para dar seguimiento a tu pedido...\n\nTe dejo este videotutorial para que te familiarices con este nuevo catálogo, ahí puedes *Comprar, Seleccionar y Levantar tu pedido*\n\nVer catálogo: https://torzo.com.mx "
+        }
+      },
+      "keyword": []
+    },
+    "type": "VIDEO",
+    "width": 268,
+    "height": 401,
+    "selected": false,
+    "positionAbsolute": {
+      "x": 1067.591824298645,
+      "y": -385.12757449323794
+    },
+    "dragging": false
+  },
+  {
+    "id": "1748539865652",
+    "position": {
+      "x": 1073.162193018313,
+      "y": 55.26548466370838
+    },
+    "nodeType": "TAKE_INPUT",
+    "data": {
+      "msgContent": {
+        "type": "take_input",
+        "text": {
+          "preview_url": true,
+          "body": "Por favor escríbeme el número de pedido, nombre y correo electrónico con el que hiciste tu pedido"
+        }
+      },
+      "variableName": "pedido",
+      "regex": "",
+      "useRegEx": false,
+      "keyword": []
+    },
+    "type": "TAKE_INPUT",
+    "width": 318,
+    "height": 295,
+    "selected": false,
+    "positionAbsolute": {
+      "x": 1073.162193018313,
+      "y": 55.26548466370838
+    },
+    "dragging": false
+  },
+  {
+    "id": "1748539893225",
+    "position": {
+      "x": 1543.1850253984574,
+      "y": 52.04516690831218
+    },
+    "nodeType": "TEXT",
+    "data": {
+      "msgContent": {
+        "type": "text",
+        "text": {
+          "preview_url": true,
+          "body": "Confirma tus datos, por favor:\n\nTu pedido fue: {{{pedido}}}\n\nEs correcto:\n✅ Si\n❌ No"
+        }
+      },
+      "keyword": [
+        "Si",
+        "si",
+        "No",
+        "no"
+      ]
+    },
+    "type": "TEXT",
+    "width": 268,
+    "height": 435,
+    "selected": false,
+    "positionAbsolute": {
+      "x": 1543.1850253984574,
+      "y": 52.04516690831218
+    },
+    "dragging": false
+  },
+  {
+    "id": "1748540190703",
+    "position": {
+      "x": 1111.297651661913,
+      "y": 464.63053337797123
+    },
+    "nodeType": "IMAGE",
+    "data": {
+      "msgContent": {
+        "type": "image",
+        "image": {
+          "link": "https://kibot.kuvo360.com/media/hyeqfflpXCeWFAqn5bTOusZthyVMgmWP.jpeg",
+          "caption": "Estos son nuestros precios de envío\n\n¿En qué más te puedo ayudar?\n\n1️⃣ Ver catálogo\n2️⃣ Seguimiento de pedido"
+        }
+      },
+      "keyword": [
+        "1",
+        "2"
+      ]
+    },
+    "type": "IMAGE",
+    "width": 318,
+    "height": 721,
+    "selected": false,
+    "positionAbsolute": {
+      "x": 1111.297651661913,
+      "y": 464.63053337797123
+    },
+    "dragging": false
+  },
+  {
+    "id": "1748540631947",
+    "position": {
+      "x": 1967.8781581036526,
+      "y": 99.00624845690731
+    },
+    "nodeType": "TEXT",
+    "data": {
+      "msgContent": {
+        "type": "text",
+        "text": {
+          "preview_url": true,
+          "body": "Gracias, vamos a revisar tu pedido y te avisaremos el estatus 😉"
+        }
+      },
+      "keyword": []
+    },
+    "type": "TEXT",
+    "width": 268,
+    "height": 214,
+    "selected": false,
+    "positionAbsolute": {
+      "x": 1967.8781581036526,
+      "y": 99.00624845690731
+    },
+    "dragging": false
+  }
+]

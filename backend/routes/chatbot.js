@@ -225,4 +225,140 @@ router.post("/make_request_api", validateUser, checkPlan, async (req, res) => {
   }
 });
 
+router.post("/add_beta_chatbot", validateUser, checkPlan, async (req, res) => {
+  try {
+    const { title, origin, flow } = req.body;
+    if (!title || !origin || !flow?.id) {
+      return res.json({ msg: "Please fill all required fields" });
+    }
+
+    if (req.plan?.allow_chatbot < 1) {
+      return res.json({
+        success: false,
+        msg: "Your plan does not allow you to set a chatbot",
+      });
+    }
+
+    const { flow_id } = flow;
+    const [getFlow] = await query(
+      `SELECT * FROM beta_flows WHERE flow_id = ? AND uid = ?`,
+      [flow_id, req.decode.uid]
+    );
+    if (!getFlow) {
+      return res.json({ msg: "This flow is not existed" });
+    }
+
+    const flowNodesEdges = getFlow?.data ? JSON.parse(getFlow.data) : null;
+
+    if (!flowNodesEdges || flowNodesEdges?.nodes?.length < 2) {
+      return res.json({
+        msg: "This flow does not have enough nodes to start, Please complete the flow",
+      });
+    }
+
+    const { nodes, edges } = flowNodesEdges;
+
+    if (origin?.code !== "META") {
+      const checkBtn = hasPropertyWithValue(nodes, "type", "BUTTON");
+      const checkList = hasPropertyWithValue(nodes, "type", "LIST");
+      if (checkBtn || checkList) {
+        return res.json({
+          msg: "Please select another flow which does not contain interactive buttons",
+        });
+      }
+    }
+
+    const origins = ["QR", "META"];
+    if (!origins.includes(origin.code)) {
+      return res.json({ msg: "Please select the origin" });
+    }
+
+    const getAllChatbots = await query(
+      `SELECT * FROM beta_chatbot WHERE uid = ?`,
+      [req.decode.uid]
+    );
+
+    // Assuming the chatbot data is stored as JSON in the database
+    const chatbots = getAllChatbots?.map((x) => JSON.parse(x.origin)) || [];
+
+    if (chatbots.find((x) => x.code === "META")) {
+      return res.json({
+        msg: "A chatbot is already running for this device, Please delete that to add new",
+      });
+    }
+
+    if (chatbots.find((x) => x.title === origin?.title)) {
+      return res.json({
+        msg: "A chatbot with this title already exists for this device",
+      });
+    }
+
+    if (origin.code === "QR" && !origin.data?.uniqueId) {
+      return res.json({ msg: "No active account found using this origin" });
+    }
+
+    await query(
+      `INSERT INTO beta_chatbot (uid, title, flow_id, origin, origin_id) VALUES (?,?,?,?,?)`,
+      [
+        req.decode.uid,
+        title,
+        flow_id,
+        JSON.stringify(origin),
+        origin.code === "META" ? "META" : origin.data?.uniqueId,
+      ]
+    );
+
+    res.json({ success: true, msg: "Chatbot was added" });
+  } catch (err) {
+    console.log(err);
+    res.json({ success: false, msg: "Something went wrong", err });
+  }
+});
+
+// get all chatbots beta
+router.get("/get_beta_chatbots", validateUser, async (req, res) => {
+  try {
+    const { type } = req.query;
+    const data = await query(
+      `SELECT * FROM beta_chatbot WHERE uid = ? AND source = ?`,
+      [req.decode.uid, type]
+    );
+    res.json({ data, success: true });
+  } catch (err) {
+    console.log(err);
+    res.json({ success: false, msg: "Something went wrong", err });
+  }
+});
+
+// change bot status
+router.post("/change_beta_bot_status", validateUser, async (req, res) => {
+  try {
+    const { id, status } = req.body;
+    await query(`UPDATE beta_chatbot SET active = ? WHERE uid = ? AND id = ?`, [
+      status ? 1 : 0,
+      req.decode.uid,
+      id,
+    ]);
+    res.json({ msg: "Satus changed", success: true });
+  } catch (err) {
+    console.log(err);
+    res.json({ success: false, msg: "Something went wrong", err });
+  }
+});
+
+// del beta chatbot
+router.post("/del_beta_chatbot", validateUser, async (req, res) => {
+  try {
+    const { id } = req.body;
+    await query(`DELETE FROM beta_chatbot WHERE id = ? AND uid = ?`, [
+      id,
+      req.decode.uid,
+    ]);
+    res.json({ msg: "Chatbot was deleted", success: true });
+  } catch (err) {
+    console.log(err);
+    res.json({ success: false, msg: "Something went wrong", err });
+  }
+});
+
 module.exports = router;

@@ -1,0 +1,276 @@
+[
+  {
+    "id": "1749513337070",
+    "position": {
+      "x": 107,
+      "y": 152
+    },
+    "nodeType": "TEXT",
+    "data": {
+      "msgContent": {
+        "type": "text",
+        "text": {
+          "preview_url": true,
+          "body": "{{OTHER_MSG}}"
+        }
+      },
+      "keyword": [
+        "{{OTHER_MSG}}"
+      ]
+    },
+    "type": "TEXT",
+    "width": 268,
+    "height": 262,
+    "selected": false,
+    "dragging": false,
+    "positionAbsolute": {
+      "x": 107,
+      "y": 152
+    }
+  },
+  {
+    "id": "1749513366595",
+    "position": {
+      "x": 507,
+      "y": 122
+    },
+    "nodeType": "BUTTON",
+    "data": {
+      "msgContent": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "Hola que tal, en que te puedo ayudar,\n\nSelecciona el tema de tu interes"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1749513401598",
+                  "title": "Pedidos"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1749513421995",
+                  "title": "Paquetes"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1749513425861",
+                  "title": "Otro"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "keyword": [
+        "Pedidos",
+        "Paquetes",
+        "Otro"
+      ]
+    },
+    "type": "BUTTON",
+    "width": 268,
+    "height": 342,
+    "selected": false,
+    "positionAbsolute": {
+      "x": 507,
+      "y": 122
+    },
+    "dragging": false
+  },
+  {
+    "id": "1749513445699",
+    "position": {
+      "x": 1131,
+      "y": 92
+    },
+    "nodeType": "IMAGE",
+    "data": {
+      "msgContent": {
+        "type": "image",
+        "image": {
+          "link": "https://kibot.kuvo360.com/media/5mgtno3rKQpKfIiCjQiMvoC3XBLuRkZ6.jpeg",
+          "caption": "paquete"
+        }
+      },
+      "keyword": []
+    },
+    "type": "IMAGE",
+    "width": 318,
+    "height": 522,
+    "selected": false,
+    "positionAbsolute": {
+      "x": 1131,
+      "y": 92
+    },
+    "dragging": false
+  },
+  {
+    "id": "1749513470493",
+    "position": {
+      "x": 837.7161246492024,
+      "y": -84.90434853265693
+    },
+    "nodeType": "BUTTON",
+    "data": {
+      "msgContent": {
+        "type": "interactive",
+        "interactive": {
+          "type": "button",
+          "body": {
+            "text": "mas opciones"
+          },
+          "action": {
+            "buttons": [
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1749513494083",
+                  "title": "1"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1749513496552",
+                  "title": "2"
+                }
+              },
+              {
+                "type": "reply",
+                "reply": {
+                  "id": "1749513498277",
+                  "title": "4"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "keyword": [
+        "1",
+        "2",
+        "4"
+      ]
+    },
+    "type": "BUTTON",
+    "width": 268,
+    "height": 342,
+    "selected": false,
+    "positionAbsolute": {
+      "x": 837.7161246492024,
+      "y": -84.90434853265693
+    },
+    "dragging": false
+  },
+  {
+    "id": "1749513520510",
+    "position": {
+      "x": 829.2692701346027,
+      "y": 556.0450858346874
+    },
+    "nodeType": "DOCUMENT",
+    "data": {
+      "msgContent": {
+        "type": "document",
+        "document": {
+          "link": "https://kibot.kuvo360.com/media/qrRHhthy1oXGHCnMsnHRWvsSzi5J16Jd.pdf",
+          "caption": "Si te interesa di \"si\" para enviarte a un agente especializado"
+        }
+      },
+      "keyword": [
+        "Marketing",
+        "Ventas"
+      ]
+    },
+    "type": "DOCUMENT",
+    "width": 268,
+    "height": 350,
+    "selected": false,
+    "positionAbsolute": {
+      "x": 829.2692701346027,
+      "y": 556.0450858346874
+    },
+    "dragging": false
+  },
+  {
+    "id": "1749513571561",
+    "position": {
+      "x": 1477.561528338826,
+      "y": 576.6209974923073
+    },
+    "nodeType": "ASSIGN_AGENT",
+    "data": {
+      "msgContent": {
+        "agentEmail": "vero@kexe.mx",
+        "agentObj": {
+          "id": 3,
+          "owner_uid": "lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8",
+          "uid": "n9xrxIvwIajEo2JO2poQ0b3UyUnhUF3g",
+          "role": "agent",
+          "email": "vero@kexe.mx",
+          "password": "$2b$10$ZYIPNaHaMsQEHmwlMMiJxeomuLuca6HCX4Smci4KgfCauN/xYv58W",
+          "name": "Vero",
+          "mobile": "12345678",
+          "comments": "some comments",
+          "is_active": 1,
+          "createdAt": "2024-04-06T06:45:15.000Z"
+        }
+      },
+      "keyword": []
+    },
+    "type": "ASSIGN_AGENT",
+    "width": 268,
+    "height": 191,
+    "selected": false,
+    "dragging": false,
+    "positionAbsolute": {
+      "x": 1477.561528338826,
+      "y": 576.6209974923073
+    }
+  },
+  {
+    "id": "1749513719430",
+    "position": {
+      "x": 1465.561528338826,
+      "y": 793.6209974923073
+    },
+    "nodeType": "ASSIGN_AGENT",
+    "data": {
+      "msgContent": {
+        "agentEmail": "raul@kexe.mx",
+        "agentObj": {
+          "id": 6,
+          "owner_uid": "lWvj6K0xI0FlSKJoyV7ak9DN0mzvKJK8",
+          "uid": "oAdZb5Q4EeyhJGVkGgLuvHqBzpxA84Vv",
+          "role": "agent",
+          "email": "raul@kexe.mx",
+          "password": "$2b$10$p5cTxfjP1so2PS.wKOpg4.PCB.jqdbNnWIz4YQ1BkAAZLEZOLbmvC",
+          "name": "Raul",
+          "mobile": "52123123123",
+          "comments": null,
+          "is_active": 1,
+          "createdAt": "2025-06-10T00:01:38.000Z"
+        }
+      },
+      "keyword": []
+    },
+    "type": "ASSIGN_AGENT",
+    "width": 268,
+    "height": 191,
+    "selected": true,
+    "positionAbsolute": {
+      "x": 1465.561528338826,
+      "y": 793.6209974923073
+    },
+    "dragging": false
+  }
+]

@@ -1,8 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 const pino = require("pino");
-const makeWASocket = require("@whiskeysockets/baileys").default;
-const { getUrlInfo, downloadMediaMessage } = require("@whiskeysockets/baileys");
+const makeWASocket = require("baileys").default;
+const { getUrlInfo, downloadMediaMessage } = require("baileys");
 const { toDataURL } = require("qrcode");
 const { query } = require("../../../database/dbpromise");
 
